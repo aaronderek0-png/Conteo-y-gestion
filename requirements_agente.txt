@@ -1,0 +1,12 @@
+# --- Paso 1: parser de facturas PDF ---
+pdfplumber>=0.11.0
+pandas>=2.2.0
+openpyxl>=3.1.0        # exportar resultados a .xlsx
+
+# --- Conector Google Sheets / Drive (drive_connector.py) ---
+gspread>=6.1.0
+google-auth>=2.30.0
+
+# --- Próximos pasos: agente LangChain (descomentar cuando se implemente) ---
+# langchain>=0.3.0
+# langchain-anthropic>=0.3.0

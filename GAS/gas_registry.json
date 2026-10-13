@@ -1,0 +1,131 @@
+[
+ {
+  "carpeta": "_ajeno_quini6",
+  "scriptId": "1efd4Dg8_Sq6QSAMlNjqQj-ge-N5cwPBm2B2mV4afE-fURSwQOrrCiiox",
+  "archivos": [
+   "Quini6.js"
+  ]
+ },
+ {
+  "carpeta": "_vacio",
+  "scriptId": "1UNaIrJJZ58YypIxofTcRdYU9Hvd5rDMPoV-YMeEXnXCko52dDOr1wW0x",
+  "archivos": [
+   "Código.js"
+  ]
+ },
+ {
+  "carpeta": "arcos_conteo_gestion",
+  "scriptId": "1h-6e3ahMK85LN1drilipOw1UqC5Q7T6KNqN5aruq4GyrO3UNMa8XsEhZ",
+  "archivos": [
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "arcos_precios",
+  "scriptId": "1aSHt2hnnyUanBQXCjrlnNh-idWd9cZb7LMgG7U6rbwaLKKn_BoUmzwy6",
+  "archivos": [
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "arcos_remitos_alertas",
+  "scriptId": "1-teTPPWoAyVK9bf7o3e6Ng3NMvwQX0AJ4xphZmIISWQOCTTJXax6LJNQ",
+  "archivos": [
+   "2.js",
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "cabello_conteo_gestion",
+  "scriptId": "1k8RZA-7eO86Fglb2csSjAaSb004lK8fQC4X6MtSCkDUw7Z_W8RhjhRPH",
+  "archivos": [
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "cabello_precios",
+  "scriptId": "1JtHg_qvAUIb61Im3892fMYjPQdipl_dCU_Hj8ZfIvyKhrbKs0sayidrA",
+  "archivos": [
+   "213.js",
+   "Code.js",
+   "SHEET6.js"
+  ]
+ },
+ {
+  "carpeta": "cabello_remitos_alertas",
+  "scriptId": "1Gt6XYNG88zS6wZ-Ww9wXkECFo8K7gXMjZI7W6KrEh0tKJHOp9ZKW_Nbl",
+  "archivos": [
+   "2.js",
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "congreso_alertas",
+  "scriptId": "1u2IYD63seoMsRWEJcHy5imlnZGVRxbETVGUeXhJxDN1cy98PJkZYv2p5",
+  "archivos": [
+   "Code.js",
+   "Untitled.js"
+  ]
+ },
+ {
+  "carpeta": "congreso_consumo_teorico",
+  "scriptId": "1Lisw1drNAhexQGpkix2PT7yB9txstnJ7iu9MqUVWfrJzcYCJqBx7qpkX",
+  "archivos": [
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "congreso_obrador_conteo",
+  "scriptId": "1CidI4LMcymb1C8bcvzWRATT7UO_Si0LL5wQm3B5638hXQdH21els5Qj7",
+  "archivos": [
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "congreso_precios",
+  "scriptId": "12Ooo1FQGgRqyncHPcZTP0lXGLevBdM3C4feqmfemGUV1fEqmcL9fnkkG",
+  "archivos": [
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "lafinur_precios",
+  "scriptId": "1O0lYwzVcZbNtikpJJg_dd3j-EJO1CCTWRl-CQfi5AlMWif8bMikvM91f",
+  "archivos": [
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "lafinur_remitos_alertas",
+  "scriptId": "1IdKgQDDM3_9DgVGo_a0gfZSA0b8ZViBRbZXrEon2w7wbIJHQFAe9J_bx",
+  "archivos": [
+   "1.js",
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "maestro_productos",
+  "scriptId": "1U9th4ylvj3vRS8QGc5qjYZnYTKHP13hOeFVWDGffvHG2UWDcOs2XFp7H",
+  "archivos": [
+   "1.js",
+   "Aprobar SKU.js",
+   "Code.js"
+  ]
+ },
+ {
+  "carpeta": "recetas_costos",
+  "scriptId": "1JlAqc16eBCWtsL3Hb_m2LCBGC3eWFrfvWSrDrWtwkTHktn7JzrLDdXdx",
+  "archivos": [
+   "1.js",
+   "Code.js",
+   "yo.js"
+  ]
+ },
+ {
+  "carpeta": "ventas_bom_rentabilidad",
+  "scriptId": "1HHmOLrWup7M25QkDUhP42iH1LytUU5aoEeUuWiQklRfb0a46K_mmqMEo",
+  "archivos": [
+   "Code.js"
+  ]
+ }
+]
