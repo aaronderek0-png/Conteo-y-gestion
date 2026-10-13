@@ -18,3 +18,14 @@ Ecosistema de gestión de costos/inventario de Mishiguene (locales: Arcos, Congr
 - Nunca `push` a GAS ni escribir en Sheets de producción sin que el usuario lo pida explícitamente; primero probar en copia.
 - No imprimir ni commitear la API key/teléfono de CallMeBot ni `credentials.json`.
 - El Maestro de Productos (`1lOabw9U…`) es la fuente única de SKU/rubros.
+
+## Modo autónomo (cómo trabajar sin preguntar todo)
+Autorizado sin consultar: leer todo, `gas_sync.py pull/status`, editar `GAS/**` y `*.py` localmente, correr `refactor_precios_gestion.py --dry-run/--apply` (escribe solo en `Copias_Gestion/*_COPIA.xlsx`), commits locales.
+Siempre con confirmación explícita del usuario (bloqueado en `.claude/settings.json`): `clasp push/deploy`, `gas_sync.py push`, `git push`, escribir en Sheets de producción, tocar `Copias_Gestion/originales_export/`.
+
+Flujo para cualquier cambio con efecto en datos:
+1. `--dry-run` y mostrar el resumen.
+2. Aplicar solo sobre `Copias_Gestion/<Local>_COPIA.xlsx` (read-back verifica cada celda escrita).
+3. Revisar logs `Copias_Gestion/log_<Local>.csv` (filas REVISAR = no inyectadas, a decisión humana).
+4. Recién entonces proponer al usuario el push a producción, listando exactamente qué cambia.
+Variaciones de precio > ±50 % nunca se inyectan solas.

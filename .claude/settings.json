@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit(GAS/**)",
+      "Edit(Copias_Gestion/**)",
+      "Edit(*.py)",
+      "Edit(CLAUDE.md)",
+      "Edit(.gitignore)",
+      "Bash(python gas_sync.py status)",
+      "Bash(python gas_sync.py pull)",
+      "Bash(python refactor_precios_gestion.py --dry-run)",
+      "Bash(python refactor_precios_gestion.py --apply)",
+      "Bash(python ecosistema_scan.py *)",
+      "Bash(python -I -m py_compile *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(*clasp.cmd list-scripts*)",
+      "Bash(*clasp.cmd pull*)",
+      "Bash(*clasp.cmd clone-script *)"
+    ],
+    "deny": [
+      "Read(credentials.json)",
+      "Edit(credentials.json)",
+      "Edit(**/.clasprc.json)",
+      "Edit(Copias_Gestion/originales_export/**)",
+      "Bash(*clasp.cmd push*)",
+      "Bash(*clasp.cmd deploy*)",
+      "Bash(*clasp.cmd delete*)",
+      "Bash(*clasp.cmd logout*)",
+      "Bash(python gas_sync.py push *)",
+      "Bash(git push *)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(rm -rf *)"
+    ]
+  }
+}
