@@ -30,8 +30,7 @@ Copias_Gestion/
 # Copias duplicadas "(1)"
 * (1).*
 
-# GAS con secretos en texto plano / ajenos
-GAS/recetas_costos/
+# GAS ajenos
 GAS/_ajeno_quini6/
 GAS/_vacio/
 

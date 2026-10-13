@@ -111,8 +111,21 @@ def _clave_alfabetica(nombre) -> str:
     return re.sub(r"\s+", " ", texto).strip().lower()
 
 
+def _tiene_precio_real(valor) -> bool:
+    return isinstance(valor, (int, float)) and not isinstance(valor, bool) and pd.notna(valor) and valor > 0
+
+
+def _es_accionable(r: pd.Series, proveedores: list[str]) -> bool:
+    """Una fila es útil en el mail si algún proveedor tiene un precio real comparable y hay Mejor Opción.
+    Se descartan las que solo tienen '-' / '≠ unidad' o figuran como 'Unidad no comparable' / 'SIN MATCH'."""
+    if str(r.get("Mejor Opción", "")) in {"UNIDAD NO COMPARABLE", "SIN MATCH", "nan", ""}:
+        return False
+    return any(_tiene_precio_real(r.get(p)) for p in proveedores)
+
+
 def _filas_html(df: pd.DataFrame, proveedores: list[str]) -> str:
     rows = ""
+    df = df[df.apply(lambda r: _es_accionable(r, proveedores), axis=1)] if len(df) else df
     # Estrictamente A-Z por 'Producto (Dossier)' (la columna 'Insumo (Dossier)' de la tabla)
     df = df.sort_values("Producto (Dossier)", key=lambda col: col.map(_clave_alfabetica), kind="stable")
     for _, r in df.iterrows():
@@ -157,6 +170,7 @@ def armar_html(reportes: dict[str, tuple[pd.DataFrame, list[str]]]) -> tuple[str
     datos = []
     for cat, (df, proveedores) in reportes.items():
         # Solo la Opción 1 de cada insumo suma: las otras son alternativas del mismo consumo
+        df = df[df.apply(lambda r: _es_accionable(r, proveedores), axis=1)] if len(df) else df
         principal = df[df["Opción"].fillna(1).eq(1)] if "Opción" in df.columns else df
         subtotal = (principal.loc[principal.apply(_es_oportunidad, axis=1), "Ahorro estimado mes"].sum()
                     if not principal.empty else 0.0)

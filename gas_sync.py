@@ -4,7 +4,7 @@
     python gas_sync.py status          # lista proyectos y cantidad de archivos
     python gas_sync.py push <carpeta>  # sube UN proyecto (pide confirmar; nunca masivo)
 """
-import subprocess, sys, json
+import subprocess, sys, json, os
 from pathlib import Path
 
 RAIZ = Path(__file__).parent
@@ -15,7 +15,8 @@ def proyectos():
     return sorted(p.parent for p in GAS.glob("*/.clasp.json") if not p.parent.name.startswith("_"))
 
 def run(d, *args):
-    return subprocess.run([CLASP, *args], cwd=d, capture_output=True, text=True, shell=False)
+    env = {**os.environ, "PATH": str(RAIZ) + os.pathsep + os.environ.get("PATH", "")}  # node.exe vive en la raíz
+    return subprocess.run([CLASP, *args], cwd=d, capture_output=True, text=True, shell=False, env=env)
 
 def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else "status"

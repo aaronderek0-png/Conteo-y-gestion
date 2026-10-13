@@ -30,7 +30,8 @@ from pathlib import Path
 import openpyxl
 from openpyxl.utils import get_column_letter
 
-from defensivo import SchemaError, detectar_ciclos, finito, parse_numero, resolver_esquema, safe_div
+from defensivo import (SchemaError, detectar_ciclos, es_panificado_comprado, finito, parse_numero,
+                       resolver_esquema, safe_div)
 
 MAX_PROFUNDIDAD = 40   # niveles de sub-recetas anidadas tolerados antes de cortar
 ELAB_RE = re.compile(r"^(M\d|MR\d|MO\d|OBR\d|P0\d)|\bMADRE\b", re.I)
@@ -193,6 +194,8 @@ class MotorRecetas:
         self.sin_rend = sorted(c for c, rc in self.recetas.items() if not rc["rend"])
 
     def _es_sub(self, sku: str, nom) -> bool:
+        if es_panificado_comprado(sku):
+            return False
         sub = self.resolver_receta(sku)
         if sub is None:
             return False
@@ -214,7 +217,10 @@ class MotorRecetas:
 
     def _sub_receta(self, sku: str, nom) -> str | None:
         """Una línea es sub-receta si su código es una receta (COD_RECETA o NOM_RECETA); si además existe como
-        insumo con precio, gana la receta solo cuando es elaboración (M/MR/MO/OBR/MADRE)."""
+        insumo con precio, gana la receta solo cuando es elaboración (M/MR/MO/OBR/MADRE).
+        Los panificados comprados (PITA, BAGEL...) son insumo final: no se explotan (regla del GAS)."""
+        if es_panificado_comprado(sku):
+            return None
         sub = self.resolver_receta(sku)
         if sub is None:
             return None

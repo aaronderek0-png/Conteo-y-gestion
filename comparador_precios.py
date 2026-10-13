@@ -95,6 +95,24 @@ SCORE_ALTA = 85              # desde acá la confianza es 'Alta'
 TOLERANCIA_UNIDAD = 3.0      # si dossier/lista difiere más de 3x, la unidad no es comparable
 SOBREPRECIO_SOSPECHOSO = 40.0  # más de 40% de diferencia suele ser otro producto/presentación
 AHORRO_MINIMO_PCT = 3.0      # no reportar diferencias menores a este %
+# Productos con proveedor real de compra y marca fija. Se muestran y se comparan con todos los proveedores
+# (solo con la marca indicada); si el mejor precio es el del proveedor real, no hay delta ("proveedor actual").
+# El precio siempre se lleva a $/KG: una bolsa institucional (p. ej. 10 KG) se cotiza como $ bolsa / 10
+# (parse_presentacion + precio_alineado).
+PRODUCTOS_ESPECIALES = [
+    {"nombre": "PANKO BLANCO GOCHIS", "producto": {"panko"}, "marca": "gochiso", "proveedor_real": "Posta"},
+]
+# Filas del Dossier que son un error de origen (bulto/caja cargado como unidad) y no deben compararse.
+# 'precio_max': por debajo de ese Precio Ponderado la fila es el error. Se informa en el log.
+DOSSIER_EXCLUIR = [
+    {"sku": "TAH", "precio_max": 5000.0,
+     "motivo": "Tahina Frasco 900 g cargada por bulto/caja de 12 (precio/12): no es un frasco"},
+]
+# Envases de tamaño fijo: si el Dossier nombra el tamaño ('Frasco X 900Grs'), un candidato de otro tamaño
+# (pote de 400 g) no es el mismo producto aunque el precio por KG se parezca.
+ENVASE_FIJO_RE = re.compile(r"\b(frasco|pote|lata|botella|sachet|tarro|doypack)s?\b", re.I)
+TOLERANCIA_TAMANO_ENVASE = 0.25
+SEMILLAS_ENTERAS = {"sesamo", "chia", "lino", "amapola", "girasol", "zapallo"}
 MAX_OPCIONES = 3             # variantes (Opción 1..3) que se muestran por insumo
 CERCANIA_BUCKET = 0.15       # opciones a menos de ~15% de distancia al precio del Dossier empatan en cercanía
 DESCUENTO_EMPORIO = 0.85     # El Nuevo Emporio: la columna C/DTO es lista - 15%
@@ -382,6 +400,9 @@ def candidato_valido(query_tokens: list[str], cand_tokens_ordered: list[str],
     if "semi" in qset or "semi" in cand_tokens:
         # 'Sardo estacionado' acepta como alternativa el 'Sardo semi (estacionado)'
         required.discard("estacionado")
+    if "grano" in required and qset & SEMILLAS_ENTERAS and not cand_tokens & {"molido", "molida", "harina", "pasta"}:
+        # 'Semillas de sésamo blanco' ('grano sesamo blanco'): las listas dicen 'SESAMO BLANCO LOS VALLES X 1 KG'
+        required.discard("grano")
     if not required.issubset(cand_tokens):
         return False
 
@@ -397,9 +418,16 @@ def candidato_valido(query_tokens: list[str], cand_tokens_ordered: list[str],
     if "semi" in cand_tokens:
         cand_stems.add(_stem("estacionado"))
     key_terms = [_stem(t) for t in query_tokens if _es_termino(t)]
+    # 'semillas de X' se normaliza a 'grano X' (para 'comino en grano'); si la lista no lo dice ('SESAMO BLANCO
+    # LOS VALLES'), 'grano' no puede ser el sustantivo principal: se ignora de los dos lados.
+    _g = _stem("grano")
+    if len(set(key_terms)) > 1 and _g in key_terms:
+        key_terms = [t for t in key_terms if t != _g]
     # 'queso' se ignora de los dos lados: si no, 'Queso fontina' no podía matchear
     # con 'QUESO FONTINA PAULINA' (la primera palabra de la lista era 'queso').
     cand_terms = [_stem(t) for t in cand_tokens_ordered if _es_termino(t)]
+    if len(set(cand_terms)) > 1 and _g in cand_terms and _g not in key_terms:
+        cand_terms = [t for t in cand_terms if t != _g]
     if not key_terms or not cand_terms:
         return False
     # Sustantivo principal: la primera palabra de cada lado tiene que estar entre las
@@ -858,6 +886,19 @@ def _sin_simbolos(texto: Any) -> str:
     return re.sub(r"[^a-z0-9]+", "", strip_accents(texto).lower())
 
 
+def aplicar_exclusiones_dossier(dossier: pd.DataFrame) -> pd.DataFrame:
+    """Saca las filas de DOSSIER_EXCLUIR (errores de origen: bulto/caja cargado como unidad)."""
+    fuera = pd.Series(False, index=dossier.index)
+    for r in DOSSIER_EXCLUIR:
+        m = (dossier["Código SKU"].astype(str).str.strip().eq(r["sku"])
+             & pd.to_numeric(dossier["Precio Ponderado"], errors="coerce").lt(r["precio_max"]))
+        for _, f in dossier[m].iterrows():
+            LOG.info("Fila del Dossier excluida: %s '%s' $%s x %s -> %s", f["Código SKU"], f["Productos"],
+                     f"{f['Precio Ponderado']:,.2f}", f["Cantidad Inventario"], r["motivo"])
+        fuera |= m
+    return dossier[~fuera].reset_index(drop=True)
+
+
 def aplicar_lista_negra(dossier: pd.DataFrame) -> pd.DataFrame:
     negra = {_sin_simbolos(n) for n in LISTA_NEGRA}
     fuera = dossier["Productos"].map(_sin_simbolos).isin(negra)
@@ -899,6 +940,10 @@ def precio_alineado(precio_dossier: float, cand: pd.Series, producto_dossier: st
 
     opciones = [(cand["precio_base"], f"$/{cand['unidad_base']}")]
     cant_d, base_d = parse_presentacion(str(producto_dossier))
+    if (base_d != "UN" and ENVASE_FIJO_RE.search(str(producto_dossier)) and cant_d
+            and cand["unidad_base"] == base_d and cand["cantidad_base"]
+            and abs(cand["cantidad_base"] / cant_d - 1) > TOLERANCIA_TAMANO_ENVASE):
+        return None          # otro tamaño de frasco/pote: no es el mismo producto
     if base_d != "UN":
         if cant_d != 1 and base_d == cand["unidad_base"]:
             opciones.append((cand["precio_base"] * cant_d, f"$/envase {cant_d:g} {base_d}"))
@@ -1043,6 +1088,13 @@ def comparar(dossier: pd.DataFrame, listas: pd.DataFrame, lineas_txt: list[dict]
         pond = d["Precio Ponderado"]
         marcas, consulta = marcas_requeridas(d["Productos"], lineas_txt or [])
         query = consulta or _consulta(d["Productos"])
+        stems_q = {_stem(t) for t in query.split()}
+        esp = next((e for e in PRODUCTOS_ESPECIALES if {_stem(t) for t in e["producto"]} <= stems_q), None)
+        if esp:
+            marcas = [frozenset({_stem(esp["marca"])})]            # solo la marca fijada
+        # proveedor real de compra: se compara, pero contra sí mismo no genera ahorro
+        prov_real = (esp["proveedor_real"] if esp and _sin_simbolos(esp["proveedor_real"])
+                     in _sin_simbolos(d["Proveedor"]) else None)
         # Las reglas se evalúan sobre el nombre completo; para buscar, 'crema de leche'
         # es 'crema' (las listas dicen 'CREMA 44% MILKAUT BALDE', sin 'leche')
         reglas = [fn for palabras, fn in RESTRICCIONES if palabras <= {_stem(t) for t in query.split()}]
@@ -1187,7 +1239,8 @@ def comparar(dossier: pd.DataFrame, listas: pd.DataFrame, lineas_txt: list[dict]
             comparables = [m for m in mejores if m["precio"] is not None]
             if comparables:
                 g = min(comparables, key=lambda m: m["precio"])
-                dif = pond - g["precio"]
+                es_real = bool(prov_real and _sin_simbolos(g["prov"]) == _sin_simbolos(prov_real))
+                dif = 0.0 if es_real else pond - g["precio"]     # el proveedor real no compite contra sí mismo
                 pct = dif / pond * 100
                 mismo = _sin_simbolos(claves.get(g["prov"], g["prov"])) in _sin_simbolos(d["Proveedor"])
                 if pct < AHORRO_MINIMO_PCT:
@@ -1211,6 +1264,8 @@ def comparar(dossier: pd.DataFrame, listas: pd.DataFrame, lineas_txt: list[dict]
                 fila["Mejor Opción"] = "UNIDAD NO COMPARABLE"
             else:
                 fila["Mejor Opción"] = "SIN MATCH"
+            if prov_real and fila.get("Mejor Opción") == prov_real:
+                fila["Acción"] = f"Proveedor actual ({prov_real}): sin ahorro vs {prov_real}; marca {esp['nombre']}"
             filas.append(fila)
 
     return pd.DataFrame(filas)
@@ -1367,6 +1422,7 @@ def main() -> int:
     dossier = pd.read_excel(args.dossier, sheet_name=args.hoja)
     LOG.info("Dossier '%s': %d filas", args.hoja, len(dossier))
     dossier = aplicar_lista_negra(dossier)
+    dossier = aplicar_exclusiones_dossier(dossier)
 
     def con_criollo(paths: list[Path]) -> list[Path]:
         criollo = Path(args.criollo_csv) if args.criollo_csv else None

@@ -18,6 +18,98 @@ import unicodedata
 from collections import defaultdict
 from typing import Any, Iterable
 
+# Reglas de negocio heredadas del GAS (ventas_bom_rentabilidad / congreso_consumo_teorico)
+# Panificados que se COMPRAN a proveedor: son insumo final, nunca se explotan en el BOM.
+PANIFICADOS_COMPRADOS = frozenset({"PITA", "BAMAPOLA", "BSESAMO", "BCEBOLLA", "BKUMMEL", "PLETZ", "CROIL", "RDCL",
+                                   "PDM", "PDCAF", "BAGEL", "CROISSANT"})
+# VARIOS / FLETE: gasto operativo o logística; fuera del balance de materia prima y del food cost.
+LOGISTICA_RE = re.compile(r"varios|flete", re.I)
+
+
+# --- Sanitización de filas de planillas de origen (subtotales, encabezados intermedios, cortes) -------------
+_SECCION_RE = re.compile(
+    r"^\s*(?:lista\s+de\s+precios\b|saldo\b|subtotal\b"
+    r"|total(?:es)?(?:\s+(?:general|mes|local|compras|facturas|gastos))?\s*:?\s*$)", re.I)
+_ENCABEZADOS = {"codigo", "código", "cod", "sku", "producto", "productos", "nombre", "item", "ítem", "unidad",
+                "u. medida", "precio", "cantidad", "total", "rubro", "descripcion", "descripción"}
+_UNIDAD_RE = re.compile(r"^[A-Za-zÁÉÍÓÚÑáéíóúñ][A-Za-zÁÉÍÓÚÑáéíóúñ.\s/]{0,24}$")
+
+
+def _vacio(v: Any) -> bool:
+    return v is None or (isinstance(v, float) and v != v) or str(v).strip() in ("", "nan", "None", "NaT")
+
+
+def _es_numero(v: Any) -> bool:
+    if isinstance(v, bool):
+        return False
+    if isinstance(v, (int, float)):
+        return not (isinstance(v, float) and v != v)
+    return parse_numero(v)[0] is not None and re.fullmatch(r"[\s$\d.,\-+%]+", str(v)) is not None
+
+
+def motivo_fila_invalida(item: Any = None, codigo: Any = None, unidad: Any = None, *,
+                         exigir_codigo: bool = False, exigir_item: bool = False) -> str | None:
+    """None si la fila es de datos; si no, el motivo: ítem y código vacíos o ítem numérico, encabezado o subtotal intermedio,
+    unidad que no es texto. Un `código` vacío solo invalida cuando exigir_codigo=True (hay planillas donde el
+    ítem se identifica por nombre)."""
+    if _vacio(item) and (exigir_item or _vacio(codigo)):
+        return "ítem vacío" if exigir_item else "ítem y código vacíos"
+    if not _vacio(item):
+        if _es_numero(item):
+            return f"ítem numérico ({item})"
+        t = str(item).strip()
+        if _SECCION_RE.search(t):
+            return f"texto de sección/subtotal ({t[:30]})"
+        if t.lower() in _ENCABEZADOS:
+            return f"encabezado intermedio ({t})"
+    if not _vacio(codigo):
+        t = str(codigo).strip()
+        if _SECCION_RE.search(t) or t.lower() in _ENCABEZADOS:
+            return f"código con texto de sección ({t[:30]})"
+    elif exigir_codigo:
+        return "código vacío"
+    if unidad is not None and not _vacio(unidad):
+        if _es_numero(unidad):
+            return f"unidad no válida ({str(unidad)[:20]})"
+    return None
+
+
+def filas_validas(df, item: str | None, codigo: str | None = None, unidad: str | None = None, *,
+                  exigir_codigo: bool = False, exigir_item: bool = False, origen: str = "", log=None):
+    """Devuelve `df` sin las filas parásitas (subtotales, encabezados repetidos, unidad numérica). Las
+    columnas que no existan se ignoran. Loguea cuántas y por qué."""
+    import logging
+    log = log or logging.getLogger("defensivo")
+    ci = item if item in df.columns else None
+    cc = codigo if codigo in df.columns else None
+    cu = unidad if unidad in df.columns else None
+    if df.empty or not (ci or cc or cu):
+        return df
+    motivos = [motivo_fila_invalida(r.get(ci) if ci else None, r.get(cc) if cc else None,
+                                    r.get(cu) if cu else None, exigir_codigo=exigir_codigo,
+                                    exigir_item=exigir_item and ci is not None)
+               for r in df.to_dict("records")]
+    malas = [m is not None for m in motivos]
+    if any(malas):
+        from collections import Counter
+        resumen = Counter(m.split(" (")[0] for m in motivos if m)
+        ej = next(m for m in motivos if m)
+        solo_blancos = set(resumen) == {"ítem y código vacíos"}      # relleno en blanco de la planilla
+        (log.info if solo_blancos else log.warning)(
+            "%s: %d fila(s) %s descartada(s) %s | ej.: %s", origen or "planilla", sum(malas),
+            "en blanco" if solo_blancos else "parásita(s)", dict(resumen), ej)
+        return df.loc[[not b for b in malas]].copy()
+    return df
+
+
+def es_panificado_comprado(codigo: Any) -> bool:
+    return str(codigo or "").strip().upper() in PANIFICADOS_COMPRADOS
+
+
+def es_logistica(*textos: Any) -> bool:
+    return any(LOGISTICA_RE.search(unicodedata.normalize("NFKD", str(t or "")).encode("ascii", "ignore").decode())
+               for t in textos)
+
 
 class SchemaError(RuntimeError):
     """El libro no tiene el formato que el pipeline asume. Abortar sin escribir."""

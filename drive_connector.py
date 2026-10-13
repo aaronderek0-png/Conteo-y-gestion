@@ -48,6 +48,7 @@ SHEET_TAB = "Facturas"
 COLUMN_MAP = {
     3: "Proveedor",
     4: "Productos",
+    11: "Unidad Medida",
     13: "Cantidad Inventario",
     14: "Precio Unitario",
     15: "Mes factura",
@@ -119,18 +120,38 @@ def read_facturas(
     categorías objetivo (comparación exacta, sin acentos ni mayúsculas).
     'Categoría 2' no se filtra: entran todas sus subcategorías.
     """
-    categorias_gasto = categorias_gasto or CATEGORIAS_GASTO_OBJETIVO
     client = get_client(creds_path)
     ws = client.open_by_key(spreadsheet_id).worksheet(SHEET_TAB)
-
     # get_all_values() en lugar de get_all_records(): tolera encabezados duplicados/vacíos
-    rows = ws.get_all_values()
+    return filas_a_dataframe(ws.get_all_values(), categorias_gasto)
+
+
+def read_facturas_xlsx(
+    path: str | Path,
+    sheet: str = SHEET_TAB,
+    categorias_gasto: list[str] | None = None,
+) -> pd.DataFrame:
+    """Igual que read_facturas pero desde un .xlsx descargado (copia local de la planilla)."""
+    raw = pd.read_excel(path, sheet_name=sheet, header=None, dtype=object).fillna("")
+
+    def _txt(v: object) -> str:
+        # Los decimales se pasan con coma: _to_number leería "0.125" como 125 (punto de miles)
+        if isinstance(v, float):
+            return str(int(v)) if v.is_integer() else repr(v).replace(".", ",")
+        return str(v)
+
+    return filas_a_dataframe([[_txt(v) for v in r] for r in raw.values.tolist()], categorias_gasto)
+
+
+def filas_a_dataframe(rows: list[list[str]], categorias_gasto: list[str] | None = None) -> pd.DataFrame:
+    """Filas crudas de la pestaña 'Facturas' (la primera es el encabezado) -> DataFrame filtrado."""
+    categorias_gasto = categorias_gasto or CATEGORIAS_GASTO_OBJETIVO
     if len(rows) < 2:
         LOG.warning("La pestaña '%s' está vacía.", SHEET_TAB)
         return pd.DataFrame(columns=list(COLUMN_MAP.values()))
 
     width = max(COLUMN_MAP) + 1
-    data = [(r + [""] * width)[:width] for r in rows[1:]]  # rellena filas cortas
+    data = [(list(r) + [""] * width)[:width] for r in rows[1:]]  # rellena filas cortas
     df = pd.DataFrame(data)[list(COLUMN_MAP)].rename(columns=COLUMN_MAP)
     df.index = range(2, len(df) + 2)  # índice = nº de fila en el Sheet
     df.index.name = "Fila Sheet"
@@ -142,6 +163,7 @@ def read_facturas(
     out["Cantidad Inventario"] = out["Cantidad Inventario"].map(_to_number)
     out["Precio Unitario"] = out["Precio Unitario"].map(_to_number)
     out["Código SKU"] = out["Código SKU"].str.strip()
+    out["Unidad Medida"] = out["Unidad Medida"].str.strip()
     out["Mes factura"] = out["Mes factura"].map(_to_number)
     out = out.dropna(subset=["Mes factura"])
     out["Mes factura"] = out["Mes factura"].astype(int)

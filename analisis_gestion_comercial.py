@@ -54,6 +54,8 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 from rapidfuzz import fuzz, process
 
+from defensivo import es_logistica, es_panificado_comprado, filas_validas, motivo_fila_invalida
+
 LOG = logging.getLogger("analisis_gestion")
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -78,6 +80,8 @@ FUENTES_FIJAS = {
     "congreso_facturas": ("CONGRESO", "1udLEQpQ29avK4c6fNnQig-w02xIV82IgLe85yVJXaOY"),
     "conteo_obrador": ("CONTEO OBRADOR", "1i0LPYWIGqzTVr2KYJXgy5SrbL676EQxEk5qZshaztrM"),
     "lafinur": ("LAFINUR", "1tv0uI4KsSEPRUecYfnwcDqpGbUDelGqWwe3Hp-fikOc"),
+    "casi_gestion": ("Casi gestion", "1bnJp0suZ8pBoE3AFMnLMdzTy5frC3e3bDZ5XVbBzrLQ"),
+    "cabello": ("CABELLO", "1zAxYyNB98Sb1-D0HtfokESXc6FrDS96EbFYyMmsseIE"),
 }
 # Sucursales. 'planta' = Congreso: en Drive es la planta del Obrador (su gestión informa VENTA OBRADOR y se
 # cuenta en Producción/Pastelería/Depósito): vende a los locales, no recibe semielaborados.
@@ -87,9 +91,11 @@ LOCALES = {
 }
 # Fuentes que, si no están, no frenan el análisis (se informa en 'Controles')
 OPCIONALES = {"traspasos", "lista_precios_obrador", "precio_viejo_nuevo", "maestro", "congreso_facturas",
-              "conteo_obrador", "lafinur"}
+              "conteo_obrador", "lafinur", "casi_gestion", "cabello"}
 
 
+# Mes al que corresponden los nombres de FUENTES_FIJAS (ventas_arcos = "Ventas ARCOS 09-26", etc.)
+MES_BASE = 9
 MESES_ES = {1: "enero", 2: "febrero", 3: "marzo", 4: "abril", 5: "mayo", 6: "junio", 7: "julio",
             8: "agosto", 9: "septiembre", 10: "octubre", 11: "noviembre", 12: "diciembre"}
 
@@ -109,6 +115,11 @@ MERMA_NATURAL = {"frutas y verduras": 0.15, "carnes": 0.12, "pescados": 0.10}
 OPERATIVO_RE = re.compile(r"rational|pastilla|\bhielo\b|bolsas?\s+(?:de\s+)?vac|ecobandeja|eco\s?bandeja|\bfilm\b|guantes?\b")
 # Una cantidad de desperdicio mayor a esto x la mediana del mismo ítem se trata como error de carga
 DESP_ERROR_X = 50.0
+DESP_MAX_KG_LT = 100.0
+# Insumos cuyo proveedor real de compra es POSTA: el delta contra su propia lista no es ahorro; se excluyen
+# de 'Ahorro vs POSTA' (p. ej. PANKO BLANCO GOCHIS, comprado a Posta en bolsa de 10 KG, siempre $/KG).
+EXCLUIR_AHORRO_POSTA_SKU = {"PANK"}
+EXCLUIR_AHORRO_POSTA_RE = re.compile(r"panko.*goch|goch.*panko")
 
 
 # --------------------------------------------------------------------------- #
@@ -139,9 +150,24 @@ def fnum(x: float, dec: int = 1) -> str:
 # --------------------------------------------------------------------------- #
 # Descarga
 # --------------------------------------------------------------------------- #
+def mes_anterior(anio: int, mes: int) -> tuple[int, int]:
+    return (anio, mes - 1) if mes > 1 else (anio - 1, 12)
+
+
+def sufijo_mes(mes: int) -> str:
+    """'' para el mes base; '_MM' para los demás (ventas_arcos_10.xlsx)."""
+    return "" if mes == MES_BASE else f"_{mes:02d}"
+
+
 def fuentes_mes(anio: int, mes: int) -> dict[str, tuple[str, str]]:
     """Fuentes fijas + las que dependen del mes (patrón 'Ventas_Obrador_<Mes> <Año>')."""
     f = dict(FUENTES_FIJAS)
+    # Gestión mensual de Arcos del mes y del anterior (saldo inicial); ids de respaldo solo para los fijos
+    for a_, m_ in (mes_anterior(anio, mes), (anio, mes)):
+        f.setdefault(f"gestion_{MESES_ES[m_]}", (f"Gestión mensual Arcos_{MESES_ES[m_]}{a_}", ""))
+    if mes != MES_BASE:
+        f[f"ventas_arcos{sufijo_mes(mes)}"] = (f"Ventas ARCOS {mes:02d}-{anio % 100:02d}", "")
+        f[f"resumen_ventas{sufijo_mes(mes)}"] = (f"Resumen Ventas {mes:02d}-{anio % 100:02d}", "")
     f[f"ventas_obrador_{MESES_ES[mes]}"] = (f"Ventas_Obrador_{MESES_ES[mes].capitalize()} {anio}", "")
     ids_cong = {"septiembre": "1uVTec0SmdOivlKzVWJIuIVd_eiLpZ5RKUn2MXsD25jU"}
     f[f"gestion_congreso_{MESES_ES[mes]}"] = (f"Gestión Congreso {MESES_ES[mes].capitalize()}",
@@ -149,10 +175,13 @@ def fuentes_mes(anio: int, mes: int) -> dict[str, tuple[str, str]]:
     return f
 
 
-def descargar(refresh: bool, anio: int, mes: int) -> None:
+def descargar(refresh: bool, anio: int, mes: int, solo: list[str] | None = None) -> None:
+    """Baja de Drive (solo lectura) las planillas que faltan; con `refresh` las vuelve a bajar. `solo` limita
+    la descarga a esas claves de FUENTES_FIJAS (p. ej. ['arcos', 'cabello'])."""
     DATA_DIR.mkdir(exist_ok=True)
     fuentes = fuentes_mes(anio, mes)
-    faltan = [k for k in fuentes if refresh or not (DATA_DIR / f"{k}.xlsx").exists()]
+    faltan = [k for k in fuentes if (solo is None or k in solo)
+              and (refresh or not (DATA_DIR / f"{k}.xlsx").exists())]
     if not faltan:
         return
     creds = Credentials.from_service_account_file(
@@ -171,7 +200,7 @@ def descargar(refresh: bool, anio: int, mes: int) -> None:
             fid = id_resp if (id_resp and len(cand) != 1) else (cand[0] if cand else id_resp)
         if not fid:
             msg = f"No encontré '{nombre}' en Drive (ni id de respaldo)"
-            if k in OPCIONALES or k.startswith(("ventas_obrador_", "gestion_congreso_")):
+            if k in OPCIONALES or k.startswith(("ventas_obrador_", "gestion_", "ventas_arcos_", "resumen_ventas_")):
                 LOG.warning("%s: el análisis sigue sin esa fuente", msg)
                 continue
             raise FileNotFoundError(msg)
@@ -251,6 +280,9 @@ class Recetario:
         if len(ruta) > 14 or cod in ruta:
             acc[f"__CICLO__{cod}"] += qty
             return
+        if es_panificado_comprado(cod):      # panificado comprado: insumo final, no se abre (regla del GAS)
+            acc[cod] += qty
+            return
         es_obr = cod in self.obrador.index
         if es_obr and (frenar_obrador is True or (isinstance(frenar_obrador, frozenset) and cod in frenar_obrador)):
             acc[cod] += qty
@@ -288,10 +320,100 @@ class Recetario:
 # --------------------------------------------------------------------------- #
 # Ventas
 # --------------------------------------------------------------------------- #
-def cargar_ventas(path: Path, path_resumen: Path) -> tuple[pd.DataFrame, dict[str, Any]]:
+def _sku_resuelto(rec: "Recetario", sku: Any) -> bool:
+    """El SKU existe como receta, insumo u ítem de Obrador (si no, la venta no explica ningún consumo)."""
+    s_ = str(sku).strip() if sku is not None and pd.notna(sku) else ""
+    return bool(s_) and bool(rec.receta_de(s_) or s_ in rec.insumos.index or s_ in rec.obrador.index
+                             or rec.receta_obrador.get(s_))
+
+
+def cruzar_ventas_con_recetas(S: pd.DataFrame, rec: "Recetario", umbral: float = 92.0) -> pd.DataFrame:
+    """Cruce A:B de los artículos vendidos sin SKU utilizable contra los nombres del recetario (recetas,
+    Obrador, insumos). Solo acepta coincidencias exactas por nombre normalizado o difusas >= `umbral` con un
+    único código ganador. Devuelve una fila por artículo cruzado (articulo, sku, via, score)."""
+    nombres: dict[str, set[str]] = defaultdict(set)
+    for cod, nom in rec.nombre.items():
+        nombres[nk(nom)].add(cod)
+    for alias, cod in rec.alias.items():
+        nombres[nk(alias)].add(cod)
+    for sku_, row in rec.obrador.iterrows():
+        nombres[nk(row["NOMBRE"])].add(sku_)
+    for sku_, row in rec.insumos.iterrows():
+        nombres[nk(row["Producto"])].add(sku_)
+    nombres.pop("", None)
+    claves = list(nombres)
+    filas = []
+    for i, r in S.iterrows():
+        if _sku_resuelto(rec, r["sku"]):
+            continue
+        k = r["k"]
+        if k in nombres and len(nombres[k]) == 1:
+            filas.append((i, r["articulo"], next(iter(nombres[k])), "nombre exacto", 100.0))
+            continue
+        top = process.extract(k, claves, scorer=fuzz.token_sort_ratio, score_cutoff=umbral, limit=3)
+        if not top:
+            continue
+        mejores = {c for n, sc, _ in top if sc == top[0][1] for c in nombres[n]}
+        if len(mejores) == 1:
+            filas.append((i, r["articulo"], next(iter(mejores)), "nombre similar", float(top[0][1])))
+    return pd.DataFrame(filas, columns=["idx", "articulo", "sku", "via", "score"])
+
+
+def _consolidar_por_sku(S: pd.DataFrame) -> pd.DataFrame:
+    """Un único renglón por SKU (suma unidades y venta); los artículos sin SKU quedan tal cual."""
+    con_sku, sin_sku = S[S["sku"].notna()], S[S["sku"].isna()]
+    con_sku = con_sku.groupby("sku", as_index=False).agg(
+        k=("k", "first"), articulo=("articulo", "first"), unidades=("unidades", "sum"), venta=("venta", "sum"))
+    return pd.concat([con_sku, sin_sku], ignore_index=True)[["k", "articulo", "unidades", "venta", "sku"]]
+
+
+def completar_ventas_con_indice(S: pd.DataFrame, rec: "Recetario", equiv: pd.DataFrame,
+                                indice: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Cruce A:B de los artículos vendidos sin SKU utilizable contra TODAS las demás planillas de ventas.
+    Si el mismo artículo (nombre normalizado) figura en otra planilla con un código que es una receta/insumo/
+    Obrador, o que la planilla de equivalencias traduce a uno, se toma ese SKU (solo si el candidato es único).
+    Después se consolida por SKU: ninguna fila queda duplicada. Devuelve (ventas, cruces aplicados)."""
+    vacio = pd.DataFrame(columns=["articulo", "sku", "via", "score"])
+    if indice is None or not len(indice) or "codigo" not in indice:
+        return S, vacio
+    sku_de_codigo: dict[str, set[str]] = defaultdict(set)
+    for r in equiv[equiv["sku"] != ""].itertuples(index=False):
+        if r.codigo:
+            sku_de_codigo[r.codigo].add(r.sku)
+    con_cod = indice[indice["codigo"].notna() & (indice["codigo"].astype(str).str.strip() != "")]
+    por_k: dict[str, list[tuple[str, str]]] = defaultdict(list)
+
+    def _sin_prefijo_k(k: str) -> str:
+        return re.sub(r"^(?:gr|g|kg|un|u|und|porc|lt|ml|cc)\.\s*", "", k).strip()
+
+    for r in con_cod.itertuples(index=False):
+        por_k[_sin_prefijo_k(r.k)].append((_cod(r.codigo), r.archivo))
+    filas, S = [], S.copy()
+    for i, r in S.iterrows():
+        if _sku_resuelto(rec, r["sku"]):
+            continue
+        cand: dict[str, str] = {}
+        for cod, archivo in por_k.get(_sin_prefijo_k(r["k"]), []):
+            if cod.upper() in {"", "SIN SKU", "0", "NAN"}:
+                continue
+            for c in {cod} | sku_de_codigo.get(cod, set()):
+                if _sku_resuelto(rec, c):
+                    cand.setdefault(c, archivo)
+        if len(cand) == 1:
+            sku, archivo = next(iter(cand.items()))
+            S.at[i, "sku"] = sku
+            filas.append((r["articulo"], sku, f"código en {archivo}", 100.0))
+    if filas:
+        S = _consolidar_por_sku(S)
+    return S, pd.DataFrame(filas, columns=["articulo", "sku", "via", "score"])
+
+
+def cargar_ventas(path: Path, path_resumen: Path, rec: "Recetario | None" = None
+                  ) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Ventas del mes con el SKU de receta de cada artículo.
-    Fuente de unidades: hoja 'Ventas' (todas las líneas). SKU: hoja 'Rentabilidad'
-    (el que usa el costeo) y, si falta, 'Maestro'."""
+    Fuente de unidades: hoja 'Ventas' (todas las líneas). SKU, en este orden: 'Rentabilidad' de Ventas ARCOS
+    (el que usa el costeo), 'Maestro', 'RENTABILIDAD_POR_PLATO' de Resumen Ventas y, si hay recetario, el cruce
+    por nombre contra las recetas. Las líneas que terminan con el mismo SKU se consolidan (sin duplicar filas)."""
     S = pd.read_excel(path, "Ventas").iloc[:, :3]
     S.columns = ["articulo", "unidades", "venta"]
     S = S.dropna(subset=["articulo"]).copy()
@@ -307,17 +429,35 @@ def cargar_ventas(path: Path, path_resumen: Path) -> tuple[pd.DataFrame, dict[st
     mae["k"] = mae["nombre"].map(nk)
     sku_mae = mae.drop_duplicates("k").set_index("k")["codigo"]
     S["sku"] = S["k"].map(sku_rent).fillna(S["k"].map(sku_mae)).astype("object")
-    S["sku"] = S["sku"].map(lambda x: str(x).strip() if pd.notna(x) else None)
 
-    # control cruzado contra 'Resumen Ventas'
+    # cruce A:B contra 'Resumen Ventas' (misma venta, otra planilla): completa SKUs que A no trae
     ctrl: dict[str, Any] = {}
     try:
         S2 = pd.read_excel(path_resumen, "Ventas").iloc[:, :3]
         S2.columns = ["articulo", "unidades", "venta"]
         ctrl["resumen_unidades"] = float(pd.to_numeric(S2["unidades"], errors="coerce").sum())
         ctrl["resumen_venta"] = float(pd.to_numeric(S2["venta"], errors="coerce").sum())
+        try:
+            rp = pd.read_excel(path_resumen, "RENTABILIDAD_POR_PLATO").dropna(subset=["ARTÍCULO"])
+            rp["k"] = rp["ARTÍCULO"].map(nk)
+            sku_res = rp[rp["SKU"].astype(str).str.upper() != "SIN SKU"].drop_duplicates("k").set_index("k")["SKU"]
+            falta = S["sku"].isna()
+            S.loc[falta, "sku"] = S.loc[falta, "k"].map(sku_res)
+            ctrl["sku_desde_resumen"] = int((falta & S["sku"].notna()).sum())
+        except Exception as exc:  # noqa: BLE001 - hoja opcional
+            LOG.info("Resumen Ventas sin hoja RENTABILIDAD_POR_PLATO utilizable: %s", exc)
     except Exception as exc:  # noqa: BLE001 - es solo un control
         LOG.warning("No pude leer 'Resumen Ventas' para el control cruzado: %s", exc)
+    S["sku"] = S["sku"].map(lambda x: str(x).strip() if pd.notna(x) else None)
+
+    ctrl["cruces_bom"] = pd.DataFrame(columns=["articulo", "sku", "via", "score"])
+    if rec is not None:
+        cr = cruzar_ventas_con_recetas(S, rec)
+        if len(cr):
+            S.loc[cr["idx"].values, "sku"] = cr["sku"].values
+            ctrl["cruces_bom"] = cr.drop(columns="idx").reset_index(drop=True)
+        # consolidación: un único renglón por SKU (sumar unidades y venta); los sin SKU quedan tal cual
+        S = _consolidar_por_sku(S)
     return S, ctrl
 
 
@@ -328,6 +468,7 @@ def cargar_inventario(path: Path) -> pd.DataFrame:
     d = pd.read_excel(path, "Inventario", header=1).iloc[:, :19]
     d.columns = [str(c).strip() for c in d.columns]
     d = d.dropna(subset=["PRODUCTO"]).copy()
+    d = filas_validas(d, "PRODUCTO", "CODIGO", "MEDIDA", origen=f"{path.name}/Inventario", log=LOG)
     d["codigo"] = d["CODIGO"].astype(str).str.strip().where(d["CODIGO"].notna(), None)
     d["qty"] = pd.to_numeric(d["FINAL"], errors="coerce").fillna(0.0)
     d["valor"] = pd.to_numeric(d["VALORIZADO"], errors="coerce").fillna(0.0)
@@ -342,6 +483,7 @@ def cargar_facturas(path: Path, anio: int, mes: int) -> pd.DataFrame:
     sistema), `en_mes_pago` (columna 'Mes pago') y `en_mes_ingreso` (fecha de ingreso, criterio anterior)."""
     f = pd.read_excel(path, "Facturas")
     f.columns = [str(c).strip() for c in f.columns]
+    f = filas_validas(f, "PRODUCTOS", "CODIGO", "UN. MEDIDA", exigir_item=False, origen=f"{path.name}/Facturas", log=LOG)
     f["fecha"] = pd.to_datetime(f["FECHA INGRESO"], errors="coerce")
     f["fecha_factura"] = pd.to_datetime(f["FECHA FACTURA"], errors="coerce")
     anio_f = f["fecha_factura"].dt.year == anio
@@ -358,6 +500,7 @@ def cargar_facturas(path: Path, anio: int, mes: int) -> pd.DataFrame:
 def cargar_remitos(path: Path, anio: int, mes: int) -> pd.DataFrame:
     r = pd.read_excel(path, "Remitos")
     r.columns = [str(c).strip() for c in r.columns]
+    r = filas_validas(r, "PRODUCTO", None, None, origen=f"{path.name}/Remitos", log=LOG)
     r["fecha"] = pd.to_datetime(r["FECHA"], errors="coerce")
     r = r[(r["fecha"].dt.year == anio) & (r["fecha"].dt.month == mes)].copy()
     r["qty"] = pd.to_numeric(r["CANT. U/MEDIDA"], errors="coerce").fillna(0.0)
@@ -566,8 +709,17 @@ def cargar_traspasos(path: Path, anio: int, mes: int, local: str = "ARCOS") -> p
         return pd.DataFrame(columns=cols)
     t = pd.read_excel(path, "Traspasos")
     t.columns = [str(c).strip() for c in t.columns]
+    t = filas_validas(t, "PRODUCTO", "CODIGO", "U. MEDIDA", origen=f"{path.name}/Traspasos", log=LOG)
     t["fecha"] = pd.to_datetime(t["FECHA"], errors="coerce")
     t = t[(t["fecha"].dt.year == anio) & (t["fecha"].dt.month == mes)].copy()
+    # Regla del GAS (congreso_consumo_teorico): un traspaso no aprobado no mueve stock. El export real casi no
+    # trae ESTADO (vacío = vigente), así que se descartan solo los estados explícitamente no vigentes.
+    if "ESTADO" in t.columns:
+        est = t["ESTADO"].map(nk)
+        no_vigente = est.isin({"rechazado", "anulado", "cancelado", "pendiente"})
+        if no_vigente.any():
+            LOG.warning("Traspasos: %d filas con ESTADO no vigente descartadas", int(no_vigente.sum()))
+        t = t[~no_vigente].copy()
     t["origen"] = t["LOCAL ORIGEN"].astype(str).str.strip().str.upper()
     t["destino"] = t["LOCAL DESTINO"].astype(str).str.strip().str.upper()
     t = t[(t["origen"] == local) | (t["destino"] == local)].copy()
@@ -586,6 +738,7 @@ def cargar_desperdicios(path: Path, anio: int, mes: int) -> pd.DataFrame:
     cols = ["fecha", "codigo", "producto", "qty", "unidad", "motivo", "total", "error_carga"]
     d = pd.read_excel(path, "Desperdicios")
     d.columns = [str(c).strip() for c in d.columns]
+    d = filas_validas(d, "PRODUCTO", "CÓDIGO", "Unidad de medida", origen=f"{path.name}/Desperdicios", log=LOG)
     d["fecha"] = pd.to_datetime(d["FECHA"], errors="coerce")
     d["codigo"] = d["CÓDIGO"].map(_cod)
     d["qty"] = pd.to_numeric(d["Cantidad"], errors="coerce")
@@ -598,7 +751,9 @@ def cargar_desperdicios(path: Path, anio: int, mes: int) -> pd.DataFrame:
     d["total"] = pd.to_numeric(d["*TOTAL"], errors="coerce").fillna(0.0)
     med = d["codigo"].map(mediana)
     d["error_carga"] = ((med.gt(0) & d["qty"].gt(DESP_ERROR_X * med) & d["codigo"].map(cuenta).gt(2))
-                        | d["qty"].gt(500))
+                        | d["qty"].gt(500)
+                        # un único descarte de >100 KG/LT es casi siempre gramos cargados como KG
+                        | (d["qty"].gt(DESP_MAX_KG_LT) & d["unidad"].str.lower().isin({"kg", "kgs", "lt", "lts", "l"})))
     d = d[(d["fecha"].dt.year == anio) & (d["fecha"].dt.month == mes)]
     return d[cols].reset_index(drop=True)
 
@@ -608,14 +763,34 @@ def cargar_equivalencias_codigos(data_dir: Path) -> pd.DataFrame:
     Fuentes: 'Precio viejo//nuevo metodo.' (Sheet2 y 'Precios OCTUBRE AMBOS'), 'Lista de precios Obrador'
     (Cod_maxirest -> id_receta) y la hoja Equivalencias de Recetas (CODIGO M -> nombre)."""
     filas: list[tuple[str, str, str, str]] = []
+    descartadas: list[str] = []
 
     def agregar(df: pd.DataFrame, ic: int, inom: int, isku: int | None, fuente: str) -> None:
         for r in df.itertuples(index=False):
             cod, nom = _cod(r[ic]), (str(r[inom]).strip() if pd.notna(r[inom]) else "")
             sku = _cod(r[isku]) if isku is not None else ""
+            # encabezados intermedios ('NOMBRE'/'PRECIO'), subtotales y nombres numéricos no son equivalencias
+            if motivo_fila_invalida(nom, sku or cod) or (sku and motivo_fila_invalida(sku)):
+                descartadas.append(fuente)
+                continue
             if (cod or sku) and nom and nom.lower() != "nan":
                 filas.append((cod, nom, sku, fuente))
 
+    # Casi gestion / Equivalencias ("Codigo maxirest", "Nombre maxi", "SKU RECETA"): primero la copia más nueva
+    # bajada por el consolidador (Arcos_data/ventas_drive) y después la de Arcos_data
+    cg = sorted((data_dir / "ventas_drive").glob("casi_gestion*.xlsx"),
+                key=lambda q: q.stat().st_mtime, reverse=True) if (data_dir / "ventas_drive").is_dir() else []
+    if (data_dir / "casi_gestion.xlsx").exists():
+        cg.append(data_dir / "casi_gestion.xlsx")
+    for q in cg:
+        try:
+            eq_cg = pd.read_excel(q, sheet_name="Equivalencias")
+        except Exception as exc:  # noqa: BLE001 - copia dañada: se sigue con la siguiente
+            LOG.warning("No pude leer Equivalencias de %s: %s", q.name, exc)
+            continue
+        eq_cg = eq_cg.dropna(how="all")
+        if eq_cg.shape[1] >= 3:
+            agregar(eq_cg, 0, 1, 2, "Casi gestion / Equivalencias")
     pvn = data_dir / "precio_viejo_nuevo.xlsx"
     if pvn.exists():
         agregar(pd.read_excel(pvn, "Sheet2").iloc[1:], 0, 1, 5, "Precio viejo//nuevo metodo. / Sheet2")
@@ -629,6 +804,9 @@ def cargar_equivalencias_codigos(data_dir: Path) -> pd.DataFrame:
         eq = pd.read_excel(rc, "Equivalencias")
         agregar(eq.dropna(subset=["CODIGO M"]), eq.columns.get_loc("CODIGO M"), eq.columns.get_loc("NOMBRE M"),
                 None, "Recetas / Equivalencias (CODIGO M)")
+    if descartadas:
+        LOG.warning("Equivalencias: %d fila(s) parásita(s) descartada(s) (encabezados/subtotales) %s", len(descartadas),
+                    {f: descartadas.count(f) for f in dict.fromkeys(descartadas)})
     out = pd.DataFrame(filas, columns=["codigo", "nombre", "sku", "fuente"]).drop_duplicates()
     return out.reset_index(drop=True)
 
@@ -718,6 +896,7 @@ def cargar_inventarios_planta(path_gestion: Path, path_conteo: Path, anio: int,
     d = pd.read_excel(path_gestion, "Inventario", header=1).iloc[:, :14]
     d.columns = [str(c).strip() for c in d.columns]
     d = d.dropna(subset=["PRODUCTO"]).copy()
+    d = filas_validas(d, "PRODUCTO", "CODIGO", "MEDIDA", origen=f"{path_gestion.name}/Inventario", log=LOG)
     d["codigo"] = d["CODIGO"].map(_cod).replace("", None)
     d["qty"] = pd.to_numeric(d["FINAL"], errors="coerce").fillna(0.0)
     d["valor"] = pd.to_numeric(d["VALORIZADO"], errors="coerce").fillna(0.0)
@@ -758,6 +937,7 @@ def cargar_lista_obrador(path: Path) -> pd.DataFrame:
     except ValueError:
         d = pd.read_excel(path, "Sheet1").iloc[:, [0, 1, 3, 5]]
     d.columns = cols
+    d = filas_validas(d, "nombre", "codigo", None, origen=f"{path.name}/Lista de precios Obrador", log=LOG)
     d["codigo"] = d["codigo"].map(_cod)
     d["id_receta"] = d["id_receta"].map(_cod)
     d["precio"] = pd.to_numeric(d["precio"], errors="coerce")
@@ -802,6 +982,8 @@ def qty_a_base_obrador(qty: float, u_origen: Any, base: str, gpp: float | None) 
 
 def es_gasto_operativo(tipo: Any, nombre: Any, rubro: Any) -> bool:
     """Insumo no comestible / sin receta de cocina: descartables, limpieza, pastillas rational, hielo..."""
+    if es_logistica(nombre, rubro):      # VARIOS / FLETE: logística, fuera de MP y food cost
+        return True
     t = nk(tipo)
     if t and t != "materia prima":
         return True
@@ -813,15 +995,26 @@ def es_gasto_operativo(tipo: Any, nombre: Any, rubro: Any) -> bool:
 # --------------------------------------------------------------------------- #
 # Núcleo del análisis
 # --------------------------------------------------------------------------- #
-def analizar(anio: int, mes: int, local: str = "arcos") -> dict[str, Any]:
+def analizar(anio: int, mes: int, local: str = "arcos", indice_ventas: pd.DataFrame | None = None,
+             sin_movimientos: bool = False) -> dict[str, Any]:
     cfg = LOCALES[local]
     planta = cfg["planta"]
     rec = Recetario(DATA_DIR / "recetas.xlsx")
     maestro = cargar_maestro(DATA_DIR / "maestro.xlsx")
     if not planta:
-        ventas, ctrl_ventas = cargar_ventas(DATA_DIR / "ventas_arcos.xlsx", DATA_DIR / "resumen_ventas.xlsx")
-        inv_i = cargar_inventario(DATA_DIR / "gestion_agosto.xlsx")
-        inv_f = cargar_inventario(DATA_DIR / "gestion_septiembre.xlsx")
+        sfx = sufijo_mes(mes)
+        _, mes_ant = mes_anterior(anio, mes)
+        ventas, ctrl_ventas = cargar_ventas(DATA_DIR / f"ventas_arcos{sfx}.xlsx",
+                                            DATA_DIR / f"resumen_ventas{sfx}.xlsx", rec)
+        if indice_ventas is not None and len(indice_ventas):
+            ventas, extra = completar_ventas_con_indice(ventas, rec, cargar_equivalencias_codigos(DATA_DIR),
+                                                        indice_ventas)
+            if len(extra):
+                previos = ctrl_ventas.get("cruces_bom")
+                ctrl_ventas["cruces_bom"] = (extra if previos is None or not len(previos)
+                                             else pd.concat([previos, extra], ignore_index=True))
+        inv_i = cargar_inventario(DATA_DIR / f"gestion_{MESES_ES[mes_ant]}.xlsx")
+        inv_f = cargar_inventario(DATA_DIR / f"gestion_{MESES_ES[mes]}.xlsx")
         fac_all = cargar_facturas(DATA_DIR / "arcos.xlsx", anio, mes)
         rem = cargar_remitos(DATA_DIR / "arcos.xlsx", anio, mes)
         desp = cargar_desperdicios(DATA_DIR / "arcos.xlsx", anio, mes)
@@ -834,6 +1027,8 @@ def analizar(anio: int, mes: int, local: str = "arcos") -> dict[str, Any]:
         rem = pd.DataFrame(columns=["fecha", "PRODUCTO", "qty", "total", "unidad", "nombre"])
         desp = cargar_desperdicios(DATA_DIR / "congreso_facturas.xlsx", anio, mes)
     fac = fac_all[fac_all["en_mes"]]                      # regla del sistema: mes de FACTURA
+    if sin_movimientos:                                   # línea base para medir el efecto de Desperdicios/Traspasos
+        desp = desp.iloc[0:0].copy()
     trasp = cargar_traspasos(DATA_DIR / "traspasos.xlsx", anio, mes, cfg["traspaso"])
     equiv = cargar_equivalencias_codigos(DATA_DIR)
     vobr = cargar_ventas_obrador(DATA_DIR / f"ventas_obrador_{MESES_ES[mes]}.xlsx",
@@ -1096,6 +1291,8 @@ def analizar(anio: int, mes: int, local: str = "arcos") -> dict[str, Any]:
             estado = "sin resolver: no se pudo asociar a un insumo ni a una receta"
         return (f"{kind}:{rid}" if kind else "-"), estado
 
+    if sin_movimientos:
+        trasp = trasp.iloc[0:0].copy()
     for t in trasp.itertuples(index=False):
         res_, estado = volcar("t_in" if t.sentido == "IN" else "t_out", t.codigo, t.producto, t.qty, t.unidad)
         movimientos.append({"tipo": "Traspaso entrante" if t.sentido == "IN" else "Traspaso saliente",
@@ -1370,6 +1567,9 @@ def analizar(anio: int, mes: int, local: str = "arcos") -> dict[str, Any]:
     mat["comparable_criollo"] = comparable & escala_ok(mat["precio_real"], mat["precio_criollo"])
     mat["comparable_posta"] = ((mat["base_posta"] == mat["base_inv"]) & mat["precio_real"].gt(0) & cantidad_ok
                                & escala_ok(mat["precio_real"], mat["precio_posta"]))
+    mat["excl_posta"] = (mat["codigo"].isin(EXCLUIR_AHORRO_POSTA_SKU)
+                         | mat["insumo"].map(lambda t: bool(EXCLUIR_AHORRO_POSTA_RE.search(nk(t)))))
+    mat.loc[mat["excl_posta"], "comparable_posta"] = False
     qty_pos = mat["consumo_real"].clip(lower=0)
     mat["costo_a_posta"] = qty_pos * mat["precio_posta"].where(mat["comparable_posta"])
     mat["costo_real_comp_posta"] = qty_pos * mat["precio_real"].where(mat["comparable_posta"])
@@ -1503,8 +1703,9 @@ def analizar(anio: int, mes: int, local: str = "arcos") -> dict[str, Any]:
 
     # ------------------ controles ------------------
     if not planta:
-        res_sept = pd.read_excel(DATA_DIR / "gestion_septiembre.xlsx", "Resumen", header=None)
-        res_ago = pd.read_excel(DATA_DIR / "gestion_agosto.xlsx", "Resumen", header=None)
+        res_sept = pd.read_excel(DATA_DIR / f"gestion_{MESES_ES[mes]}.xlsx", "Resumen", header=None)
+        res_ago = pd.read_excel(DATA_DIR / f"gestion_{MESES_ES[mes_anterior(anio, mes)[1]]}.xlsx", "Resumen",
+                                header=None)
 
         def col_mes(df: pd.DataFrame, nombre: str) -> int:
             # la planilla arrastra dos años (mayo..octubre): el mes del año en curso es el último que figura
@@ -1514,7 +1715,7 @@ def analizar(anio: int, mes: int, local: str = "arcos") -> dict[str, Any]:
             m = df[df[0].astype(str).str.strip() == fila]
             return num(m.iloc[0][col]) if len(m) else float("nan")
 
-        col_s, col_a = col_mes(res_sept, MESES_ES[mes]), col_mes(res_ago, MESES_ES[mes - 1])
+        col_s, col_a = col_mes(res_sept, MESES_ES[mes]), col_mes(res_ago, MESES_ES[mes_anterior(anio, mes)[1]])
         gest = {
             "gest_stock_inicial": rs(res_sept, "STOCK INICIAL", col_s),
             "gest_compras": rs(res_sept, "COMPRAS", col_s),
@@ -1838,6 +2039,8 @@ def _hojas(res: dict[str, Any]) -> dict[str, pd.DataFrame]:
     m["clase"] = m["codigo"].map(clase_de).fillna("")
 
     def estado_posta(r: pd.Series) -> str:
+        if r["excl_posta"]:
+            return "Excluido: Posta es el proveedor real de compra (sin ahorro vs Posta)"
         if r["comparable_posta"]:
             return "Comparable"
         if r["excl_escala"] or r["sin_seguimiento"]:
@@ -2064,12 +2267,13 @@ def escribir_html(res: dict[str, Any], destino: Path) -> None:
     cards = "".join(f'<div class="k"><div class="v">{v}</div><div class="l">{html.escape(l)}</div></div>' for l, v in kpi)
     dif_obr = (k["obrador_ventas_arcos"] - k["obrador_remitos"]) if pd.notna(k["obrador_ventas_arcos"]) else None
     aviso_planta = ""
-    if es_p and pl and pl.get("venta_total"):
+    if es_p and pl and pl.get("venta_total") and pl.get("venta_items"):
         cob = pl["venta_items"] / pl["venta_total"]
+        extrap = f"teórico extrapolado al 100%: {pesos(k['aud_teorico_mp'] / cob)}" if cob else             "sin detalle por ítem: no se puede extrapolar el teórico"
         aviso_planta = (f"<p><b>Congreso = planta del Obrador.</b> Sus ventas son las ventas Obrador "
                         f"({pesos(pl['venta_total'])}); solo hay detalle por ítem del {cob:.0%} (remitos de Arcos y Lafinur, "
                         f"sin Cabello), por eso el teórico está subestimado y el faltante crítico sobreestimado "
-                        f"(teórico extrapolado al 100%: {pesos(k['aud_teorico_mp'] / cob)}).</p>")
+                        f"({extrap}).</p>")
     doc = f"""<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Gestión {nombre} {mes_t}</title>
 <style>body{{font-family:Segoe UI,Arial,sans-serif;color:#222;margin:0;background:#f5f6f8}}
@@ -2111,23 +2315,162 @@ Detalle y controles en Analisis_Gestion_Comercial_{nombre}_{res['mes']:02d}_{res
 
 
 # --------------------------------------------------------------------------- #
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--refresh", action="store_true", help="volver a bajar las planillas de Drive")
-    ap.add_argument("--anio", type=int, default=2026)
-    ap.add_argument("--mes", type=int, default=9)
-    ap.add_argument("--out-dir", type=Path, default=BASE_DIR)
-    ap.add_argument("--locales", nargs="+", default=list(LOCALES), choices=list(LOCALES),
-                    help="sucursales a procesar (por defecto todas)")
-    args = ap.parse_args()
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s", datefmt="%H:%M:%S")
-    descargar(args.refresh, args.anio, args.mes)
-    for local in args.locales:
+# Reporte de ítems huérfanos (sin ventas que los expliquen)
+# --------------------------------------------------------------------------- #
+def huerfanos(res: dict[str, Any]) -> pd.DataFrame:
+    """Ítems cuyo consumo no explica ninguna venta: (local, mes, codigo, nombre, origen, detalle)."""
+    filas: list[tuple[str, str, str, str, str]] = []
+    mes_txt = f"{res['mes']:02d}/{res['anio']}"
+    aud = res["auditoria"]
+    if len(aud):
+        for r in aud[aud["causa"].astype(str).str.startswith("Sin receta/venta")].itertuples(index=False):
+            filas.append((str(r.codigo), str(r.insumo), "Auditoría de desvíos",
+                          f"{r.clase} | consumo real {fnum(r.consumo_real, 2)} {r.unidad} | faltante {pesos(r.critico)}"))
+    obr = res["obrador"]
+    if len(obr):
+        for r in obr[obr["alerta"].astype(str).str.startswith("sin ventas que lo expliquen")].itertuples(index=False):
+            filas.append((str(r.codigo), str(r.item_obrador), "Obrador",
+                          "sin receta/venta que lo use (alerta del Obrador)"))
+    for r in res["sin_receta"].itertuples(index=False):
+        sku = r.sku if isinstance(r.sku, str) and r.sku else "SIN SKU"
+        filas.append((sku, str(r.articulo), "Venta sin receta/insumo",
+                      f"{fnum(r.unidades, 2)} unidades | venta {pesos(r.venta)}"))
+    df = pd.DataFrame(filas, columns=["codigo", "nombre", "origen", "detalle"])
+    df.insert(0, "mes", mes_txt)
+    df.insert(0, "local", res["nombre_local"])
+    # una sola fila por (local, mes, código, nombre): los orígenes se unen en vez de duplicar
+    return (df.groupby(["local", "mes", "codigo", "nombre"], as_index=False, sort=False)
+            .agg(origen=("origen", lambda x: " + ".join(dict.fromkeys(x))),
+                 detalle=("detalle", lambda x: " || ".join(dict.fromkeys(x)))))
+
+
+class IndiceVentas:
+    """Consulta de 'dónde aparece este código/nombre' sobre el índice de ventas (todas las planillas)."""
+
+    def __init__(self, indice: pd.DataFrame | None, equiv: pd.DataFrame | None = None):
+        self.vacio = indice is None or not len(indice)
+        self.grupos: list[dict[str, Any]] = []
+        self.cod_de_sku: dict[str, set[str]] = defaultdict(set)
+        self.nombres_de_sku: dict[str, set[str]] = defaultdict(set)
+        if equiv is not None and len(equiv):
+            for r in equiv.itertuples(index=False):
+                if r.sku:
+                    if r.codigo:
+                        self.cod_de_sku[r.sku].add(r.codigo)
+                    self.nombres_de_sku[r.sku].add(nk(r.nombre))
+        if self.vacio:
+            return
+        for (archivo, hoja), g in indice.groupby(["archivo", "hoja"], sort=False):
+            codigos = {_cod(c): True for c in g["codigo"].dropna() if _cod(c)}
+            self.grupos.append({"archivo": archivo, "hoja": hoja, "n": len(g), "codigos": set(codigos),
+                                "g": g, "ks": sorted(set(g["k"]))})
+
+    def evidencia(self, codigo: str, nombre: str, umbral: float = 90.0
+                  ) -> tuple[list[str], list[str]]:
+        """(donde aparece, donde NO aparece) como texto 'archivo › hoja'."""
+        codigos = {_cod(codigo)} | self.cod_de_sku.get(codigo, set())
+        claves = {nk(nombre)} | self.nombres_de_sku.get(codigo, set())
+        claves.discard("")
+        si, no = [], []
+        for gr in self.grupos:
+            etiqueta = f"{str(gr['archivo']).split('/')[-1]} › {gr['hoja']}"
+            g = gr["g"]
+            hit = g[g["codigo"].map(lambda c: _cod(c) in codigos if pd.notna(c) else False)]
+            criterio = "por código"
+            if not len(hit):
+                ks = [k for k in claves if k in set(gr["ks"])]
+                if not ks and gr["ks"]:
+                    for k in claves:
+                        m = process.extractOne(k, gr["ks"], scorer=fuzz.token_sort_ratio, score_cutoff=umbral)
+                        if m:
+                            ks.append(m[0])
+                hit = g[g["k"].isin(ks)]
+                criterio = "por nombre"
+            if len(hit):
+                nombres = ", ".join(dict.fromkeys(hit["articulo"].astype(str)))[:60]
+                si.append(f"{etiqueta} ({criterio}: \"{nombres}\", {fnum(hit['unidades'].sum(), 1)} u., "
+                          f"{pesos(hit['venta'].sum())})")
+            else:
+                no.append(etiqueta)
+        return si, no
+
+
+def escribir_huerfanos(resultados: list[dict[str, Any]], destino: Path, indice: pd.DataFrame | None = None,
+                       fuentes: dict[str, Any] | None = None) -> int:
+    """Vuelca a `destino` los ítems sin mapeo: para cada uno, en qué archivos de ventas SÍ aparece y en cuáles
+    NO (por código o nombre), más los cruces automáticos aplicados. Devuelve la cantidad de ítems."""
+    fuentes = fuentes or {}
+    lineas = ["REPORTE DE ÍTEMS HUÉRFANOS - mapeo fallido",
+              "=" * 78,
+              "Ítems cuyo consumo no tiene ventas/recetas que lo expliquen. Para cada uno se indica en qué",
+              "archivos de ventas se buscó el código o nombre y dónde NO apareció. Para corregirlo, pasame",
+              "la equivalencia manual 'CÓDIGO -> SKU de receta / artículo vendido'.", ""]
+    analizados = fuentes.get("analizados")
+    if analizados is not None and len(analizados):
+        lineas.append("ARCHIVOS DE VENTAS REVISADOS (con filas de ventas por artículo)")
+        lineas += [f"  - {r.archivo} › {r.hoja}: {r.filas} filas | local: {r.local or '-'} | mes: {r.mes or '-'}"
+                   for r in analizados.itertuples(index=False)]
+    if fuentes.get("copias"):
+        lineas.append("COPIAS IDÉNTICAS (se consultan una sola vez)")
+        lineas += [f"  - {k}  ==  {', '.join(v)}" for k, v in fuentes["copias"].items()]
+    for etq, clave in (("ARCHIVOS SIN VENTAS POR ARTÍCULO (no aportan al cruce)", "sin_ventas"),
+                       ("ARCHIVOS CON ERROR AL LEER", "con_error")):
+        if fuentes.get(clave):
+            lineas.append(etq)
+            lineas += [f"  - {x}" for x in fuentes[clave]]
+    lineas.append("")
+    total = 0
+    for res in resultados:
+        h = huerfanos(res)
+        total += len(h)
+        idx = IndiceVentas(indice, res.get("equivalencias"))
+        lineas.append("#" * 78)
+        lineas.append(f"## {res['nombre_local']} - {res['mes']:02d}/{res['anio']}  ({len(h)} ítems)")
+        lineas.append("#" * 78)
+        for r in h.itertuples(index=False):
+            lineas.append(f"[{r.codigo}] {r.nombre}")
+            lineas.append(f"    Origen : {r.origen} - {r.detalle}")
+            if idx.vacio:
+                lineas.append("    Ventas : sin índice de ventas disponible")
+                continue
+            si, no = idx.evidencia(r.codigo, r.nombre)
+            for x in si:
+                lineas.append(f"    ENCONTRADO EN: {x}")
+            if no:
+                lineas.append("    NO ENCONTRADO EN: " + " | ".join(no))
+        cr = (res.get("ctrl_ventas") or {}).get("cruces_bom")
+        if cr is not None and len(cr):
+            lineas += ["", f"   Cruces automáticos aplicados ({len(cr)}): verificar que sean correctos",
+                       f"   {'ARTÍCULO VENDIDO':<48}| {'SKU/RECETA':<18}| CRITERIO"]
+            lineas += [f"   {str(r.articulo)[:47]:<48}| {str(r.sku)[:17]:<18}| {r.via} ({r.score:.0f})"
+                       for r in cr.itertuples(index=False)]
+        lineas.append("")
+    try:
+        destino.write_text("\n".join(lineas), encoding="utf-8")
+    except PermissionError:       # la raíz puede no admitir archivos nuevos: se deja en WebTest/ (la app lo ve igual)
+        alt = BASE_DIR / "WebTest" / destino.name
+        LOG.warning("Sin permiso para crear %s: se guarda en %s", destino, alt)
+        alt.write_text("\n".join(lineas), encoding="utf-8")
+    return total
+
+
+def generar(anio: int, mes: int, locales: list[str], out_dir: Path, indice_ventas: pd.DataFrame | None = None
+            ) -> tuple[list[dict[str, Any]], list[str]]:
+    """Analiza y escribe el Excel de cada local para el mes. Un local sin datos fuente no frena a los demás:
+    queda en la lista de fallidos para que el consolidador lo cubra con lo que haya (facturas)."""
+    resultados, fallidos = [], []
+    for local in locales:
         nombre = LOCALES[local]["nombre"]
-        LOG.info("=== %s ===", nombre)
-        res = analizar(args.anio, args.mes, local)
-        xlsx = args.out_dir / f"Analisis_Gestion_Comercial_{nombre}_{args.mes:02d}_{args.anio}.xlsx"
-        htmlp = args.out_dir / f"reporte_gestion_{local}.html"
+        LOG.info("=== %s %02d/%d ===", nombre, mes, anio)
+        try:
+            res = analizar(anio, mes, local, indice_ventas)
+        except Exception as exc:  # noqa: BLE001 - un local sin fuentes no debe frenar a los demás
+            LOG.warning("%s %02d/%d: sin fuentes suficientes para el análisis completo (%s: %s)",
+                        nombre, mes, anio, type(exc).__name__, exc)
+            fallidos.append(local)
+            continue
+        xlsx = out_dir / f"Analisis_Gestion_Comercial_{nombre}_{mes:02d}_{anio}.xlsx"
+        htmlp = out_dir / f"reporte_gestion_{local}.html"
         try:
             escribir_excel(res, xlsx)
         except PermissionError:       # el Excel de destino está abierto: no se pisa, se deja al lado
@@ -2145,6 +2488,32 @@ def main() -> int:
                  pesos(k["gasto_operativo"]), pesos(k["traspasos_out"]), pesos(k["ahorro_posta"]),
                  f"{k['ref_cobertura'] / k['consumo_real_total_pos']:.0%}" if k["consumo_real_total_pos"] else "-")
         LOG.info("Generado %s y %s", xlsx.name, htmlp.name)
+        resultados.append(res)
+    return resultados, fallidos
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--refresh", action="store_true", help="volver a bajar las planillas de Drive")
+    ap.add_argument("--refresh-solo", nargs="+", metavar="CLAVE",
+                    help="volver a bajar solo estas planillas (p. ej. arcos cabello), sin tocar el resto")
+    ap.add_argument("--anio", type=int, default=2026)
+    ap.add_argument("--mes", type=int, default=MES_BASE)
+    ap.add_argument("--meses", type=int, nargs="+", help="varios meses (pisa --mes)")
+    ap.add_argument("--out-dir", type=Path, default=BASE_DIR)
+    ap.add_argument("--locales", nargs="+", default=list(LOCALES), choices=list(LOCALES),
+                    help="sucursales a procesar (por defecto todas)")
+    args = ap.parse_args()
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s", datefmt="%H:%M:%S")
+    resultados: list[dict[str, Any]] = []
+    for mes in (args.meses or [args.mes]):
+        if args.refresh_solo:
+            descargar(True, args.anio, mes, solo=args.refresh_solo)
+        descargar(args.refresh, args.anio, mes)
+        ok, _ = generar(args.anio, mes, args.locales, args.out_dir)
+        resultados += ok
+    n = escribir_huerfanos(resultados, BASE_DIR / "reporte_items_huerfanos.txt")
+    LOG.info("reporte_items_huerfanos.txt: %d ítems sin mapeo", n)
     return 0
 
 
