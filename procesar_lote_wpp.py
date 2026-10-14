@@ -581,6 +581,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     for p, orig in cl["duplicados"]:
         filas_aud.append({"archivo": p.name, "tipo": "Duplicado", "numero": "-", "proveedor": "-",
                           "sello_firma": "—", "local": "—", "estado": f"DUPLICADO de {orig.name}", "alertas": []})
+    cl["_plan_por_local"] = plan_por_local                  # filas completas (para recuperar_lote.py)
     reporte = {"generado": datetime.now().isoformat(timespec="seconds"), "auditoria": filas_aud,
                "remitos_obrador": [r for rs in remitos_obrador_por_local.values() for r in rs],
                "escrituras": escrituras, "push_drive": pushes, "remitos": remitos_lote,
