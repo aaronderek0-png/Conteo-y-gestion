@@ -16,6 +16,8 @@ Uso:
     python telegram_ingestor.py --watch --interval 60     # modo vivo
     python telegram_ingestor.py --setup-task [--minutos 15]   # crea la Tarea Programada de Windows
     python telegram_ingestor.py --once --dry-run          # procesa sin escribir en las copias
+    python telegram_ingestor.py --limpiar                 # borra para todos los mensajes del grupo, salvo el fijado
+    (en el grupo, escribir /limpiar hace lo mismo)
     python telegram_ingestor.py --conectar <TOKEN>        # una sola vez: guarda el token en .env, detecta el grupo
                                                           # "Facturas Mishiguene", lo guarda y manda el mensaje de prueba
 
@@ -53,6 +55,7 @@ EXT_OK = {".jpg", ".jpeg", ".png", ".webp", ".pdf"}
 class TelegramAPI:
     def __init__(self, token: str, http: Callable[..., Any] | None = None):
         self.token = token
+        self.enviados: list[tuple[str, int]] = []
         if http is None:
             import requests
             http = requests.request
@@ -80,11 +83,25 @@ class TelegramAPI:
         destino.write_bytes(r.content)
         return destino
 
-    def responder(self, chat_id: int | str, texto: str, reply_to: int | None = None) -> None:
+    def responder(self, chat_id: int | str, texto: str, reply_to: int | None = None) -> dict:
         p: dict[str, Any] = {"chat_id": chat_id, "text": texto[:4000], "disable_web_page_preview": "true"}
         if reply_to:
             p["reply_to_message_id"] = reply_to
-        self._call("sendMessage", **p)
+        r = self._call("sendMessage", **p)
+        if isinstance(r, dict) and r.get("message_id"):
+            self.enviados.append((str(chat_id), int(r["message_id"])))     # se persiste en telegram_state.json
+        return r
+
+    def get_chat(self, chat_id: int | str) -> dict:
+        return self._call("getChat", chat_id=chat_id)
+
+    def borrar(self, chat_id: int | str, message_id: int) -> bool:
+        """deleteMessage (para todos los participantes). False si Telegram lo rechaza (ya no existe, sin permiso)."""
+        try:
+            self._call("deleteMessage", chat_id=chat_id, message_id=message_id)
+            return True
+        except Exception:
+            return False
 
 
 # --------------------------------------------------------------------------- #
@@ -95,6 +112,30 @@ def cargar_estado() -> dict:
         return json.loads(STATE_JSON.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return {"offset": None, "sha256": {}}
+
+
+def registrar_ids(est: dict, chat: int | str, ids: list[int]) -> None:
+    lista = est.setdefault("mensajes", {}).setdefault(str(chat), [])
+    vistos = set(lista)
+    lista.extend(i for i in ids if i not in vistos)
+
+
+def limpiar(api: "TelegramAPI", chat_id: int | str, est: dict, extra_ids: list[int] | None = None,
+            max_barrido: int = 5000) -> dict:
+    """Borra para todos los participantes todos los mensajes del grupo salvo el fijado (`pinned_message` de getChat).
+    Usa los message_id guardados (entrantes + los del bot) y además barre 1..máximo conocido, para llevarse también lo
+    anterior al registro. Telegram devuelve en getChat solo el último mensaje fijado."""
+    fijado = (api.get_chat(chat_id).get("pinned_message") or {}).get("message_id")
+    conocidos = set(est.get("mensajes", {}).get(str(chat_id), [])) | set(extra_ids or [])
+    tope = min(max(conocidos | {0}), max_barrido) if conocidos else 0
+    objetivo = sorted((conocidos | set(range(1, tope + 1))) - ({fijado} if fijado else set()), reverse=True)
+    borrados = 0
+    for mid in objetivo:
+        if api.borrar(chat_id, mid):
+            borrados += 1
+        time.sleep(0.03)                       # sin saturar el límite de la API
+    est.setdefault("mensajes", {})[str(chat_id)] = [fijado] if fijado else []
+    return {"chat": str(chat_id), "fijado": fijado, "intentados": len(objetivo), "borrados": borrados}
 
 
 def guardar_estado(e: dict) -> None:
@@ -160,6 +201,11 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
     ups = api.get_updates(est.get("offset"), timeout=timeout)
     stats = {"updates": len(ups), "archivos": 0, "duplicados": 0, "respondidos": 0, "ms": 0}
     if not ups:
+        if api.enviados:                                            # mensajes del bot enviados antes de esta consulta
+            for ch, mid in api.enviados:
+                registrar_ids(est, ch, [mid])
+            api.enviados.clear()
+            guardar_estado(est)
         stats["ms"] = round((time.perf_counter() - t0) * 1000)
         return stats
     ENTRADA.mkdir(parents=True, exist_ok=True)
@@ -172,6 +218,15 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
             continue
         chat = msg["chat"]["id"]
         if chat_permitido and str(chat) != str(chat_permitido):
+            continue
+        registrar_ids(est, chat, [msg["message_id"]])                # todo lo que entra al grupo
+        texto_msg = (msg.get("text") or "").strip().lower()
+        if texto_msg.split("@")[0] == "/limpiar":
+            r = limpiar(api, chat, est, [msg["message_id"]])
+            stats["limpiado"] = r
+            est["offset"] = ultimo
+            api.responder(chat, f"🧹 Listo: {r['borrados']} mensajes borrados"
+                                + (" (el fijado se conserva)." if r["fijado"] else "."))
             continue
         for file_id, nombre in adjuntos(msg):
             ruta = api.descargar(file_id, ENTRADA / nombre)
@@ -204,6 +259,9 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
     est["offset"] = ultimo
+    for ch, mid in api.enviados:                                   # los mensajes del bot también se registran
+        registrar_ids(est, ch, [mid])
+    api.enviados.clear()
     guardar_estado(est)
     stats["ms"] = round((time.perf_counter() - t0) * 1000)
     return stats
@@ -288,6 +346,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--interval", type=int, default=60, help="Segundos entre consultas en --watch")
     ap.add_argument("--minutos", type=int, default=15)
     ap.add_argument("--dry-run", action="store_true", help="Procesa sin escribir en las copias")
+    ap.add_argument("--limpiar", action="store_true",
+                    help="Borra para todos los mensajes del grupo salvo el fijado (también: /limpiar en el grupo)")
     ap.add_argument("--conectar", metavar="TOKEN", help="Guarda el token en .env, detecta el grupo y manda el mensaje de prueba")
     args = ap.parse_args(argv)
     cargar_env()
@@ -313,6 +373,16 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     api = TelegramAPI(token)
     chat = os.environ.get("TELEGRAM_CHAT_ID")
+    if args.limpiar:
+        if not chat:
+            print("Falta TELEGRAM_CHAT_ID: correr primero --conectar <TOKEN>.")
+            return 2
+        est = cargar_estado()
+        r = limpiar(api, chat, est)
+        guardar_estado(est)
+        print(f"Limpieza: {r['borrados']} mensajes borrados de {r['intentados']} intentados "
+              f"(fijado conservado: {r['fijado']}).")
+        return 0
     if args.once or not args.watch:
         s = pasada(api, escribir=not args.dry_run, chat_permitido=chat)
         LOG.info("pasada: %s", s)
