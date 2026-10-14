@@ -258,7 +258,8 @@ def main(argv: list[str] | None = None) -> int:
     return _imprimir(reporte, locales, ap, args, cl)
 
 
-def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True):
+def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True, forzar_nuevas: bool = False,
+             demo: bool = False):
     """Núcleo reutilizable (lo usa también telegram_ingestor.py). `args` necesita .push_drive y
     .confirmo_escribir_produccion. Devuelve (reporte, locales, ap, clasificación)."""
     # ---- Nivel 1 ------------------------------------------------------------
@@ -347,12 +348,21 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True)
         if c.get("tipo") != "Remito":
             continue
         reg = imp.procesar_remito(c)
+        loc_r = locales.get(analisis[c["archivo"]]["local"] or "Congreso") or locales["Congreso"]
+        imp.completar_remito(reg, loc_r, ap)
+        reg["proveedor_oficial"] = imp.mapear_proveedor(reg["proveedor"], "", loc_r.proveedores)[0]
         clave = imp._clave_remito(c.get("numero_factura"))
         fac = facturas_por_remito.get(clave)
         if fac:
             conc = imp.conciliar_remito_factura(reg, fac)
             reg.update({"estado": "CONCILIADO", "factura_definitiva": fac.get("numero_factura"),
                         "alertas": conc["alertas"], "conciliacion": conc})
+        if reg["estado"] == "PENDIENTE":
+            ya = imp.remito_ya_cargado_como_total(reg, loc_r)
+            if ya:
+                reg.update({"estado": "CONCILIADO", "factura_definitiva": ya["N"],
+                            "alertas": [f"ya cargado en Facturas como total N° {ya['N']} ({ya['fecha']}, "
+                                        f"${ya['total']:,.0f}; difiere {ya['diferencia_pct']:+.1f} % del estimado del remito)"]})
         c["_remito"] = reg
         remitos[str(c.get("numero_factura"))] = reg
         remitos_lote.append(reg)
@@ -372,10 +382,10 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True)
             continue                           # el remito vive en remitos_pendientes (ver arriba)
         destino = an["local"]
         reasignar = bool(an["m0"] and an["regla"]["local"] and an["m0"]["local"] != an["regla"]["local"]
-                         and an["regla"]["local"] == "Chimidoha")
-        if an["m0"] and not reasignar:
-            continue                           # ya está en la planilla
-        if reasignar and any(m["local"] == "Chimidoha" for m in an["matches"]):
+                         and an["regla"]["local"] == "Chimidoha" and not forzar_nuevas)
+        if an["m0"] and not reasignar and not forzar_nuevas:
+            continue                           # ya está en la planilla (DEMO/PRUEBA lo fuerza para mostrarlo en vivo)
+        if reasignar and not forzar_nuevas and any(m["local"] == "Chimidoha" for m in an["matches"]):
             continue                           # ya reasignada a Chimidoha en una corrida anterior
         if destino is None or not c.get("items") or not c.get("numero_factura"):
             c.setdefault("advertencias", []).append(
@@ -391,23 +401,12 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True)
                 (int(i) + 2, f"REASIGNAR A CHIMIDOHA: sello Café Mishiguene Núñez (factura {c['numero_factura']})")
                 for i in an["m0"]["filas"].index)
 
-    # remitos que quedaron pendientes (sin factura en el lote ni en la planilla) → filas con N° temporal
-    for reg in remitos_lote:
-        if reg["estado"] == "PENDIENTE":
-            loc_n = next((analisis[c["archivo"]]["local"] for c in cl["comprobantes"] if c.get("_remito") is reg), None)
-            if loc_n:
-                prov = imp.mapear_proveedor(reg["proveedor"], "", locales[loc_n].proveedores if loc_n in locales else [])[0]
-                tot = reg["total_efectivo"]
-                plan_por_local.setdefault(loc_n, []).append(imp.fila_simple(
-                    A=reg["remito"], B=reg["fecha"], C=reg["fecha"], D=prov or reg["proveedor"], proveedor_oficial=prov,
-                    descripcion_original=f"REMITO {reg['remito']} pendiente de factura", presentacion="Verduleria",
-                    sku="I0275", confianza=0.9, metodo="remito pendiente (N° temporal)", G=1.0, H=tot, I=0.0, J=tot,
-                    P_UN=tot, accion="INYECTAR", cant_orig=1.0, precio_orig=tot))
+    # remitos pendientes: viven en la pestaña 'Remitos' (copia y planilla real); el gasto entra con la factura
 
     # ---- escritura en copias -------------------------------------------------
     escrituras = {}
     revision_filas: list[dict] = []
-    if escribir:
+    if escribir and not demo:
         remitos_tab_por_local: dict[str, list[dict]] = {}
         for c in cl["comprobantes"]:
             if c.get("tipo") == "Remito":
@@ -428,12 +427,15 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True)
                                        "estado": "REVISAR" if f_.get("accion") == "REVISAR" else "OK (pre-aprobada)",
                                        "motivos": "; ".join((f_.get("motivos") or []) + (f_.get("avisos") or [])),
                                        "transferencia": (f_.get("transferencia") or {}).get("p_un_transferencia")})
-    if escribir:
+    if escribir and not demo:
         escribir_carpeta_revision(revision_filas, analisis, cl)
     pushes = {}
     if args.push_drive:
         for nombre, filas in plan_por_local.items():
-            pushes[nombre] = imp.push_drive(nombre, filas, confirmado=args.confirmo_escribir_produccion)
+            pushes[nombre] = imp.push_drive(nombre, filas, confirmado=args.confirmo_escribir_produccion, demo=demo)
+        pend = [r for r in remitos_lote if r["estado"] == "PENDIENTE"]
+        if pend and not demo:
+            pushes["Remitos"] = imp.push_remitos_drive("Congreso", pend, confirmado=args.confirmo_escribir_produccion)
 
     # ---- reporte --------------------------------------------------------------
     filas_aud = []

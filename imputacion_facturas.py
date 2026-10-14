@@ -440,11 +440,10 @@ def _vigente_otro_local(nombre: str, pres: str, antes) -> tuple[float | None, st
 
 
 def numero_a_celda(numero: str | None) -> float | int | str | None:
-    """'0004-00012345' -> 12345 (la planilla guarda el N° como número)."""
-    if not numero:
-        return None
-    ultimo = re.split(r"[-–]", str(numero))[-1]
-    return int(ultimo) if ultimo.isdigit() else numero
+    """Solo los dígitos significativos, sin punto de venta ni ceros a la izquierda (así se carga en las planillas):
+    '00003-00004462' -> 4462 · '5548-00008853' -> 8853 · '0001-00063554' -> 63554 · 'R-0001/00009194' -> 9194."""
+    n = ultimo_entero(numero)
+    return n if n is not None else (numero or None)
 
 
 def imputar_comprobante(comp: dict, loc: Local, ap: dict, omitir_duplicados: bool = False) -> dict:
@@ -484,7 +483,7 @@ def _fecha_celda(iso: str | None):
 def aplicar_a_copia(resultados: list[dict], loc: Local, remitos: list[dict] | None = None,
                     marcar: list[tuple[int, str]] | None = None) -> dict:
     """Escribe las filas en la copia local de Facturas. Devuelve {'escritas': n, 'verificadas': n, 'filas': [...]}.
-    `remitos`: registros para la pestaña 'Remitos_Pendientes'. `marcar`: [(fila, nota)] filas ya existentes que se
+    `remitos`: registros para la pestaña 'Remitos' (o 'Remitos_Pendientes' si ya existe una ajena). `marcar`: [(fila, nota)] filas ya existentes que se
     señalan en la col F (p. ej. 'REASIGNAR A CHIMIDOHA') sin tocar sus importes."""
     import openpyxl
     from openpyxl.styles import PatternFill
@@ -527,20 +526,44 @@ def aplicar_a_copia(resultados: list[dict], loc: Local, remitos: list[dict] | No
         ws.cell(fila, 6).value = nota[:250]
         ws.cell(fila, 6).fill = amarillo
     if remitos is not None:
-        nombre_hoja = "Remitos_Pendientes"
+        from copy import copy
+        propia = "Remitos" in wb.sheetnames and str(wb["Remitos"]["Y1"].value or "").startswith("ESTADO REMITO IA")
+        nombre_hoja = "Remitos" if ("Remitos" not in wb.sheetnames or propia) else "Remitos_Pendientes"
         if nombre_hoja in wb.sheetnames:
             del wb[nombre_hoja]
         wr = wb.create_sheet(nombre_hoja)
-        wr.append(["Remito", "Fecha", "Proveedor", "Estado", "Factura definitiva", "Renglón", "Unidad",
-                   "Cant. remito", "Precio", "Total remito", "ANULADO ('NO')", "Cant. real", "Peso real kg",
-                   "Costo real $/kg", "Reclamo por peso $", "Nota", "Alertas de conciliación"])
+        wr.sheet_view.showGridLines = False                       # sin líneas de cuadrícula
+        for c in range(1, 25):                                    # encabezado, fuente, color y ancho clonados de Facturas
+            src, dst = ws.cell(1, c), wr.cell(1, c)
+            dst.value = src.value
+            if src.has_style:
+                dst.font, dst.fill, dst.border = copy(src.font), copy(src.fill), copy(src.border)
+                dst.alignment, dst.number_format = copy(src.alignment), src.number_format
+            letra = openpyxl.utils.get_column_letter(c)
+            if ws.column_dimensions[letra].width:
+                wr.column_dimensions[letra].width = ws.column_dimensions[letra].width
+        for j, h in enumerate(["ESTADO REMITO IA", "PESO REAL KG", "COSTO REAL $/KG", "ANULADO ('NO')", "FACTURA DEFINITIVA"]):
+            c = wr.cell(1, 25 + j)
+            c.value = h
+            src = ws.cell(1, 10)
+            if src.has_style:
+                c.font, c.fill, c.alignment = copy(src.font), copy(src.fill), copy(src.alignment)
+        wr.freeze_panes = "A2"
         for rem in remitos:
             for r in rem["renglones"]:
-                wr.append([rem["remito"], rem["fecha"], rem["proveedor"], rem["estado"], rem.get("factura_definitiva"),
-                           r["descripcion"], r["unidad"], r["cantidad_facturada_remito"], r["precio_unitario"],
-                           r["total_remito"], "SI" if r["anulado"] else "", r["cantidad_real"],
-                           r["peso_real_recibido_kg"], r["costo_real_por_kg"], r["reclamo_por_peso"] or None, r["nota"],
-                           "; ".join(rem.get("alertas") or [])])
+                cant = 0 if r["anulado"] else r["cantidad_facturada_remito"]
+                precio = r.get("precio_final") if r.get("precio_final") is not None else r["precio_unitario"]
+                fila = wr.max_row + 1
+                valores = {1: numero_a_celda(rem["remito"]), 2: _fecha_celda(rem["fecha"]), 3: _fecha_celda(rem["fecha"]),
+                           4: rem.get("proveedor_oficial") or rem["proveedor"], 5: r.get("presentacion") or r["descripcion"],
+                           6: r.get("nota") or None, 7: cant, 8: precio, 9: 0,
+                           10: round(cant * (precio or 0), 2), 25: rem["estado"], 26: r.get("peso_real_recibido_kg"),
+                           27: r.get("costo_real_por_kg"), 28: "SI" if r["anulado"] else None,
+                           29: rem.get("factura_definitiva")}
+                for c, v in valores.items():
+                    wr.cell(fila, c).value = v
+                for c in range(1, 10):
+                    wr.cell(fila, c).fill = PatternFill("solid", fgColor="FFF8E1")
     wb.save(loc.copia)
     # read-back: cada celda escrita tiene que leerse igual
     chk = openpyxl.load_workbook(loc.copia, read_only=True)["Facturas"]
@@ -1141,36 +1164,280 @@ IDS_PLANILLAS = {"Congreso": "1udLEQpQ29avK4c6fNnQig-w02xIV82IgLe85yVJXaOY",
                  "Cabello": "1zAxYyNB98Sb1-D0HtfokESXc6FrDS96EbFYyMmsseIE"}
 
 
-def push_drive(local: str, filas: list[dict], confirmado: bool = False) -> dict:
-    """Agrega las filas A:I a la pestaña Facturas de la planilla REAL del local (Google Sheets, credentials.json).
-
-    NUNCA se llama sola: requiere `--push-drive` Y `--confirmo-escribir-produccion`. Sin confirmación devuelve el
-    plan exacto (qué fila y qué valores) sin escribir nada. Chimidoha no tiene planilla real todavía."""
-    if local not in IDS_PLANILLAS:
-        return {"escrito": False, "motivo": f"{local} no tiene planilla real de Facturas; usar la copia local"}
-    inyectables = [f for f in filas if f.get("accion") == "INYECTAR"]
-    plan = [[f["A"], f["B"], f["C"], f["D"], f["presentacion"], "", f["G"], f["H"], f["I"]] for f in inyectables]
-    if not confirmado:
-        return {"escrito": False, "motivo": "falta --confirmo-escribir-produccion", "plan": plan,
-                "planilla": IDS_PLANILLAS[local]}
+def _gspread():
     import gspread
     from google.oauth2.service_account import Credentials
-    creds = Credentials.from_service_account_file(
-        str(BASE_DIR / "credentials.json"), scopes=["https://www.googleapis.com/auth/spreadsheets"])
-    ws = gspread.authorize(creds).open_by_key(IDS_PLANILLAS[local]).worksheet("Facturas")
-    col_a = ws.col_values(1)
-    primera = len(col_a) + 1                      # primera fila libre después de la última con N°
-    fmt = [[str(v) if isinstance(v, datetime) else v for v in r] for r in plan]
-    for r in fmt:
-        for k in (1, 2):
-            if isinstance(r[k], str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", r[k]):
-                y, m, d = r[k].split("-")
-                r[k] = f"{d}/{m}/{y}"
-    ws.update(f"A{primera}:I{primera + len(fmt) - 1}", fmt, value_input_option="USER_ENTERED")
-    # amarillo suave hasta que alguien las apruebe con el menú de GAS/aprobador_facturas_ia.gs
-    ws.format(f"A{primera}:I{primera + len(fmt) - 1}",
-              {"backgroundColor": {"red": 1.0, "green": 0.973, "blue": 0.882}})
-    return {"escrito": True, "desde_fila": primera, "filas": len(fmt)}
+    c = Credentials.from_service_account_file(
+        str(BASE_DIR / "credentials.json"),
+        scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.readonly"])
+    return gspread.authorize(c), c
+
+
+def verificar_acceso_planillas() -> dict:
+    """Qué planillas reales ve la Service Account y con qué permiso (solo lectura de metadatos; no escribe)."""
+    from google.auth.transport.requests import AuthorizedSession
+    gc, creds = _gspread()
+    ses = AuthorizedSession(creds)
+    out = {}
+    for local, sid in IDS_PLANILLAS.items():
+        try:
+            r = ses.get(f"https://www.googleapis.com/drive/v3/files/{sid}",
+                        params={"fields": "name,capabilities(canEdit)", "supportsAllDrives": "true"})
+            r.raise_for_status()
+            d = r.json()
+            sh = gc.open_by_key(sid)
+            titulos = [w.title for w in sh.worksheets()]
+            out[local] = {"ok": True, "nombre": d.get("name"), "editor": d.get("capabilities", {}).get("canEdit"),
+                          "tiene_facturas": "Facturas" in titulos, "tiene_remitos": "Remitos" in titulos,
+                          "pestañas": len(titulos)}
+        except Exception as e:
+            out[local] = {"ok": False, "error": f"{type(e).__name__}: {str(e)[:120]}"}
+    out["Chimidoha"] = {"ok": False, "error": "no tiene planilla real de Facturas (se escribe solo en su copia)"}
+    return out
+
+
+def _celda_a_texto_fecha(iso: str | None):
+    if iso and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(iso)):
+        y, m, d = str(iso).split("-")
+        return f"{d}/{m}/{y}"
+    return iso
+
+
+def _fila_push(f: dict, demo: bool = False) -> list:
+    reviso = f.get("accion") == "REVISAR"
+    nota = ""
+    if demo:
+        nota = "DEMO IA - borrar con /deshacer"
+    elif reviso:
+        sug = f" | sugerido: {f['presentacion']} (conf {f['confianza']:.2f})" if f.get("presentacion") else ""
+        nota = f"{f['descripcion_original']}{sug} | {'; '.join(f.get('motivos') or [])}"[:250]
+    g = f["G"] if f.get("G") is not None else f.get("cant_orig")
+    h = f["H"] if f.get("H") is not None else f.get("precio_orig")
+    return [f["A"], _celda_a_texto_fecha(f["B"]), _celda_a_texto_fecha(f["C"]), f["D"],
+            REVISAR_TXT if reviso else f["presentacion"], nota, g, h, f["I"]]
+
+
+def crear_hoja_remitos_real(sh) -> str:
+    """Crea la pestaña 'Remitos' en la planilla real si no existe: sin líneas de cuadrícula y con el encabezado, formato y
+    anchos de columna de 'Facturas' (copyPaste), más las columnas propias del remito. No toca una 'Remitos' existente."""
+    titulos = {w.title: w for w in sh.worksheets()}
+    if "Remitos" in titulos:
+        return "ya existía (no se modifica)"
+    fac = titulos["Facturas"]
+    rem = sh.add_worksheet(title="Remitos", rows=2000, cols=max(fac.col_count, 29))
+    rng_src = {"sheetId": fac.id, "startRowIndex": 0, "endRowIndex": 1, "startColumnIndex": 0, "endColumnIndex": 24}
+    rng_dst = {"sheetId": rem.id, "startRowIndex": 0, "endRowIndex": 1, "startColumnIndex": 0, "endColumnIndex": 24}
+    sh.batch_update({"requests": [
+        {"copyPaste": {"source": rng_src, "destination": rng_dst, "pasteType": "PASTE_NORMAL"}},
+        {"copyPaste": {"source": {**rng_src, "startRowIndex": 0, "endRowIndex": 2},
+                       "destination": {**rng_dst, "endRowIndex": 2}, "pasteType": "PASTE_COLUMN_WIDTHS"}},
+        {"updateSheetProperties": {"properties": {"sheetId": rem.id, "gridProperties": {
+            "hideGridlines": True, "frozenRowCount": 1}}, "fields": "gridProperties.hideGridlines,gridProperties.frozenRowCount"}},
+    ]})
+    rem.update("Y1:AC1", [["ESTADO REMITO IA", "PESO REAL KG", "COSTO REAL $/KG", "ANULADO ('NO')", "FACTURA DEFINITIVA"]])
+    return "creada (sin cuadrícula, formato de Facturas)"
+
+
+def push_drive(local: str, filas: list[dict], confirmado: bool = False, demo: bool = False) -> dict:
+    """Agrega las filas A:I a la pestaña Facturas de la planilla REAL del local (Google Sheets, credentials.json), pintadas
+    #FFF8E1 (OK) o #FFEBEE (REVISAR). Antes de escribir lee la col A/D de la hoja real y NO duplica un N° ya cargado
+    (salvo `demo=True`, que sirve para mostrar en vivo la escritura y deja la nota 'DEMO IA - borrar con /deshacer').
+
+    Solo escribe con confirmado=True (flags --push-drive y --confirmo-escribir-produccion, o --push-drive del bot).
+    Devuelve el detalle exacto: hoja, filas y valores, para poder deshacerlo."""
+    if local not in IDS_PLANILLAS:
+        return {"escrito": False, "local": local,
+                "motivo": f"{local} no tiene planilla real de Facturas; queda en la copia local"}
+    cand = [f for f in filas if f.get("accion") in ("INYECTAR", "REVISAR") and f.get("A") is not None]
+    plan = [_fila_push(f, demo) for f in cand]
+    if not confirmado:
+        return {"escrito": False, "local": local, "motivo": "falta --confirmo-escribir-produccion", "plan": plan,
+                "planilla": IDS_PLANILLAS[local]}
+    gc, _ = _gspread()
+    sh = gc.open_by_key(IDS_PLANILLAS[local])
+    ws = sh.worksheet("Facturas")
+    col_a, col_d = ws.col_values(1), ws.col_values(4)
+    existentes = {(ultimo_entero(a), norm(d)) for a, d in zip(col_a[1:], (col_d + [""] * len(col_a))[1:]) if a}
+    nuevas, omitidas = [], []
+    for f, fila in zip(cand, plan):
+        clave = (ultimo_entero(fila[0]), norm(fila[3]))
+        if not demo and clave in existentes:
+            omitidas.append({"N": fila[0], "proveedor": fila[3], "presentacion": fila[4]})
+            continue
+        nuevas.append((f, fila))
+    if not nuevas:
+        return {"escrito": False, "local": local, "motivo": "todas las filas ya estaban cargadas (no se duplica)",
+                "omitidas": omitidas}
+    primera = len(col_a) + 1
+    ultima = primera + len(nuevas) - 1
+    ws.update(f"A{primera}:I{ultima}", [fila for _, fila in nuevas], value_input_option="USER_ENTERED")
+    amarillo = {"backgroundColor": {"red": 1.0, "green": 0.973, "blue": 0.882}}      # #FFF8E1
+    rojo = {"backgroundColor": {"red": 1.0, "green": 0.922, "blue": 0.933}}          # #FFEBEE
+    ws.batch_format([{"range": f"A{primera + i}:I{primera + i}",
+                      "format": rojo if f.get("accion") == "REVISAR" else amarillo}
+                     for i, (f, _) in enumerate(nuevas)])
+    return {"escrito": True, "local": local, "planilla": sh.title, "sheet_id": IDS_PLANILLAS[local],
+            "desde_fila": primera, "hasta_fila": ultima, "filas": len(nuevas), "demo": demo, "omitidas": omitidas,
+            "detalle": [{"fila": primera + i, "N": fila[0], "proveedor": fila[3], "E": fila[4], "G": fila[6], "H": fila[7],
+                         "color": "rojo suave #FFEBEE" if f.get("accion") == "REVISAR" else "amarillo suave #FFF8E1"}
+                        for i, (f, fila) in enumerate(nuevas)]}
+
+
+def push_remitos_drive(local: str, remitos: list[dict], confirmado: bool = False) -> dict:
+    """Pasa a la pestaña 'Remitos' de la planilla real (la crea si no existe, ver crear_hoja_remitos_real) los remitos
+    pendientes de factura. No duplica remitos ya presentes (col A + proveedor)."""
+    if local not in IDS_PLANILLAS or not remitos:
+        return {"escrito": False, "motivo": "sin planilla real o sin remitos"}
+    if not confirmado:
+        return {"escrito": False, "motivo": "falta confirmación", "remitos": [r["remito"] for r in remitos]}
+    gc, _ = _gspread()
+    sh = gc.open_by_key(IDS_PLANILLAS[local])
+    estado_hoja = crear_hoja_remitos_real(sh)
+    ws = sh.worksheet("Remitos")
+    if "ESTADO REMITO IA" not in (ws.row_values(1) + [""] * 30)[24:29]:
+        return {"escrito": False, "motivo": "existe una pestaña 'Remitos' ajena (Maxirest); no se toca", "hoja": estado_hoja}
+    col_a, col_d = ws.col_values(1), ws.col_values(4)
+    ya = {(ultimo_entero(a), norm(d)) for a, d in zip(col_a[1:], (col_d + [""] * len(col_a))[1:]) if a}
+    filas = []
+    for rem in remitos:
+        for r in rem["renglones"]:
+            clave = (ultimo_entero(rem["remito"]), norm(rem.get("proveedor_oficial") or rem["proveedor"]))
+            if clave in ya:
+                continue
+            filas.append([ultimo_entero(rem["remito"]), _celda_a_texto_fecha(rem["fecha"]), _celda_a_texto_fecha(rem["fecha"]),
+                          rem.get("proveedor_oficial") or rem["proveedor"], r.get("presentacion") or r["descripcion"],
+                          r.get("nota") or "", 0 if r["anulado"] else r["cantidad_facturada_remito"],
+                          r.get("precio_final") or r["precio_unitario"], 0] + [""] * 15 +
+                         [rem["estado"], r.get("peso_real_recibido_kg") or "", r.get("costo_real_por_kg") or "",
+                          "SI" if r["anulado"] else "", rem.get("factura_definitiva") or ""])
+    if not filas:
+        return {"escrito": False, "motivo": "remitos ya cargados", "hoja": estado_hoja}
+    primera = len(col_a) + 1
+    ws.update(f"A{primera}:AC{primera + len(filas) - 1}", filas, value_input_option="USER_ENTERED")
+    ws.batch_format([{"range": f"A{primera}:I{primera + len(filas) - 1}",
+                      "format": {"backgroundColor": {"red": 1.0, "green": 0.973, "blue": 0.882}}}])
+    return {"escrito": True, "hoja": estado_hoja, "desde_fila": primera, "filas": len(filas)}
+
+
+def deshacer_push(registro: dict) -> dict:
+    """Borra de la planilla real las filas de una inyección anterior (registro devuelto por push_drive), verificando
+    que cada fila siga teniendo el mismo N° y proveedor antes de borrar."""
+    if not registro or not registro.get("escrito"):
+        return {"deshecho": False, "motivo": "no hay una inyección en vivo registrada"}
+    gc, _ = _gspread()
+    ws = gc.open_by_key(registro["sheet_id"]).worksheet("Facturas")
+    a, b = registro["desde_fila"], registro["hasta_fila"]
+    vals = ws.get(f"A{a}:I{b}")
+    for esperado, real in zip(registro["detalle"], vals):
+        if str(real[0]) != str(esperado["N"]) or norm(real[3] if len(real) > 3 else "") != norm(esperado["proveedor"]):
+            return {"deshecho": False, "motivo": f"la fila {esperado['fila']} ya no coincide (alguien la modificó); no se borra"}
+    ws.delete_rows(a, b)
+    return {"deshecho": True, "filas": b - a + 1, "desde_fila": a, "hasta_fila": b, "planilla": registro.get("planilla")}
+
+
+# ---- remitos sin precio: valorización con lista del proveedor / último costo ----------------
+def _lista_verduleria() -> list[dict]:
+    p = BASE_DIR / "Verduleria" / "precios_verduleria_limpios.xlsx"
+    if not p.is_file():
+        return []
+    d = pd.read_excel(p)
+    d.columns = [str(c) for c in d.columns]
+    return [{"articulo": norm(r["Articulo"]), "bulto": _num(r.get("Precio_Bulto")) or 0.0,
+             "kilo": _num(r.get("Precio_Kilo")) or 0.0} for _, r in d.iterrows()]
+
+
+_BULTO_U = {"CAJON", "CAJA", "BOLSA", "BULTO", "BAL", "BALDE"}
+
+
+def completar_remito(reg: dict, loc: "Local", ap: dict) -> dict:
+    """Remito sin precios (solo cantidades/bultos/kilos de birome): calcula precio y total de cada renglón cruzando
+    contra (1) lista de verdulería en Verduleria/, (2) benchmark Grupo Free, (3) último costo vigente del local, aplicando
+    BULTO_KG_DEFAULT para cajón/bolsa y los kilos reales de balanza anotados. Marca el origen de cada precio."""
+    lista = _lista_verduleria()
+    try:
+        sys.path.insert(0, str(BASE_DIR / "Precios"))
+        import benchmark_grupo_free as bg
+        bench = bg.cargar()
+    except Exception:
+        bg, bench = None, None
+    total = 0.0
+    for r in reg["renglones"]:
+        m = mapear_producto(r["descripcion"], None, loc, ap)
+        pres = m["presentacion"] if m["confianza"] >= 0.7 else None
+        r["presentacion"] = pres
+        if r["anulado"]:
+            r["precio_final"], r["precio_origen"], r["total_estimado"] = r["precio_unitario"] or 0.0, "anulado", 0.0
+            continue
+        if r["precio_unitario"]:                                    # el remito trae precio: se respeta
+            base = r.get("peso_real_recibido_kg") if (r.get("unidad") or "").upper() == "KG" and r.get("peso_real_recibido_kg") else r["cantidad_facturada_remito"]
+            r["precio_final"], r["precio_origen"] = r["precio_unitario"], "remito"
+            r["total_estimado"] = round(base * r["precio_unitario"], 2)
+            total += r["total_estimado"]
+            continue
+        nombre = norm(r["descripcion"])
+        primera = nombre.split(" ")[0]
+        por_kg = por_bulto = None
+        origen = None
+        mejor = max(lista, key=lambda x: fuzz.token_set_ratio(primera, x["articulo"]), default=None)
+        if mejor and fuzz.token_set_ratio(primera, mejor["articulo"]) >= 90:
+            por_kg, por_bulto, origen = mejor["kilo"] or None, mejor["bulto"] or None, "lista Verduleria/"
+        if por_kg is None and por_bulto is None and bg and bench:
+            ref = bg.precio_referencia(r["descripcion"], bench)
+            if ref:
+                por_kg, origen = ref["precio"], "benchmark Grupo Free"
+        if por_kg is None and por_bulto is None and pres:
+            vig, _ = loc.costo_vigente(pres)
+            cat = loc.catalogo[loc.catalogo["PRESENTACION"] == pres].iloc[0]
+            if vig:
+                por_kg, origen = vig / ((_num(cat["UN_PRES"]) or 1) * (_num(cat["CANT_PRES"]) or 1)), "último costo vigente"
+        kg_bulto = BULTO_KG_DEFAULT.get(norm(pres or primera))
+        cant = r["cantidad_facturada_remito"]
+        u = (r.get("unidad") or "").upper()
+        peso = r.get("peso_real_recibido_kg")
+        t = None
+        if peso and por_kg:
+            t = peso * por_kg
+        elif u == "KG" and por_kg:
+            t = cant * por_kg
+        elif u in _BULTO_U and por_bulto:
+            t = cant * por_bulto
+        elif u in _BULTO_U and por_kg and kg_bulto:
+            t = cant * kg_bulto * por_kg
+        elif por_bulto:
+            t = cant * por_bulto
+        elif por_kg and u in ("UN", "UNIDAD", "PAQ", "ATADO") and peso is None:
+            t = cant * por_kg                                        # sin peso: se valoriza la unidad como 1 kg (aprox.)
+            origen += " (aprox.: 1 u = 1 kg)"
+        if t is None:
+            r["precio_final"], r["precio_origen"], r["total_estimado"] = None, "sin precio: REVISAR", None
+            continue
+        r["total_estimado"] = round(t, 2)
+        r["precio_final"] = round(t / cant, 2) if cant else None
+        r["precio_origen"] = origen
+        total += r["total_estimado"]
+    reg["total_estimado"] = round(total, 2)
+    reg["sin_precio_en_remito"] = all(not r["precio_unitario"] for r in reg["renglones"])
+    return reg
+
+
+def remito_ya_cargado_como_total(reg: dict, loc: "Local", dias_antes: int = 2, dias_despues: int = 7,
+                                 tolerancia: float = 0.15) -> dict | None:
+    """¿Ese remito ya está en Facturas como una fila total del mismo proveedor (p. ej. 'Verduleria')? Compara fecha y
+    monto estimado. Si sí, se concilia sin volver a cargar el gasto."""
+    if not reg.get("total_estimado"):
+        return None
+    f = loc.facturas
+    prov = norm(reg.get("proveedor"))
+    fecha = pd.Timestamp(reg["fecha"])
+    sel = f[(f["PROVEEDOR"].map(lambda p: fuzz.token_set_ratio(prov, norm(p)) >= 70))
+            & (f["F_FACTURA"] >= fecha - pd.Timedelta(days=dias_antes))
+            & (f["F_FACTURA"] <= fecha + pd.Timedelta(days=dias_despues))]
+    for n, g in sel.groupby("N"):
+        tot = float((g["CANT"] * g["PRECIO"] * (1 - g["DESC"])).sum())
+        if tot and abs(tot - reg["total_estimado"]) / reg["total_estimado"] <= tolerancia:
+            return {"N": int(n) if pd.notna(n) else n, "total": round(tot, 2),
+                    "fecha": str(g["F_FACTURA"].iloc[0].date()), "diferencia_pct": round((tot / reg["total_estimado"] - 1) * 100, 1)}
+    return None
 
 
 # --------------------------------------------------------------------------- #
