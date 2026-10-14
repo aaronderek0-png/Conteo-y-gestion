@@ -126,6 +126,21 @@ LISTA_NEGRA = [
     "Almidon De Maiz x kg",        # ya está 'Fécula de maíz'
 ]
 
+# Ofertas que el proveedor marca como no comprables: no entran al cálculo de ahorro.
+# 'VENCIMIENTO 1-21' (fecha informativa) NO coincide; sí 'VENCIDAS' / 'SOLO QUEDAN VENCIDAS' / 'SIN STOCK'.
+ESTADOS_INVALIDOS_RE = re.compile(
+    r"\b(?:vencid[oa]s?|solo\s+quedan\s+vencid[oa]s?|sin\s+stock|s/\s*stock|agotad[oa]s?)\b", re.I)
+# Listas nuevas bajadas de Gmail (Precios/ingesta_listas.py las deja en esta carpeta)
+LISTAS_MAIL_DIR = BASE_DIR / "Precios" / "Listas_Mail"
+DESCARTADAS_CSV = BASE_DIR / "Precios" / "ofertas_descartadas.csv"
+
+# Especie: atributo obligatorio en los dos sentidos. 'Queso Feta' no es 'FETA DE CABRA' y 'Dulce de leche
+# de cabra' no es el familiar. 'bufalo' queda afuera a propósito: es marca de fécula (Búfalo/Buffalo Ingredion);
+# 'bufala' sí (mozzarella di bufala).
+ESPECIES_EXCLUYENTES = {"cabra", "oveja", "bufala"}
+# Carnes/aves: si el insumo nombra la especie la lista tiene que nombrarla (la inversa no: 'Bondiola' = 'de cerdo').
+ESPECIES_REQUERIDAS = {"cerdo", "cordero", "pollo", "pavo", "gallina", "conejo"}
+
 LOG = logging.getLogger("comparador_precios")
 
 
@@ -390,6 +405,12 @@ def candidato_valido(query_tokens: list[str], cand_tokens_ordered: list[str],
         if color_q and {_stem(t) for t in cand_tokens} & PIMIENTA_COLORES != color_q:
             return False
     if marcas and not _cumple_marcas(marcas, {_stem(t) for t in cand_tokens}):
+        return False
+
+    q_st, c_st = {_stem(t) for t in qset}, {_stem(t) for t in cand_tokens}
+    if (q_st & ESPECIES_EXCLUYENTES) != (c_st & ESPECIES_EXCLUYENTES):
+        return False
+    if (q_st & ESPECIES_REQUERIDAS) - c_st:
         return False
 
     for key, forbidden in FORBIDDEN_MATCHES.items():
@@ -842,14 +863,44 @@ def descargar_listas(dest: Path, folder_id: str, creds_path: Path) -> list[Path]
     return paths
 
 
+def descartar_ofertas_invalidas(df: pd.DataFrame, proveedor: str) -> pd.DataFrame:
+    """Saca las ofertas marcadas VENCIDAS / SIN STOCK (ver ESTADOS_INVALIDOS_RE) y las
+    deja asentadas en Precios/ofertas_descartadas.csv para poder auditarlas."""
+    malas = df["producto"].map(lambda t: bool(ESTADOS_INVALIDOS_RE.search(strip_accents(t))))
+    if not malas.any():
+        return df
+    for _, r in df[malas].iterrows():
+        LOG.info("%s: oferta descartada (estado inválido): %s", proveedor, r["producto"][:90])
+    descartadas = df.loc[malas, ["producto", "precio_lista"]].assign(proveedor=proveedor)
+    try:
+        previas = pd.read_csv(DESCARTADAS_CSV, encoding="utf-8-sig") if DESCARTADAS_CSV.is_file() else None
+        todo = pd.concat([previas, descartadas]) if previas is not None else descartadas
+        todo.drop_duplicates(["proveedor", "producto"]).to_csv(DESCARTADAS_CSV, index=False, encoding="utf-8-sig")
+    except Exception as e:  # el log técnico nunca debe frenar el cálculo
+        LOG.warning("No se pudo escribir %s: %s", DESCARTADAS_CSV.name, e)
+    return df[~malas]
+
+
+def _lector_generico(path: Path) -> list[dict]:
+    """Listas sin lector propio (proveedor nuevo que llega por mail): Precios/ingesta_listas.py."""
+    sys.path.insert(0, str(BASE_DIR / "Precios"))
+    from ingesta_listas import leer_lista_generica
+    return leer_lista_generica(path, _item, parse_price)
+
+
 def cargar_listas(paths: list[Path]) -> pd.DataFrame:
     frames = []
     for path in paths:
         key = next((k for k in PROVEEDORES if k in _sin_simbolos(path.name)), None)
         if key is None:
-            LOG.warning("Sin lector para '%s' (agregalo en PROVEEDORES)", path.name)
-            continue
-        nombre, lector, rubros = PROVEEDORES[key]
+            from_mail = path.suffix.lower() in {".xlsx", ".xls", ".csv", ".pdf", ".txt"}
+            if not from_mail:
+                LOG.warning("Sin lector para '%s' (agregalo en PROVEEDORES)", path.name)
+                continue
+            nombre, lector, rubros = re.sub(r"[_\-]+", " ", path.stem).strip().title(), _lector_generico, None
+            LOG.info("Lista nueva '%s': lector genérico (proveedor '%s')", path.name, nombre)
+        else:
+            nombre, lector, rubros = PROVEEDORES[key]
         try:
             items = lector(path)
         except Exception:
@@ -858,6 +909,9 @@ def cargar_listas(paths: list[Path]) -> pd.DataFrame:
         df = pd.DataFrame(items)
         if df.empty:
             LOG.warning("%s: 0 productos leídos", nombre)
+            continue
+        df = descartar_ofertas_invalidas(df, nombre)
+        if df.empty:
             continue
         df["proveedor"] = nombre
         df["rubros"] = [rubros] * len(df)
@@ -870,7 +924,7 @@ def cargar_listas(paths: list[Path]) -> pd.DataFrame:
     if not frames:
         raise RuntimeError("No se pudo leer ninguna lista de proveedor.")
     orden = [n for n, _, _ in PROVEEDORES.values()]
-    frames.sort(key=lambda f: orden.index(f["proveedor"].iat[0]))
+    frames.sort(key=lambda f: orden.index(f["proveedor"].iat[0]) if f["proveedor"].iat[0] in orden else len(orden))
     return pd.concat(frames, ignore_index=True)
 
 
@@ -1414,6 +1468,11 @@ def main() -> int:
     ap.add_argument("--sin-nogada", action="store_true", help="No scrapear ni usar Nogada")
     ap.add_argument("--productos-txt", default=str(PRODUCTOS_TXT),
                     help="Lista de productos a buscar; sus marcas son obligatorias en el match ('' para desactivar)")
+    ap.add_argument("--listas-mail", default=str(LISTAS_MAIL_DIR),
+                    help="Carpeta con listas nuevas bajadas de Gmail (.xlsx/.csv/.pdf/.txt); '' para omitirla")
+    ap.add_argument("--gmail", action="store_true",
+                    help="Antes de comparar, baja los adjuntos nuevos de Gmail a --listas-mail "
+                         "(GMAIL_USER / GMAIL_APP_PASSWORD en el entorno)")
     ap.add_argument("--out-dir", default=str(OUTPUT_DIR))
     args = ap.parse_args()
 
@@ -1446,13 +1505,35 @@ def main() -> int:
                         pd.Timestamp(cache.stat().st_mtime, unit="s").strftime("%d/%m/%Y"))
         return [*paths, cache]
 
+    def con_listas_mail(paths: list[Path]) -> list[Path]:
+        if not args.listas_mail:
+            return paths
+        carpeta = Path(args.listas_mail)
+        if args.gmail:
+            sys.path.insert(0, str(BASE_DIR / "Precios"))
+            from ingesta_listas import descargar_adjuntos_gmail
+            try:
+                nuevas = descargar_adjuntos_gmail(carpeta)
+                LOG.info("Gmail: %d adjuntos nuevos en %s", len(nuevas), carpeta.name)
+            except Exception as e:
+                LOG.warning("Gmail: no se pudieron bajar listas (%s); sigo con las que ya están", e)
+        if not carpeta.is_dir():
+            return paths
+        ya = {p.name.lower() for p in paths}
+        extra = sorted(p for p in carpeta.iterdir()
+                       if p.is_file() and p.suffix.lower() in {".xlsx", ".xls", ".csv", ".pdf", ".txt"}
+                       and not p.name.startswith("~$") and p.name.lower() not in ya)
+        if extra:
+            LOG.info("Listas de mail: %s", ", ".join(p.name for p in extra))
+        return [*paths, *extra]
+
     if args.listas_dir:
-        listas = cargar_listas(con_nogada(con_criollo(
-            sorted(p for p in Path(args.listas_dir).iterdir() if p.is_file()))))
+        listas = cargar_listas(con_listas_mail(con_nogada(con_criollo(
+            sorted(p for p in Path(args.listas_dir).iterdir() if p.is_file())))))
     else:
         with tempfile.TemporaryDirectory(prefix="listas_proveedores_") as tmp:
-            listas = cargar_listas(con_nogada(con_criollo(
-                descargar_listas(Path(tmp), args.carpeta_id, Path(args.creds)))))
+            listas = cargar_listas(con_listas_mail(con_nogada(con_criollo(
+                descargar_listas(Path(tmp), args.carpeta_id, Path(args.creds))))))
 
     lineas_txt = leer_productos_txt(Path(args.productos_txt)) if args.productos_txt else []
     LOG.info("productos a buscar: %d líneas, %d con marca", len(lineas_txt), sum(bool(l["marcas"]) for l in lineas_txt))

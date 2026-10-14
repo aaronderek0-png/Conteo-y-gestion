@@ -1,0 +1,6221 @@
+{
+ "mapeos": {
+  "aadi|aadi": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "AADI",
+   "ultima": "2026-10-13"
+  },
+  "aadi|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "adrian pereira srl|filet de pollo calibrado": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Filet de pollo calibrado",
+   "ultima": "2026-10-13"
+  },
+  "adrian pereira srl|lomo de ternera": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 7,
+   "presentacion": "Lomo de ternera",
+   "ultima": "2026-10-13"
+  },
+  "adrian pereira srl|mollejas de garganta": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 7,
+   "presentacion": "Mollejas De Garganta",
+   "ultima": "2026-10-13"
+  },
+  "adrian pereira srl|mollejas de novillo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Mollejas De Novillo",
+   "ultima": "2026-10-13"
+  },
+  "adrian pereira srl|paleta de cordero deshuesada": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Paleta de cordero deshuesada",
+   "ultima": "2026-10-13"
+  },
+  "adrian pereira srl|peceto": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Peceto",
+   "ultima": "2026-10-13"
+  },
+  "adrian pereira srl|pierna de cordero deshuesada": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Pierna de cordero deshuesada",
+   "ultima": "2026-10-13"
+  },
+  "agustina|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "alluchon pamela marta flores|arreglo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Arreglo",
+   "ultima": "2026-10-13"
+  },
+  "alluchon pamela marta flores|flor": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "FLOR",
+   "ultima": "2026-10-13"
+  },
+  "alluchon pamela marta flores|flores": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Flores",
+   "ultima": "2026-10-13"
+  },
+  "alma zen|bazar": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "alma zen|velador": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Velador",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|cacao amargo alcalino": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Cacao amargo alcalino",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|crema de leche": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Crema de leche",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|fecula de maiz maicena x 10": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Fecula de maiz/maicena x 10",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|mangas x100 u": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Mangas X100 U",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|manteca 10 kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Manteca 10 kg",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|manteca 25 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Manteca 25 Kg",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|manteca 5 kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Manteca 5 kg",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|sal entrefina celusal x 25kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Sal entrefina celusal X 25KG",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|sal gruesa x 25kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Sal gruesa x 25kg",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|tomate perita en conserva italiano": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Tomate perita en conserva italiano",
+   "ultima": "2026-10-13"
+  },
+  "alyser sa|tomate perita en lata": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Tomate Perita En Lata",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|acido ascorbico": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Acido ascorbico",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|alginato": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Alginato",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|bazar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|dextrosa": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Dextrosa",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|estabilizante de helado": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Estabilizante De Helado",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|gas butano": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "gas butano",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|gastos varios": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Gastos Varios",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|mangas x100 u": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Mangas X100 U",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|salitre": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Salitre",
+   "ultima": "2026-10-13"
+  },
+  "amui dona clara|vela nacarada x 10 unid": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "vela nacarada x 10 unid",
+   "ultima": "2026-10-13"
+  },
+  "amui|aro rectangular 27x17": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "aro rectangular 27x17",
+   "ultima": "2026-10-13"
+  },
+  "amui|gas butano": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "gas butano",
+   "ultima": "2026-10-13"
+  },
+  "amui|vela nacarada x 10 unid": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "vela nacarada x 10 unid",
+   "ultima": "2026-10-13"
+  },
+  "aqa|agua aqa": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Agua AQA",
+   "ultima": "2026-10-13"
+  },
+  "aqa|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "argenfil fadefil sa|agua aqa": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 4,
+   "presentacion": "Agua AQA",
+   "ultima": "2026-10-13"
+  },
+  "argenfil fadefil sa|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "aurea|chimuelo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Chimuelo",
+   "ultima": "2026-10-13"
+  },
+  "aurea|macollo sangiovese": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Macollo Sangiovese",
+   "ultima": "2026-10-13"
+  },
+  "aurea|nodo cabernet frank": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "NODO CABERNET FRANK",
+   "ultima": "2026-10-13"
+  },
+  "aurea|nodo chardonay": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Nodo Chardonay",
+   "ultima": "2026-10-13"
+  },
+  "aurea|nodo malbec": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "NODO MALBEC",
+   "ultima": "2026-10-13"
+  },
+  "aurea|nodo pinot": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Nodo pinot",
+   "ultima": "2026-10-13"
+  },
+  "baigorria hernan|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "barreiro karina gabriela|hilo morocco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Hilo Morocco",
+   "ultima": "2026-10-13"
+  },
+  "bauletto srl|caja rectangular alta 28 5 x 14 x 10": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Caja Rectangular alta 28.5 x 14 x 10",
+   "ultima": "2026-10-13"
+  },
+  "bodega noemi patagonia|a lisa vino tto malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "A lisa vino tto malbec",
+   "ultima": "2026-10-13"
+  },
+  "bodegas lopez|vasco viejo vino tinto": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 4,
+   "presentacion": "Vasco Viejo Vino Tinto",
+   "ultima": "2026-10-13"
+  },
+  "buenos mares|chernia entera": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Chernia entera",
+   "ultima": "2026-10-13"
+  },
+  "buenos mares|corvina": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Corvina",
+   "ultima": "2026-10-13"
+  },
+  "buenos mares|filet de merluza": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Filet de merluza",
+   "ultima": "2026-10-13"
+  },
+  "buenos mares|filet de merluzon": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Filet de Merluzon",
+   "ultima": "2026-10-13"
+  },
+  "buenos mares|filet de mero": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Filet de mero",
+   "ultima": "2026-10-13"
+  },
+  "buenos mares|filet de trucha crudo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Filet de trucha crudo",
+   "ultima": "2026-10-13"
+  },
+  "buenos mares|filet de trucha crudo entera": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Filet de trucha crudo entera",
+   "ultima": "2026-10-13"
+  },
+  "buenos mares|tinta de calamar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tinta De Calamar",
+   "ultima": "2026-10-13"
+  },
+  "burza carlos daniel|mantenimiento": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "casa china suli srl|aceite de trufa": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Aceite De Trufa",
+   "ultima": "2026-10-13"
+  },
+  "casa china suli srl|chernia entera": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Chernia entera",
+   "ultima": "2026-10-13"
+  },
+  "casa china suli srl|chipirones": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Chipirones",
+   "ultima": "2026-10-13"
+  },
+  "casa china suli srl|cornalito": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Cornalito",
+   "ultima": "2026-10-13"
+  },
+  "casa china suli srl|corvina rubia": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Corvina RUBIA",
+   "ultima": "2026-10-13"
+  },
+  "casa china suli srl|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "casa china suli srl|filet de trucha crudo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Filet de trucha crudo",
+   "ultima": "2026-10-13"
+  },
+  "casa china suli srl|lisa": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Lisa",
+   "ultima": "2026-10-13"
+  },
+  "casamana|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "castro volpe agustin|chile guajillo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Chile Guajillo",
+   "ultima": "2026-10-13"
+  },
+  "castro volpe agustin|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|angelica merlot": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "ANGELICA MERLOT",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|angelica zapata chardonay": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Angelica Zapata Chardonay",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|catena apellation vista flores malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 4,
+   "presentacion": "Catena Apellation  Vista Flores Malbec",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|dv catena chardonnay": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "DV CATENA CHARDONNAY",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|dv catena exploratore salta": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Dv catena exploratore Salta",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|dv catena zapata malbec": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "DV CATENA ZAPATA MALBEC",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|el enemigo as bravas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "El enemigo as bravas",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|el enemigo malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "EL ENEMIGO MALBEC",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|historico blanco dv catena": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Historico blanco Dv Catena",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|luca beso de dante": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Luca Beso de Dante",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|luca chardonnay": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Luca Chardonnay",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|nicasia grand blend": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "NICASIA GRAND BLEND",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|nicassia cabernet malbec": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "NICASSIA CABERNET MALBEC",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|padrillos malbec": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "padrillos malbec",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|padrillos pinot noir": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "padrillos pinot noir",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|padrillos rose": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "padrillos rose",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|padrillos trifecta": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "padrillos trifecta",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|saint felicien chardonnay": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "SAINT FELICIEN CHARDONNAY",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|saint felicien malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "SAINT FELICIEN MALBEC",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|saint felicien pinot noir": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Saint felicien Pinot Noir",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|saint nature charmat lungo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Saint Nature Charmat Lungo",
+   "ultima": "2026-10-13"
+  },
+  "catena zapata|vino mishiguene": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "VINO MISHIGUENE",
+   "ultima": "2026-10-13"
+  },
+  "centomani oscar ruben|bazar": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "central 23 sas|mantenimiento": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "cespedes helado|helado": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "HELADO",
+   "ultima": "2026-10-13"
+  },
+  "cespedes helado|helado de crema americana": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 6,
+   "presentacion": "Helado de crema americana",
+   "ultima": "2026-10-13"
+  },
+  "cga mana|harina 000": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 4,
+   "presentacion": "Harina 000",
+   "ultima": "2026-10-13"
+  },
+  "cga mana|harina 000 organica campodonico": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 5,
+   "presentacion": "Harina 000 organica Campodonico",
+   "ultima": "2026-10-13"
+  },
+  "cga mana|harina 0000": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 6,
+   "presentacion": "Harina 0000",
+   "ultima": "2026-10-13"
+  },
+  "cga mana|semolin": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Semolin",
+   "ultima": "2026-10-13"
+  },
+  "cidel organica srl|acelga": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Acelga",
+   "ultima": "2026-10-13"
+  },
+  "cidel organica srl|espinaca": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Espinaca",
+   "ultima": "2026-10-13"
+  },
+  "cidel organica srl|mini puerro": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Mini Puerro",
+   "ultima": "2026-10-13"
+  },
+  "cidel organica srl|nabo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Nabo",
+   "ultima": "2026-10-13"
+  },
+  "cidel organica srl|nota de credito materia prima": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Nota de credito Materia Prima",
+   "ultima": "2026-10-13"
+  },
+  "cidel organica srl|pera roja": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pera Roja",
+   "ultima": "2026-10-13"
+  },
+  "cidel organica srl|verduleria": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 7,
+   "presentacion": "Verduleria",
+   "ultima": "2026-10-13"
+  },
+  "cleopatra dist kosta|hoja parra": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Hoja parra",
+   "ultima": "2026-10-13"
+  },
+  "cleopatra dist kosta|sumac": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Sumac",
+   "ultima": "2026-10-13"
+  },
+  "cleopatra dist kosta|trigo burgol grueso": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Trigo Burgol grueso",
+   "ultima": "2026-10-13"
+  },
+  "cleopatra dist kosta|trigo burgol grueso x 10u": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Trigo Burgol grueso x 10u",
+   "ultima": "2026-10-13"
+  },
+  "conallison sa muge|asado muge 4 5 costillar del centro": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 5,
+   "presentacion": "Asado Muge 4/5 Costillar Del Centro",
+   "ultima": "2026-10-13"
+  },
+  "conallison sa muge|carne picada vaca": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Carne picada vaca",
+   "ultima": "2026-10-13"
+  },
+  "coquitos monroe|semilla de zapallo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Semilla de zapallo",
+   "ultima": "2026-10-13"
+  },
+  "crm pro|impuesto dba": {
+   "locales": [
+    "Chimidoha"
+   ],
+   "n": 1,
+   "presentacion": "IMPUESTO DBA",
+   "ultima": "2026-10-13"
+  },
+  "crm pro|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "cuevas susana maria noelia|mantenimiento": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bandas elasticas": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bandas Elasticas",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bobina papel tissue": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Bobina papel tissue",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bobina petro": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bobina petro",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa camiseta 40x50": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa camiseta 40x50",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa camiseta 60 x 80": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Bolsa Camiseta 60 X 80",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa con manija kp3": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Bolsa con manija KP3",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa con manija kp3 x u": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Bolsa con manija KP3 X  U",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa con manija kp4": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Bolsa con manija KP4",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa con manija kp4 x u": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Bolsa con manija KP4 x  U",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa con manija kp5": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa con manija KP5",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa consorcio negra 80x110x50": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Bolsa consorcio negra 80x110x50",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de arranque 20x30": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa De Arranque 20X30",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de arranque 30 x 40": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Bolsa De Arranque 30 X 40",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de arranque 40 x 60": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Bolsa De Arranque 40 X 60",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de arranque 50 x 70": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa De Arranque 50 X 70",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de arranque chica 15 x 20": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Bolsa De Arranque Chica 15 X 20",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de consorcio 45 x 60 negra": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa De Consorcio 45 X 60 Negra",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de consorcio 50 x 70 negra": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa De Consorcio 50 X 70 Negra",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de consorcio 90 x 120 negra": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Bolsa De Consorcio 90 X 120 Negra",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa de consorcio 90 x 120 verde": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa De Consorcio 90 X 120 Verde",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa delivery kraft marron 26x38x17 fm8": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa delivery kraft  marron 26x38x17 (  FM8 )",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa kraft 5": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "bolsa kraft 5",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa pp 20x25x100": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa Pp 20X25X100",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa sin manija fm8": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Bolsa sin manija FM8",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa vacio 15 25": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa vacio 15*25",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa vacio 30 40 grande x 250": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Bolsa vacio 30*40(GRANDE) x 250",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bolsa vacio grande": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa vacio GRANDE",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bowl compostable 500 cc": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bowl Compostable 500 Cc",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|caja de media pizza": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Caja De Media Pizza",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|caja de pizza 33 x33 x 1 un": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Caja de pizza 33 x33 x 1 Un",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|caja de pizza 33 x33 x 50 un": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Caja De Pizza 33 X33 X 50 Un",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|caja mediana": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Caja Mediana",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|cinta de papel 24x50": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Cinta De Papel 24X50",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|cinta scoch": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Cinta Scoch",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|collarin de carton 12 oz": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Collarin de carton 12 oz",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|collarin de carton 8 oz": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Collarin de carton 8 oz",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|dip 80 cc con tapa": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Dip 80 Cc Con Tapa",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|ensaladera cristal con tapa": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Ensaladera cristal con tapa",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|ensaladera cristal con tapa x un": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Ensaladera cristal con tapa x un",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|escarbadiente ensobrado": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Escarbadiente  ensobrado",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|estuche compostable cuadrado": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Estuche compostable cuadrado",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|estuche compostable rectangular": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Estuche compostable rectangular",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|etiqueta 44x55": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Etiqueta 44X55",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|film": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Film",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|film 45 500": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Film 45*500",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|film grande 45 1000": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Film grande 45*1000",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|folex 20 25 kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Folex 20*25 kg",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|folex 25 35 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Folex 25*35 * KG",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|folex 37 x 50 antartida panaderia": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Folex 37 x 50 antartida (PANADERIA)",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|folex grande 25 x 37 cocina": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Folex grande 25 x 37 (cocina)",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|folios a4": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Folios A4",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|ganchitos abrochadora": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Ganchitos abrochadora",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|guantes de nitrilo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 8,
+   "presentacion": "Guantes de nitrilo",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|harpic limpiador de inodoros": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Harpic Limpiador de inodoros",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|hilo para vidrar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Hilo para vidrar",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|p b consorcio 80x100x30 negra": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "P.B Consorcio 80x100x30 Negra",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|pack bolsa negra 45 60": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Pack Bolsa Negra 45*60",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|papel higienico 300 m eco": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Papel higienico 300 m - eco",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|papel higienico 300 m extra blanco": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Papel higienico 300 m - extra blanco",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|papel manteca": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Papel manteca",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|paquete rollo termico 50x80": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Paquete Rollo Termico 50X80",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|pb consorcio 80 x 100 verde": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "PB consorcio 80 x 100 verde",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|pb consorcio 80 x 110 negra": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "PB consorcio 80 x 110 negra",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|pincho bambu": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Pincho Bambu",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|resma de papel a4": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Resma De Papel A4",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|rollo airepack": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "rollo airepack",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|rollo de aluminio x 1kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Rollo De Aluminio X 1Kg",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|rollo fiscal": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Rollo Fiscal",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|servilleta elegante 33 x 33": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Servilleta elegante 33 x 33",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|servilleta simil tela": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Servilleta simil tela",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|sobres manila 14x21": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "sobres manila 14x21",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|sorbete sur negro": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 7,
+   "presentacion": "Sorbete sur negro",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|talonario x 120 u": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Talonario x 120 u",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|tapa bolws biodegradable 500 cc": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Tapa bolws biodegradable 500 cc",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|tapa bowl compostable 500 cc": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Tapa Bowl Compostable 500 Cc",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|tapa bowl ovalado 500cc": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "TAPA bowl ovalado 500cc",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|tapa vaso polipapel 12 oz": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 2,
+   "presentacion": "Tapa vaso polipapel 12 oz",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|tapa vaso transparente para llevar": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "TAPA VASO TRANSPARENTE  PARA LLEVAR",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|toalla intercalada": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 3,
+   "presentacion": "Toalla Intercalada",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|vaso polipapel 12 oz": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Vaso polipapel 12 oz",
+   "ultima": "2026-10-13"
+  },
+  "dba|angostura bitter 200ml": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Angostura bitter 200ml",
+   "ultima": "2026-10-13"
+  },
+  "dba|aperol": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Aperol",
+   "ultima": "2026-10-13"
+  },
+  "dba|coca cola x u": {
+   "locales": [
+    "Chimidoha"
+   ],
+   "n": 1,
+   "presentacion": "Coca cola x U",
+   "ultima": "2026-10-13"
+  },
+  "dba|coca cola zero": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Coca Cola Zero",
+   "ultima": "2026-10-13"
+  },
+  "dba|coca cola zero x u": {
+   "locales": [
+    "Chimidoha"
+   ],
+   "n": 1,
+   "presentacion": "Coca Cola Zero x U",
+   "ultima": "2026-10-13"
+  },
+  "dba|cynar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Cynar",
+   "ultima": "2026-10-13"
+  },
+  "dba|gin apostoles": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Gin Apostoles",
+   "ultima": "2026-10-13"
+  },
+  "dba|gin bulldog": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Gin Bulldog",
+   "ultima": "2026-10-13"
+  },
+  "dba|gin monkey": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Gin Monkey",
+   "ultima": "2026-10-13"
+  },
+  "dba|gin principe de los aposteles gaucha": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "gin principe de los aposteles gaucha",
+   "ultima": "2026-10-13"
+  },
+  "dba|gin tanqueray": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Gin Tanqueray",
+   "ultima": "2026-10-13"
+  },
+  "dba|impuestos internos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 4,
+   "presentacion": "IMPUESTOS INTERNOS",
+   "ultima": "2026-10-13"
+  },
+  "dba|licor golden age elder flower": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Licor golden age elder flower",
+   "ultima": "2026-10-13"
+  },
+  "dba|sprite comun x u": {
+   "locales": [
+    "Chimidoha"
+   ],
+   "n": 1,
+   "presentacion": "Sprite comun x U",
+   "ultima": "2026-10-13"
+  },
+  "dba|sprite zero": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Sprite ZERO",
+   "ultima": "2026-10-13"
+  },
+  "dba|sprite zero x u": {
+   "locales": [
+    "Chimidoha"
+   ],
+   "n": 1,
+   "presentacion": "Sprite ZERO x U",
+   "ultima": "2026-10-13"
+  },
+  "dba|tequila cuervo oro": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Tequila Cuervo Oro",
+   "ultima": "2026-10-13"
+  },
+  "dba|the macallan": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "The Macallan",
+   "ultima": "2026-10-13"
+  },
+  "dba|vermut carpano rosso": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Vermut Carpano Rosso",
+   "ultima": "2026-10-13"
+  },
+  "dba|vodka absolut azul": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Vodka Absolut Azul",
+   "ultima": "2026-10-13"
+  },
+  "dba|vodka smirnoff": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Vodka Smirnoff",
+   "ultima": "2026-10-13"
+  },
+  "dba|whiskey benchmark": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Whiskey Benchmark",
+   "ultima": "2026-10-13"
+  },
+  "dba|whisky glenfiddich 15 anos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Whisky Glenfiddich 15 años",
+   "ultima": "2026-10-13"
+  },
+  "dba|whisky hiram walker 750cc": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Whisky Hiram Walker 750cc",
+   "ultima": "2026-10-13"
+  },
+  "despensa del celiaco|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "despensa del celiaco|pan celiaco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pan Celiaco",
+   "ultima": "2026-10-13"
+  },
+  "destiny|te destiny negro": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Te Destiny negro",
+   "ultima": "2026-10-13"
+  },
+  "destiny|te destiny rojo america": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Te Destiny rojo America",
+   "ultima": "2026-10-13"
+  },
+  "destiny|te destiny verde mediterraneo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Te Destiny verde Mediterraneo",
+   "ultima": "2026-10-13"
+  },
+  "diaz gaviola margarita rosa velas|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "diaz gaviola margarita rosa velas|velas largas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Velas Largas",
+   "ultima": "2026-10-13"
+  },
+  "digital crams meneghello|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|abrilantador para maq lavavajillas": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Abrilantador para maq lavavajillas",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|abrillantador de acero inoxidable": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Abrillantador de acero inoxidable",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|aerosol para acero": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "aerosol para acero",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|bidones 5 litros virgen blanco": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "BIDONES 5 LITROS VIRGEN BLANCO",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|blem": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 2,
+   "presentacion": "Blem",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|bobina papel tissue": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Bobina papel tissue",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|bolsa de consorcio 45 x 60 negra": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa De Consorcio 45 X 60 Negra",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|botella para pulver x 500cc": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Botella Para Pulver X 500Cc",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|cabo de metal": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Cabo De Metal",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|delantal pvc": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Delantal  PVC",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|descarbonizante": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Descarbonizante",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|desengrasante": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Desengrasante",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|desinfectante de piso perfumado": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Desinfectante de piso perfumado",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|desinfectante perfumado dispeko": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Desinfectante Perfumado Dispeko",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|desodorante antibacterial aromatizante inhibidor de olores": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Desodorante antibacterial / aromatizante / inhibidor de olores",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|escobillon pelo suave base laqueada": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Escobillon Pelo Suave Base Laqueada",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|fibra esponja": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Fibra Esponja",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|fibra mediana fuerte": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Fibra Mediana Fuerte",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|fibra parrillera fina": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Fibra Parrillera Fina",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|fibra parrillera fuerte": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Fibra Parrillera Fuerte",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|gatillo reforzado transparente": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Gatillo Reforzado Transparente",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|guantes de nitrilo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Guantes de nitrilo",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|guantes domesticos de goma m": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Guantes Domesticos De Goma M",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|hipoclorito de sodio": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "hipoclorito de sodio",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|jabon liquido manos": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Jabon liquido manos",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|jabon nacarado personal": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Jabon nacarado personal",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|lavandina": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 8,
+   "presentacion": "Lavandina",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|lavavajillas concentrado": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 10,
+   "presentacion": "Lavavajillas concentrado",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|limpiador cremoso": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Limpiador cremoso",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|limpiador de vidrios multiuso": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Limpiador de vidrios multiuso",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|limpieza": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Limpieza",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|pala pvc": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Pala PVC",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|purificador y dispensor de agua": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Purificador y dispensor de agua",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|sanitizante alcohol 70": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 10,
+   "presentacion": "Sanitizante alcohol 70%",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|secador de piso": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Secador De Piso",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|toalla intercalada": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Toalla Intercalada",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|trapo de piso": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Trapo De Piso",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|trapo rejilla": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Trapo rejilla",
+   "ultima": "2026-10-13"
+  },
+  "dispeko|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "dispe|cebolla en polvo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Cebolla en polvo",
+   "ultima": "2026-10-13"
+  },
+  "distribaz|bazar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|aceite girasol": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Aceite girasol ",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|aceite girasol alsamar": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Aceite girasol ALSAMAR",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|aceitunas negras descarozadas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Aceitunas negras descarozadas",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|aceitunas verdes descarozadas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Aceitunas verdes descarozadas",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|aji molido": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Aji Molido",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|ajo granulado": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Ajo granulado",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|almidon de maiz x kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Almidon De Maiz x kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|arroz basmati x 5kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Arroz basmati x 5kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|atun en lata x 1 8kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Atun En Lata x 1.8kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|avellanas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Avellanas",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|azucar mascabo x 500 gr": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Azucar mascabo x 500 gr",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|azucar negra": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 7,
+   "presentacion": "Azucar negra",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|azucar x kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Azucar x kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|cacao amargo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Cacao Amargo",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|cafe instantaneo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Cafe instantaneo",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|cafe nescafe personal": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "cafe Nescafe personal",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|canela en polvo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Canela en polvo",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|cebolla escamas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Cebolla escamas",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|cebollita chicas reygal": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Cebollita chicas reygal",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|chocolate aguila barrita": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Chocolate AGUILA BARRITA",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|chocolate amargo fenix 87": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Chocolate Amargo Fenix 87",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|chocolate blanco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Chocolate blanco",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|coco rallado x kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Coco rallado x kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|comino molido": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Comino molido",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|coriandro": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Coriandro",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|coriandro molido": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Coriandro molido",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|curcuma en polvo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Curcuma en polvo",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|dulce de leche repostero x 10 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Dulce de leche Repostero x 10 kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|dulce de leche repostero x 4kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Dulce De Leche Repostero x 4kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|dulce de leche repostero x kg": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Dulce De Leche Repostero x kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|dulce de leche tradicional x 10 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Dulce de leche tradicional x 10 kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|extracto de tomate": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Extracto De Tomate",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|fecula de maiz x kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Fecula de maiz x KG",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|harina 000": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Harina 000",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|harina 0000": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Harina 0000",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|harina de almendras": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Harina de almendras",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|leche descremada x 1": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 7,
+   "presentacion": "Leche descremada x 1",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|leche descremada x 12": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Leche descremada x 12",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|leche entera x 1": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Leche entera x 1",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|leche entera x 12": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Leche entera x 12",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|levadura prensada": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Levadura prensada",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|manteca 5 kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Manteca 5 kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|mate cocido": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Mate Cocido",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|mostaza en grano x kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Mostaza en grano x KG",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|nuez pelada": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Nuez pelada",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|oregano seco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Oregano seco",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|pan rallado": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pan rallado",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|pasas de uva negra": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Pasas de uva negra",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|pimenton ahumado": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Pimenton Ahumado",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|pimienta negra en grano": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Pimienta negra en grano",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|pure de tomate": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pure de tomate",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|sal entrefina x 5kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Sal EntreFina X 5KG",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|sal gruesa x 5 kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Sal gruesa x 5 kg",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|semillas de calabaza": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Semillas de Calabaza",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|semillas de coriandro": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Semillas de coriandro",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|semillas de mostaza": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Semillas de mostaza",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|semillas de sesamo blanco": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 9,
+   "presentacion": "Semillas de sesamo blanco",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|semillas de sesamo negro": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Semillas de sesamo negro",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|semolin": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 7,
+   "presentacion": "Semolin",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|te ensobrado hurlingham": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Te ensobrado Hurlingham ",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|tomate perita en conserva italiano": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tomate perita en conserva italiano",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|tomate perita en lata": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tomate Perita En Lata",
+   "ultima": "2026-10-13"
+  },
+  "distribuidora el criollo srl|vinagre de alcohol": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 8,
+   "presentacion": "Vinagre de alcohol",
+   "ultima": "2026-10-13"
+  },
+  "dixtron dx srl|ecobandeja 900 cc reutilizable x 300": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Ecobandeja 900 Cc Reutilizable x 300",
+   "ultima": "2026-10-13"
+  },
+  "dixtron dx srl|pote lock food 230": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Pote lock food 230",
+   "ultima": "2026-10-13"
+  },
+  "dixtron dx srl|pote lock food 390": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Pote lock food 390",
+   "ultima": "2026-10-13"
+  },
+  "dixtron dx srl|tapa ecobandeja 900 cc reutilizable x 300": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Tapa Ecobandeja 900 Cc Reutilizable x 300",
+   "ultima": "2026-10-13"
+  },
+  "easy clean aguilera luis alberto|cristal fajinador": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Cristal-Fajinador",
+   "ultima": "2026-10-13"
+  },
+  "easy clean aguilera luis alberto|lavadero": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "LAVADERO",
+   "ultima": "2026-10-13"
+  },
+  "easy clean aguilera luis alberto|limpieza": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Limpieza",
+   "ultima": "2026-10-13"
+  },
+  "easy clean aguilera luis alberto|repasador frances": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Repasador Frances",
+   "ultima": "2026-10-13"
+  },
+  "easy clean aguilera luis alberto|servilletas mishigene": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Servilletas Mishigene",
+   "ultima": "2026-10-13"
+  },
+  "easy clean aguilera luis alberto|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "ecobaires ambiental|fumigacion": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Fumigacion",
+   "ultima": "2026-10-13"
+  },
+  "ecobaires ambiental|servicio": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Servicio",
+   "ultima": "2026-10-13"
+  },
+  "ecobaires ambiental|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "eggs hons srl|huevo cajon": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Huevo cajon",
+   "ultima": "2026-10-13"
+  },
+  "eggs hons srl|huevo organico x 12": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Huevo organico x 12",
+   "ultima": "2026-10-13"
+  },
+  "eggs hons srl|huevo organico x cajon": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Huevo organico x cajon",
+   "ultima": "2026-10-13"
+  },
+  "ehrlich srl|bolsa vacio 15 25": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 7,
+   "presentacion": "Bolsa vacio 15*25",
+   "ultima": "2026-10-13"
+  },
+  "ehrlich srl|bolsa vacio 20 40": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa vacio 20*40",
+   "ultima": "2026-10-13"
+  },
+  "ehrlich srl|bolsa vacio 20x25 x 1u": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa vacio 20x25 x 1u",
+   "ultima": "2026-10-13"
+  },
+  "ehrlich srl|bolsa vacio grande x unidad": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa vacio GRANDE X UNIDAD",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|aceite girasol": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Aceite girasol ",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|aceite girasol alsamar": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Aceite girasol ALSAMAR",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|avellanas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Avellanas",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|avena arrollada": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Avena arrollada",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|chocolate semi amargo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Chocolate Semi Amargo",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|chocolate semi amargo aguila": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Chocolate semi amargo AGUILA",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|crema de leche": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Crema de leche",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|esencia de vainilla x 1": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Esencia de vainilla x 1",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|esencia de vainilla x 5": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Esencia de vainilla x 5",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|espinaca congelada x 2 5kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Espinaca congelada x 2.5kg",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|gin london dry": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Gin london dry",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|leche entera x 12": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Leche entera x 12",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|mostaza antigua x 850 gr": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Mostaza Antigua X 850 Gr",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|mostaza dijon x 85kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Mostaza dijon x .85KG",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|muzzarella": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Muzzarella",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|polenta x 490g": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Polenta x 490g",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|queso azul": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Queso Azul",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|queso fontina": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Queso fontina",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|queso mozzarella": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Queso Mozzarella",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|queso pategras": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Queso Pategras",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|queso sardo estacionado": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 8,
+   "presentacion": "Queso sardo estacionado",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|queso sardo semi estacionado": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Queso sardo semi estacionado",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|ricota": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Ricota",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|tapa de pascualina": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tapa de pascualina",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|tapa para pascualina personal": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tapa Para Pascualina Personal",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|vajilla": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Vajilla",
+   "ultima": "2026-10-13"
+  },
+  "el emporio|vino tinto": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Vino tinto",
+   "ultima": "2026-10-13"
+  },
+  "el grano de trigo|pan cortado chico blanco": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Pan cortado chico blanco",
+   "ultima": "2026-10-13"
+  },
+  "el grano de trigo|pan de miga": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "PAN DE MIGA",
+   "ultima": "2026-10-13"
+  },
+  "el nuevo emporio|bazar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "el paltero curcuma gianfelice matias gabriel|champignon": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Champignon",
+   "ultima": "2026-10-13"
+  },
+  "el paltero curcuma gianfelice matias gabriel|portobelos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Portobelos",
+   "ultima": "2026-10-13"
+  },
+  "el paltero curcuma gianfelice matias gabriel|verduleria": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Verduleria",
+   "ultima": "2026-10-13"
+  },
+  "electro servicios|arreglo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 6,
+   "presentacion": "Arreglo",
+   "ultima": "2026-10-13"
+  },
+  "electro servicios|mantenimiento": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "electro servicios|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "envio|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "esteban cerullo bunkerpress|caja de postres": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Caja De Postres",
+   "ultima": "2026-10-13"
+  },
+  "esteban cerullo bunkerpress|caja sandiwch grande": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Caja Sandiwch - Grande",
+   "ultima": "2026-10-13"
+  },
+  "esteban cerullo bunkerpress|caja sandwich chico": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Caja Sandwich - Chico",
+   "ultima": "2026-10-13"
+  },
+  "everfull|purificador y dispensor de agua": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Purificador y dispensor de agua",
+   "ultima": "2026-10-13"
+  },
+  "expofor sas|arreglo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Arreglo",
+   "ultima": "2026-10-13"
+  },
+  "expofor sas|mantenimiento": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "femsa|coca cola": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 9,
+   "presentacion": "Coca cola",
+   "ultima": "2026-10-13"
+  },
+  "femsa|coca cola zero": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 8,
+   "presentacion": "Coca Cola Zero",
+   "ultima": "2026-10-13"
+  },
+  "femsa|impuestos internos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "IMPUESTOS INTERNOS",
+   "ultima": "2026-10-13"
+  },
+  "femsa|schwepps tonica 1 5 l x8": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "schwepps tonica 1.5 L X8",
+   "ultima": "2026-10-13"
+  },
+  "femsa|sprite comun": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Sprite comun",
+   "ultima": "2026-10-13"
+  },
+  "femsa|sprite zero": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 16,
+   "presentacion": "Sprite ZERO",
+   "ultima": "2026-10-13"
+  },
+  "femsa|tonica botella": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Tonica botella",
+   "ultima": "2026-10-13"
+  },
+  "femsa|tonica lata": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "tonica lata",
+   "ultima": "2026-10-13"
+  },
+  "ferreyra juan carlos|gastos varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Gastos Varios",
+   "ultima": "2026-10-13"
+  },
+  "free|ajo entero": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Ajo Entero",
+   "ultima": "2026-10-13"
+  },
+  "free|ajo pelado": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Ajo pelado",
+   "ultima": "2026-10-13"
+  },
+  "free|cebolla pluma": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 17,
+   "presentacion": "CEBOLLA PLUMA",
+   "ultima": "2026-10-13"
+  },
+  "free|frutillas congeladas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Frutillas congeladas",
+   "ultima": "2026-10-13"
+  },
+  "free|manzana en cubos": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Manzana en cubos",
+   "ultima": "2026-10-13"
+  },
+  "free|manzana verde en cubo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Manzana Verde En Cubo",
+   "ultima": "2026-10-13"
+  },
+  "free|papa baston premium": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 24,
+   "presentacion": "Papa Baston PREMIUM",
+   "ultima": "2026-10-13"
+  },
+  "free|papa entera pelada premium": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 43,
+   "presentacion": "Papa Entera Pelada PREMIUM",
+   "ultima": "2026-10-13"
+  },
+  "frimaq srl|freezzer vertical": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Freezzer Vertical",
+   "ultima": "2026-10-13"
+  },
+  "frimaq|freezzer vertical": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Freezzer Vertical",
+   "ultima": "2026-10-13"
+  },
+  "frimaq|mantenimiento": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "frimaq|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "fura|asado": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Asado",
+   "ultima": "2026-10-13"
+  },
+  "gadol bazar|bazar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "galas trade|bazar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "gba gases buenos aires|anhidrido carbonico": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Anhidrido Carbonico",
+   "ultima": "2026-10-13"
+  },
+  "geson|aceite de trufa": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 6,
+   "presentacion": "Aceite De Trufa",
+   "ultima": "2026-10-13"
+  },
+  "geson|leche de coco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "LECHE DE COCO",
+   "ultima": "2026-10-13"
+  },
+  "go to retired sa|bohio burreca": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Bohio Burreca",
+   "ultima": "2026-10-13"
+  },
+  "go to retired sa|bohio espinaca": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Bohio Espinaca",
+   "ultima": "2026-10-13"
+  },
+  "go to retired sa|bohio papa": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Bohio Papa",
+   "ultima": "2026-10-13"
+  },
+  "go to retired sa|burreca": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 10,
+   "presentacion": "Burreca",
+   "ultima": "2026-10-13"
+  },
+  "go to retired sa|kippe": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 8,
+   "presentacion": "Kippe",
+   "ultima": "2026-10-13"
+  },
+  "go to retired sa|phila burreca": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Phila Burreca",
+   "ultima": "2026-10-13"
+  },
+  "go to retired sa|phila cordero": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Phila Cordero",
+   "ultima": "2026-10-13"
+  },
+  "go to retired sa|phila espinaca": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Phila Espinaca",
+   "ultima": "2026-10-13"
+  },
+  "gonzalez matias gabriel|arreglo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Arreglo",
+   "ultima": "2026-10-13"
+  },
+  "govyar srl|alcauciles organicos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 8,
+   "presentacion": "Alcauciles Organicos",
+   "ultima": "2026-10-13"
+  },
+  "govyar srl|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "govyar srl|miel en panal": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Miel En Panal",
+   "ultima": "2026-10-13"
+  },
+  "govyar srl|repollitos de bruselas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 6,
+   "presentacion": "Repollitos De Bruselas",
+   "ultima": "2026-10-13"
+  },
+  "guerra juan ignacio|fumigacion": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Fumigacion",
+   "ultima": "2026-10-13"
+  },
+  "guicom|arreglo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Arreglo",
+   "ultima": "2026-10-13"
+  },
+  "guicom|mantenimiento": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "hielo cristalino|hielo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Hielo",
+   "ultima": "2026-10-13"
+  },
+  "hongos|melena de leon": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Melena De Leon",
+   "ultima": "2026-10-13"
+  },
+  "horeca srl|crema de leche": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Crema de leche",
+   "ultima": "2026-10-13"
+  },
+  "horeca srl|jamon cocido personal": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Jamon cocido PERSONAL",
+   "ultima": "2026-10-13"
+  },
+  "horeca srl|jamon de cerdo fresco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Jamon de cerdo fresco",
+   "ultima": "2026-10-13"
+  },
+  "horeca srl|levadura prensada": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 6,
+   "presentacion": "Levadura prensada",
+   "ultima": "2026-10-13"
+  },
+  "horeca srl|manteca 5 kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Manteca 5 kg",
+   "ultima": "2026-10-13"
+  },
+  "horeca srl|ricota": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Ricota",
+   "ultima": "2026-10-13"
+  },
+  "horeca srl|vinagre de alcohol": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Vinagre de alcohol",
+   "ultima": "2026-10-13"
+  },
+  "impresos velox srl|talonario x 120 u": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Talonario x 120 u",
+   "ultima": "2026-10-13"
+  },
+  "industrias mas srl|mantenimiento": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "industrias mas srl|matafuegos": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Matafuegos",
+   "ultima": "2026-10-13"
+  },
+  "industrias metalurgicas pastorino s a|mantenimiento": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "ivan jonathan castro|asesoramiento de seguridad higiene": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Asesoramiento de seguridad/higiene",
+   "ultima": "2026-10-13"
+  },
+  "jms packaging sa|pote aderezos 60cc x 50": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Pote aderezos 60cc x 50",
+   "ultima": "2026-10-13"
+  },
+  "jms packaging sa|tapa cristal pote 45 60 75 cc x 100u": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Tapa cristal Pote 45-60-75 cc x 100u",
+   "ultima": "2026-10-13"
+  },
+  "juan grande|queso feta": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 5,
+   "presentacion": "Queso Feta",
+   "ultima": "2026-10-13"
+  },
+  "krustafish superbe|filet de trucha crudo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Filet de trucha crudo",
+   "ultima": "2026-10-13"
+  },
+  "la agricola s a|espum santa julia extrabrut": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Espum. Santa Julia Extrabrut",
+   "ultima": "2026-10-13"
+  },
+  "la agricola s a|espumante zuccardi blancs the blancs": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Espumante Zuccardi blancs the blancs",
+   "ultima": "2026-10-13"
+  },
+  "la agricola s a|poligonos che blanc": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Poligonos che blanc",
+   "ultima": "2026-10-13"
+  },
+  "la agricola s a|tito zuccardi paraje altamira": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tito Zuccardi Paraje Altamira",
+   "ultima": "2026-10-13"
+  },
+  "la anunciacion|verduleria": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Verduleria",
+   "ultima": "2026-10-13"
+  },
+  "la gloriosa|trufa trozos de primera l": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Trufa (Trozos De Primera L)",
+   "ultima": "2026-10-13"
+  },
+  "la grafika|imprenta": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Imprenta",
+   "ultima": "2026-10-13"
+  },
+  "la grafika|libreria": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Libreria",
+   "ultima": "2026-10-13"
+  },
+  "la grafika|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "la meson|burrata": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 9,
+   "presentacion": "Burrata",
+   "ultima": "2026-10-13"
+  },
+  "la meson|carga de sifon": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "CARGA DE SIFON",
+   "ultima": "2026-10-13"
+  },
+  "la meson|dulce de leche cabra x 0 5kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Dulce De Leche Cabra x 0.5kg",
+   "ultima": "2026-10-13"
+  },
+  "la meson|espumante zuccardi blancs the blancs": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Espumante Zuccardi blancs the blancs",
+   "ultima": "2026-10-13"
+  },
+  "la meson|miel organica x 10kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Miel Organica (x 10kg)",
+   "ultima": "2026-10-13"
+  },
+  "la meson|mostaza antigua x 1 kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 11,
+   "presentacion": "Mostaza Antigua X 1 KG",
+   "ultima": "2026-10-13"
+  },
+  "la meson|mostaza antigua x 850 gr": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Mostaza Antigua X 850 Gr",
+   "ultima": "2026-10-13"
+  },
+  "la meson|mostaza dijon": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Mostaza dijon",
+   "ultima": "2026-10-13"
+  },
+  "la meson|mostaza dijon x kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Mostaza dijon x KG",
+   "ultima": "2026-10-13"
+  },
+  "la meson|queso cabra untar": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 10,
+   "presentacion": "Queso cabra untar",
+   "ultima": "2026-10-13"
+  },
+  "la meson|tabasco": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Tabasco",
+   "ultima": "2026-10-13"
+  },
+  "la meson|vodka smirnoff": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Vodka Smirnoff",
+   "ultima": "2026-10-13"
+  },
+  "la meson|yogurt natural familia beaudroit": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Yogurt Natural Familia Beaudroit",
+   "ultima": "2026-10-13"
+  },
+  "la meson|yogurt natural pote 160 gr": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Yogurt natural pote 160 gr",
+   "ultima": "2026-10-13"
+  },
+  "la meson|yogurt natural x 5k entry x l": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Yogurt Natural x 5K (ENTRY X L)",
+   "ultima": "2026-10-13"
+  },
+  "la vocacion s r l|los dragones torrontes": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Los Dragones torrontes",
+   "ultima": "2026-10-13"
+  },
+  "la vocacion s r l|maida naranjo de criollas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Maida naranjo de Criollas",
+   "ultima": "2026-10-13"
+  },
+  "lacteos la delfina|envio": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "lacteos la delfina|queso crema tipico": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 9,
+   "presentacion": "Queso crema Tipico",
+   "ultima": "2026-10-13"
+  },
+  "lacteos la delfina|yogurt natural x 3 8": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 5,
+   "presentacion": "Yogurt natural x 3.8",
+   "ultima": "2026-10-13"
+  },
+  "lacteos la delfina|yogurth batido tp": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Yogurth Batido TP",
+   "ultima": "2026-10-13"
+  },
+  "lauria roberto eduardo|huevo cajon": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Huevo cajon",
+   "ultima": "2026-10-13"
+  },
+  "lauria roberto eduardo|huevo docena": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Huevo docena",
+   "ultima": "2026-10-13"
+  },
+  "lavadero estrella rodriguez ruben|lavadero": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "LAVADERO",
+   "ultima": "2026-10-13"
+  },
+  "lavadero estrella|lavadero": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 3,
+   "presentacion": "LAVADERO",
+   "ultima": "2026-10-13"
+  },
+  "lavadero estrella|servilletas mishigene": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Servilletas Mishigene",
+   "ultima": "2026-10-13"
+  },
+  "leon mariano|alcaparras frasco x 650grs": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Alcaparras (Frasco X 650Grs)",
+   "ultima": "2026-10-13"
+  },
+  "levando alveolo sa|croissant": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 17,
+   "presentacion": "Croissant",
+   "ultima": "2026-10-13"
+  },
+  "levando alveolo sa|medialuna": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Medialuna",
+   "ultima": "2026-10-13"
+  },
+  "levando alveolo sa|roll de canela": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 5,
+   "presentacion": "Roll De Canela",
+   "ultima": "2026-10-13"
+  },
+  "los manjares|corazon de pollo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Corazon de pollo",
+   "ultima": "2026-10-13"
+  },
+  "maiju srl|uniformes": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Uniformes",
+   "ultima": "2026-10-13"
+  },
+  "master supply|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "melena|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "melena|melena de leon": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Melena De Leon",
+   "ultima": "2026-10-13"
+  },
+  "mg ballester|uniformes": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Uniformes",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|baguel": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 20,
+   "presentacion": "Baguel",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|baguel amapola": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 14,
+   "presentacion": "Baguel Amapola",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|baguel cebolla": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 12,
+   "presentacion": "Baguel Cebolla",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|hojaldre": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 10,
+   "presentacion": "Hojaldre",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|laffa": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 20,
+   "presentacion": "Laffa",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|pan de campo hogaza": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 8,
+   "presentacion": "Pan De Campo (Hogaza)",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|pan de nuez y pasas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 8,
+   "presentacion": "Pan De Nuez Y Pasas",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|pita": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 22,
+   "presentacion": "Pita",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|pletzalej": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 21,
+   "presentacion": "Pletzalej",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|vte lopez": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Vte lopez",
+   "ultima": "2026-10-13"
+  },
+  "mix 57|etiqueta il vip 50x20": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Etiqueta IL VIP 50x20",
+   "ultima": "2026-10-13"
+  },
+  "mix 57|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "mollero maria cristina|aceite de trufa": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Aceite De Trufa",
+   "ultima": "2026-10-13"
+  },
+  "mollero maria cristina|flores": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Flores",
+   "ultima": "2026-10-13"
+  },
+  "moop|bobina papel tissue": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Bobina papel tissue",
+   "ultima": "2026-10-13"
+  },
+  "moop|bobina petro": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Bobina petro",
+   "ultima": "2026-10-13"
+  },
+  "moop|caja de cartulina grande": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Caja De Cartulina Grande",
+   "ultima": "2026-10-13"
+  },
+  "moop|folex 25 35 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Folex 25*35 * KG",
+   "ultima": "2026-10-13"
+  },
+  "moop|folios a4": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Folios A4",
+   "ultima": "2026-10-13"
+  },
+  "moop|lapiceras": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Lapiceras",
+   "ultima": "2026-10-13"
+  },
+  "moop|molde budin 100 un": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Molde budin ( 100 un)",
+   "ultima": "2026-10-13"
+  },
+  "moop|resma de papel a4": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Resma De Papel A4",
+   "ultima": "2026-10-13"
+  },
+  "moop|tapa aluminio f75": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Tapa aluminio f75",
+   "ultima": "2026-10-13"
+  },
+  "musicos shabat|musicos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Musicos",
+   "ultima": "2026-10-13"
+  },
+  "new garden|sumac": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Sumac",
+   "ultima": "2026-10-13"
+  },
+  "nilda market|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "nilda market|maracuya": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Maracuya",
+   "ultima": "2026-10-13"
+  },
+  "niz pedro osvaldo|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "nogada|aceite alto oleico": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 10,
+   "presentacion": "Aceite alto oleico",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|ajo entero": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Ajo Entero",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|apio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Apio",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|berenjena": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Berenjena",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|cilantro": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Cilantro",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|ciruelas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Ciruelas",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|durazno": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Durazno",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|eneldo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Eneldo",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|envio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|espinaca": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Espinaca",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|huevo cajon": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Huevo cajon",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|lima": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Lima",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|limon": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Limon",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|menta": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Menta",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|naranja": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Naranja",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|papa entera pelada premium": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Papa Entera Pelada PREMIUM",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|pepino": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pepino",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|pera": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pera",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|puerro": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Puerro",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|romero": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Romero",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|tomillo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tomillo",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|verduleria": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 63,
+   "presentacion": "Verduleria",
+   "ultima": "2026-10-13"
+  },
+  "panaderia y confiteria armenia srl|halva de mani": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Halva de mani",
+   "ultima": "2026-10-13"
+  },
+  "papelera raul juan cora sa|papel parafinado": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Papel parafinado",
+   "ultima": "2026-10-13"
+  },
+  "paredes hector arnaldo|arreglo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Arreglo",
+   "ultima": "2026-10-13"
+  },
+  "peluffo libreria|libreria": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Libreria",
+   "ultima": "2026-10-13"
+  },
+  "personal|personal": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "PERSONAL",
+   "ultima": "2026-10-13"
+  },
+  "personal|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "pingaro mariso le soleil|anis estrellado": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Anis estrellado",
+   "ultima": "2026-10-13"
+  },
+  "pingaro mariso le soleil|azucar de coco": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Azucar de coco",
+   "ultima": "2026-10-13"
+  },
+  "pingaro mariso le soleil|cardamomo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Cardamomo",
+   "ultima": "2026-10-13"
+  },
+  "posta|aceite de girasol legitimo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Aceite de girasol Legitimo",
+   "ultima": "2026-10-13"
+  },
+  "posta|aceite girasol": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Aceite girasol ",
+   "ultima": "2026-10-13"
+  },
+  "posta|aceite girasol alsamar": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Aceite girasol ALSAMAR",
+   "ultima": "2026-10-13"
+  },
+  "posta|aji molido": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Aji Molido",
+   "ultima": "2026-10-13"
+  },
+  "posta|almendras fileteadas": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Almendras fileteadas",
+   "ultima": "2026-10-13"
+  },
+  "posta|almidon de maiz x kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Almidon De Maiz x kg",
+   "ultima": "2026-10-13"
+  },
+  "posta|arroz personal don marcos": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Arroz personal Don Marcos",
+   "ultima": "2026-10-13"
+  },
+  "posta|avellanas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Avellanas",
+   "ultima": "2026-10-13"
+  },
+  "posta|azucar impalpable": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Azucar impalpable",
+   "ultima": "2026-10-13"
+  },
+  "posta|azucar x 10kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Azucar x 10kg",
+   "ultima": "2026-10-13"
+  },
+  "posta|azucar x kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Azucar x kg",
+   "ultima": "2026-10-13"
+  },
+  "posta|bicarbonato de sodio": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bicarbonato de sodio",
+   "ultima": "2026-10-13"
+  },
+  "posta|cacao amargo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Cacao Amargo",
+   "ultima": "2026-10-13"
+  },
+  "posta|cacao amargo en polvo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Cacao amargo en polvo",
+   "ultima": "2026-10-13"
+  },
+  "posta|canela en polvo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Canela en polvo",
+   "ultima": "2026-10-13"
+  },
+  "posta|canela en rama": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Canela en rama",
+   "ultima": "2026-10-13"
+  },
+  "posta|chocolate amargo fenix 87": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Chocolate Amargo Fenix 87",
+   "ultima": "2026-10-13"
+  },
+  "posta|coco rallado x kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Coco rallado x kg",
+   "ultima": "2026-10-13"
+  },
+  "posta|compras de equipo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Compras de equipo",
+   "ultima": "2026-10-13"
+  },
+  "posta|crema de leche": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Crema de leche",
+   "ultima": "2026-10-13"
+  },
+  "posta|curcuma en polvo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Curcuma en polvo",
+   "ultima": "2026-10-13"
+  },
+  "posta|dulce de leche repostero x 10 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Dulce de leche Repostero x 10 kg",
+   "ultima": "2026-10-13"
+  },
+  "posta|extracto de tomate": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Extracto De Tomate",
+   "ultima": "2026-10-13"
+  },
+  "posta|fideo tirabuzon": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Fideo tirabuzon",
+   "ultima": "2026-10-13"
+  },
+  "posta|fideos tallarin": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Fideos Tallarin",
+   "ultima": "2026-10-13"
+  },
+  "posta|hongos secos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Hongos Secos",
+   "ultima": "2026-10-13"
+  },
+  "posta|hongos secos bavosi": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Hongos secos Bavosi",
+   "ultima": "2026-10-13"
+  },
+  "posta|leche de avena": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Leche de avena",
+   "ultima": "2026-10-13"
+  },
+  "posta|leche descremada x 12": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 8,
+   "presentacion": "Leche descremada x 12",
+   "ultima": "2026-10-13"
+  },
+  "posta|leche entera x 12": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 10,
+   "presentacion": "Leche entera x 12",
+   "ultima": "2026-10-13"
+  },
+  "posta|levadura prensada": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Levadura prensada",
+   "ultima": "2026-10-13"
+  },
+  "posta|maiz pisingallo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Maiz pisingallo",
+   "ultima": "2026-10-13"
+  },
+  "posta|manteca 5 kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Manteca 5 kg",
+   "ultima": "2026-10-13"
+  },
+  "posta|miel": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Miel",
+   "ultima": "2026-10-13"
+  },
+  "posta|oregano seco": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Oregano seco",
+   "ultima": "2026-10-13"
+  },
+  "posta|panko": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 11,
+   "presentacion": "Panko",
+   "ultima": "2026-10-13"
+  },
+  "posta|pimenton dulce": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pimenton dulce",
+   "ultima": "2026-10-13"
+  },
+  "posta|porotos alubia": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Porotos Alubia",
+   "ultima": "2026-10-13"
+  },
+  "posta|pure de tomate": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Pure de tomate",
+   "ultima": "2026-10-13"
+  },
+  "posta|queso fontina": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 7,
+   "presentacion": "Queso fontina",
+   "ultima": "2026-10-13"
+  },
+  "posta|ricota": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Ricota",
+   "ultima": "2026-10-13"
+  },
+  "posta|sal entrefina celusal x 25kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Sal entrefina celusal X 25KG",
+   "ultima": "2026-10-13"
+  },
+  "posta|sal entrefina x 5kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Sal EntreFina X 5KG",
+   "ultima": "2026-10-13"
+  },
+  "posta|sal gruesa x 25kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 5,
+   "presentacion": "Sal gruesa x 25kg",
+   "ultima": "2026-10-13"
+  },
+  "posta|salsa de soja": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Salsa de soja",
+   "ultima": "2026-10-13"
+  },
+  "posta|semillas de mostaza": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Semillas de mostaza",
+   "ultima": "2026-10-13"
+  },
+  "posta|servilleta elegante 33 x 33": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 8,
+   "presentacion": "Servilleta elegante 33 x 33",
+   "ultima": "2026-10-13"
+  },
+  "posta|tabasco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tabasco",
+   "ultima": "2026-10-13"
+  },
+  "posta|tapa de empanada": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Tapa De Empanada",
+   "ultima": "2026-10-13"
+  },
+  "posta|tapa empanada roti criolla": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Tapa Empanada Roti Criolla",
+   "ultima": "2026-10-13"
+  },
+  "posta|te cachamai comun": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "TE CACHAMAI COMUN",
+   "ultima": "2026-10-13"
+  },
+  "posta|te hurlingham x 100": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "te hurlingham x 100",
+   "ultima": "2026-10-13"
+  },
+  "posta|te hurlingham x 50": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "te hurlingham x 50",
+   "ultima": "2026-10-13"
+  },
+  "posta|vinagre de alcohol": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Vinagre de alcohol",
+   "ultima": "2026-10-13"
+  },
+  "power print graphic|imprenta": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Imprenta",
+   "ultima": "2026-10-13"
+  },
+  "procamp|asesoramiento de seguridad higiene": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Asesoramiento de seguridad/higiene",
+   "ultima": "2026-10-13"
+  },
+  "procamp|limpieza de campanas": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Limpieza De Campanas",
+   "ultima": "2026-10-13"
+  },
+  "procamp|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "prohygiene|abono mensual higiene": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Abono mensual higiene",
+   "ultima": "2026-10-13"
+  },
+  "prohygiene|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "prosegur|prosegur": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Prosegur",
+   "ultima": "2026-10-13"
+  },
+  "prosegur|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|atamisque malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Atamisque malbec",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|carrascal malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Carrascal MALBEC",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|eggo filoso pinot": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Eggo Filoso Pinot",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|flechas de los andes gran canernet franc": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Flechas de los Andes Gran canernet franc",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|pintom pinot": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pintom pinot",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|punta de flechas malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Punta de flechas Malbec",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|punta de flechas rose": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "PUNTA DE FLECHAS ROSE",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|raquis las bases malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Raquis Las bases Malbec",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|weinert malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Weinert malbec",
+   "ultima": "2026-10-13"
+  },
+  "punto novisa sa|weinert merlot": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Weinert merlot",
+   "ultima": "2026-10-13"
+  },
+  "quilmes|cerv corona": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "CERV. CORONA",
+   "ultima": "2026-10-13"
+  },
+  "quilmes|cerveza barril": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Cerveza Barril",
+   "ultima": "2026-10-13"
+  },
+  "quilmes|cerveza michelob lata": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Cerveza michelob lata",
+   "ultima": "2026-10-13"
+  },
+  "quilmes|envio": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
+  "quilmes|impuestos internos": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 4,
+   "presentacion": "IMPUESTOS INTERNOS",
+   "ultima": "2026-10-13"
+  },
+  "quilmes|stella 0 0 alcohol": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Stella 0.0 Alcohol",
+   "ultima": "2026-10-13"
+  },
+  "quilmes|stella artois cerveza tirada": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Stella Artois (cerveza tirada)",
+   "ultima": "2026-10-13"
+  },
+  "quilmes|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "rafael cioffi|anchoa el delfin": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Anchoa El Delfin",
+   "ultima": "2026-10-13"
+  },
+  "raices|compras por caja": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Compras por caja",
+   "ultima": "2026-10-13"
+  },
+  "raices|huevo cajon": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 14,
+   "presentacion": "Huevo cajon",
+   "ultima": "2026-10-13"
+  },
+  "raices|verduleria": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 73,
+   "presentacion": "Verduleria",
+   "ultima": "2026-10-13"
+  },
+  "ramdom|bolsa consorcio negra 80x110x50": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa consorcio negra 80x110x50",
+   "ultima": "2026-10-13"
+  },
+  "ramdom|papel manteca": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Papel manteca",
+   "ultima": "2026-10-13"
+  },
+  "random|bazar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 5,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "random|comida de personal": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Comida de personal",
+   "ultima": "2026-10-13"
+  },
+  "random|compras por caja": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Compras por caja",
+   "ultima": "2026-10-13"
+  },
+  "random|flete": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 2,
+   "presentacion": "Flete",
+   "ultima": "2026-10-13"
+  },
+  "rapi vac|mantenimiento": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "ra|vinagre de vino tinto": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Vinagre de vino tinto",
+   "ultima": "2026-10-13"
+  },
+  "resta sanitarios sucesores de domingo resta y cia sa|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "ridigas|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "roberto o rodofeli y cia s r l|bolsa vacio 20x30": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Bolsa vacio 20x30",
+   "ultima": "2026-10-13"
+  },
+  "rupajo s a|pan arabe clasico bolsa": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Pan Arabe Clasico Bolsa",
+   "ultima": "2026-10-13"
+  },
+  "rupajo s a|pan pita x 4": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "PAN PITA X 4",
+   "ultima": "2026-10-13"
+  },
+  "sabores de argentina|astillas para ahumar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Astillas para ahumar",
+   "ultima": "2026-10-13"
+  },
+  "sabores de argentina|vinagre de sauco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Vinagre de sauco",
+   "ultima": "2026-10-13"
+  },
+  "sabores la lucinda|pierna de cordero deshuesada": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Pierna de cordero deshuesada",
+   "ultima": "2026-10-13"
+  },
+  "sadelar srl|humos bolsa manzano x 5kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Humos - Bolsa Manzano X 5Kg",
+   "ultima": "2026-10-13"
+  },
+  "sadelar srl|vinagre de sauco": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Vinagre de sauco",
+   "ultima": "2026-10-13"
+  },
+  "san martin nicolas pablo oleo y gourmet|sal en escamas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Sal En Escamas",
+   "ultima": "2026-10-13"
+  },
+  "sanchez natalia|filet de merluza": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Filet de merluza",
+   "ultima": "2026-10-13"
+  },
+  "sanitarios saenz|bazar": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "savastano|delantal muga": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Delantal Muga",
+   "ultima": "2026-10-13"
+  },
+  "savastano|uniforme": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Uniformes",
+   "ultima": "2026-10-13"
+  },
+  "savastano|uniformes": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Uniformes",
+   "ultima": "2026-10-13"
+  },
+  "savastano|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "segafredo|azucar caja x 5 kg": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Azucar caja x 5 kg",
+   "ultima": "2026-10-13"
+  },
+  "segafredo|azucar sobres": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Azucar sobres",
+   "ultima": "2026-10-13"
+  },
+  "segafredo|cafe en grano": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "CAFE EN GRANO",
+   "ultima": "2026-10-13"
+  },
+  "segafredo|cafe en grano equinoccio": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 13,
+   "presentacion": "Cafe en grano equinoccio",
+   "ultima": "2026-10-13"
+  },
+  "segafredo|cafesenza sobres descafeinado": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Cafesenza (Sobres Descafeinado)",
+   "ultima": "2026-10-13"
+  },
+  "segafredo|edulcorante": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Edulcorante",
+   "ultima": "2026-10-13"
+  },
+  "segafredo|edulcorante sobres x 1000": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Edulcorante Sobres X 1000",
+   "ultima": "2026-10-13"
+  },
+  "segafredo|edulcorante sobres x 400": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 3,
+   "presentacion": "Edulcorante Sobres X 400",
+   "ultima": "2026-10-13"
+  },
+  "silva pellegrin leonardo hohberg|mantenimiento": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "sin proveedor|arreglo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Arreglo",
+   "ultima": "2026-10-13"
+  },
+  "sin proveedor|libreria": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Librería",
+   "ultima": "2026-10-13"
+  },
+  "sin proveedor|limpieza": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Limpieza",
+   "ultima": "2026-10-13"
+  },
+  "sin proveedor|personal": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "PERSONAL",
+   "ultima": "2026-10-13"
+  },
+  "sin proveedor|servilleta simil tela": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Servilleta simil tela",
+   "ultima": "2026-10-13"
+  },
+  "sin proveedor|whisky glenfiddich 15 anos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Whisky Glenfiddich 15 años",
+   "ultima": "2026-10-13"
+  },
+  "sorrentino lucas javier|flete": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 7,
+   "presentacion": "Flete",
+   "ultima": "2026-10-13"
+  },
+  "sorrentino lucas javier|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "tienda pepino|varios": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "todofres|alitas de pollo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Alitas de pollo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|azotillo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Azotillo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|bondiola de cerdo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Bondiola de cerdo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|carne picada de ternera": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Carne Picada De Ternera",
+   "ultima": "2026-10-13"
+  },
+  "todofres|carne picada vaca": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 5,
+   "presentacion": "Carne picada vaca",
+   "ultima": "2026-10-13"
+  },
+  "todofres|chinchulines": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Chinchulines",
+   "ultima": "2026-10-13"
+  },
+  "todofres|chorizo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 2,
+   "presentacion": "Chorizo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|costillas de cerdo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Costillas de cerdo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|espinazo de vaca": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 21,
+   "presentacion": "Espinazo De Vaca",
+   "ultima": "2026-10-13"
+  },
+  "todofres|higado de pollo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 7,
+   "presentacion": "Higado de pollo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|hueso de vaca": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 20,
+   "presentacion": "Hueso De Vaca",
+   "ultima": "2026-10-13"
+  },
+  "todofres|lomo de ternera": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Lomo de ternera",
+   "ultima": "2026-10-13"
+  },
+  "todofres|matambre": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Matambre",
+   "ultima": "2026-10-13"
+  },
+  "todofres|menudos de pollo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 18,
+   "presentacion": "Menudos de pollo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|milanesa de pollo personal": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 8,
+   "presentacion": "Milanesa de pollo PERSONAL",
+   "ultima": "2026-10-13"
+  },
+  "todofres|milanesas de carne personal": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Milanesas de carne PERSONAL",
+   "ultima": "2026-10-13"
+  },
+  "todofres|mollejas de garganta": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Mollejas De Garganta",
+   "ultima": "2026-10-13"
+  },
+  "todofres|nota de credito materia prima": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Nota de credito Materia Prima",
+   "ultima": "2026-10-13"
+  },
+  "todofres|osobuco": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Osobuco",
+   "ultima": "2026-10-13"
+  },
+  "todofres|paleta de cerdo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Paleta de  cerdo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|pata y muslo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 16,
+   "presentacion": "Pata y muslo",
+   "ultima": "2026-10-13"
+  },
+  "todofres|peceto": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Peceto",
+   "ultima": "2026-10-13"
+  },
+  "todofres|pierna de cordero deshuesada": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pierna de cordero deshuesada",
+   "ultima": "2026-10-13"
+  },
+  "todofres|roast beef": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 14,
+   "presentacion": "Roast beef",
+   "ultima": "2026-10-13"
+  },
+  "todofres|suprema de pollo": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "Suprema de pollo",
+   "ultima": "2026-10-13"
+  },
+  "trafolec|efectivo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Efectivo",
+   "ultima": "2026-10-13"
+  },
+  "trafolec|mantenimiento": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Mantenimiento",
+   "ultima": "2026-10-13"
+  },
+  "tuetano sa|pastron de pecho vacuno": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 13,
+   "presentacion": "Pastron de pecho vacuno",
+   "ultima": "2026-10-13"
+  },
+  "tuetano sa|pastron de pecho vacuno corte": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Pastron De Pecho Vacuno Corte",
+   "ultima": "2026-10-13"
+  },
+  "tursarkisian dario ricardo velas|velas de noche": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Velas De Noche",
+   "ultima": "2026-10-13"
+  },
+  "utech|pastillas rational azul": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Pastillas rational azul",
+   "ultima": "2026-10-13"
+  },
+  "utech|pastillas rational roja": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Pastillas Rational Roja",
+   "ultima": "2026-10-13"
+  },
+  "verduleria barrio|verduleria": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Verduleria",
+   "ultima": "2026-10-13"
+  },
+  "verduleria|verduleria": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 3,
+   "presentacion": "Verduleria",
+   "ultima": "2026-10-13"
+  },
+  "villa juan carlos|arreglo": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Arreglo",
+   "ultima": "2026-10-13"
+  },
+  "villares|ajo en escamas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Ajo En Escamas",
+   "ultima": "2026-10-13"
+  },
+  "villares|ajo granulado": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Ajo granulado",
+   "ultima": "2026-10-13"
+  },
+  "villares|almendras fileteadas": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Almendras fileteadas",
+   "ultima": "2026-10-13"
+  },
+  "villares|anis estrellado": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Anis estrellado",
+   "ultima": "2026-10-13"
+  },
+  "villares|cacao amargo alcalino": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Cacao amargo alcalino",
+   "ultima": "2026-10-13"
+  },
+  "villares|cacao amargo en polvo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Cacao amargo en polvo",
+   "ultima": "2026-10-13"
+  },
+  "villares|canela en rama": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Canela en rama",
+   "ultima": "2026-10-13"
+  },
+  "villares|cardamomo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Cardamomo",
+   "ultima": "2026-10-13"
+  },
+  "villares|castanas de caju": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Castañas De Caju",
+   "ultima": "2026-10-13"
+  },
+  "villares|cebolla escamas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Cebolla escamas",
+   "ultima": "2026-10-13"
+  },
+  "villares|clavo de olor": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Clavo de olor",
+   "ultima": "2026-10-13"
+  },
+  "villares|cous cous x kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Cous cous x kg",
+   "ultima": "2026-10-13"
+  },
+  "villares|datiles": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Datiles",
+   "ultima": "2026-10-13"
+  },
+  "villares|garbanzos villares 1kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 9,
+   "presentacion": "Garbanzos Villares (1kg)",
+   "ultima": "2026-10-13"
+  },
+  "villares|harina de almendras": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Harina de almendras",
+   "ultima": "2026-10-13"
+  },
+  "villares|mostaza en grano x kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Mostaza en grano x KG",
+   "ultima": "2026-10-13"
+  },
+  "villares|paleta de cerdo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Paleta de cerdo",
+   "ultima": "2026-10-13"
+  },
+  "villares|pasas de uva negra": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Pasas de uva negra",
+   "ultima": "2026-10-13"
+  },
+  "villares|pasas de uva negra x 10kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 3,
+   "presentacion": "Pasas de uva negra x 10kg",
+   "ultima": "2026-10-13"
+  },
+  "villares|petalos de rosas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Petalos De Rosas",
+   "ultima": "2026-10-13"
+  },
+  "villares|pimienta blanca en grano": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pimienta blanca en grano",
+   "ultima": "2026-10-13"
+  },
+  "villares|pimienta de cayena": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 2,
+   "presentacion": "Pimienta de cayena",
+   "ultima": "2026-10-13"
+  },
+  "villares|pimienta verde en grano": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Pimienta verde en grano",
+   "ultima": "2026-10-13"
+  },
+  "villares|pistachos": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Pistachos",
+   "ultima": "2026-10-13"
+  },
+  "villares|semilla de comino": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Semilla De Comino",
+   "ultima": "2026-10-13"
+  },
+  "villares|semilla de hinojo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Semilla De Hinojo",
+   "ultima": "2026-10-13"
+  },
+  "villares|semillas de coriandro": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Semillas de coriandro",
+   "ultima": "2026-10-13"
+  },
+  "villares|sirope de datil": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 2,
+   "presentacion": "Sirope de datil",
+   "ultima": "2026-10-13"
+  },
+  "villares|tahina frasco x 3 6kg": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Tahina (Frasco X 3,6Kg)",
+   "ultima": "2026-10-13"
+  },
+  "villares|tahina frasco x 900grs": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Tahina (Frasco X 900Grs)",
+   "ultima": "2026-10-13"
+  },
+  "villares|tahina frasco x 900grs x un": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 1,
+   "presentacion": "Tahina (Frasco X 900Grs) X UN",
+   "ultima": "2026-10-13"
+  },
+  "villares|tomate deshidratado": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tomate deshidratado",
+   "ultima": "2026-10-13"
+  },
+  "villares|tomillo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tomillo",
+   "ultima": "2026-10-13"
+  },
+  "villares|varios": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "villarino lorena|masa filo": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 10,
+   "presentacion": "Masa filo",
+   "ultima": "2026-10-13"
+  },
+  "volf|bazar": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "wigen carballo fernando ariel|almendras peladas": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Almendras peladas",
+   "ultima": "2026-10-13"
+  },
+  "wigen carballo fernando ariel|arroz basmati x 1kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 3,
+   "presentacion": "Arroz basmati x 1kg",
+   "ultima": "2026-10-13"
+  },
+  "wigen carballo fernando ariel|nuez cuartos nuez partida": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Nuez cuartos (Nuez partida)",
+   "ultima": "2026-10-13"
+  },
+  "yanovsky|ferfalaj": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Ferfalaj",
+   "ultima": "2026-10-13"
+  },
+  "zuccardi|aceite de oliva varietales": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 9,
+   "presentacion": "Aceite de oliva Varietales",
+   "ultima": "2026-10-13"
+  },
+  "zuccardi|aceite de oliva zuelo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 11,
+   "presentacion": "Aceite De Oliva Zuelo",
+   "ultima": "2026-10-13"
+  },
+  "zuccardi|espum santa julia extrabrut": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 2,
+   "presentacion": "Espum. Santa Julia Extrabrut",
+   "ultima": "2026-10-13"
+  },
+  "zuccardi|poligonos che blanc": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Poligonos che blanc",
+   "ultima": "2026-10-13"
+  },
+  "zuccardi|serie a zuccardi bonarda": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Serie A Zuccardi Bonarda",
+   "ultima": "2026-10-13"
+  },
+  "zuccardi|serie a zuccardi malbec": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 1,
+   "presentacion": "Serie A Zuccardi  Malbec",
+   "ultima": "2026-10-13"
+  },
+  "zuccardi|tito zuccardi paraje altamira": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Tito Zuccardi Paraje Altamira",
+   "ultima": "2026-10-13"
+  },
+  "zuccardi|zuccardi concreto malbec": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 1,
+   "presentacion": "Zuccardi concreto malbec",
+   "ultima": "2026-10-13"
+  }
+ },
+ "version": 1
+}
