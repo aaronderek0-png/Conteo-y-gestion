@@ -550,7 +550,7 @@ def aplicar_a_copia(resultados: list[dict], loc: Local, remitos: list[dict] | No
         wr.freeze_panes = "A2"
         for rem in remitos:
             for r in rem["renglones"]:
-                cant = 0 if r["anulado"] else r["cantidad_facturada_remito"]
+                cant = 0 if r["anulado"] else (r.get("peso_real_recibido_kg") if (r.get("unidad") or "").upper() == "KG" and r.get("peso_real_recibido_kg") is not None else r["cantidad_real"])
                 precio = r.get("precio_final") if r.get("precio_final") is not None else r["precio_unitario"]
                 fila = wr.max_row + 1
                 valores = {1: numero_a_celda(rem["remito"]), 2: _fecha_celda(rem["fecha"]), 3: _fecha_celda(rem["fecha"]),
@@ -931,7 +931,7 @@ def procesar_remito(comp: dict) -> dict:
     renglones, total_impreso, total_efectivo = [], 0.0, 0.0
     for it in comp.get("items", []):
         clave = norm(it["descripcion_original"]).split(" ")[0]
-        impreso = round(it["cantidad"] * it["precio_unitario"], 2)
+        impreso = round((it.get("cantidad") or 0) * (it.get("precio_unitario") or 0), 2)
         anulado = clave in anulados
         real_kg = pesos.get(clave)
         total_impreso += impreso
@@ -1350,6 +1350,69 @@ def asegurar_hoja_remitos_real(sh) -> str:
     return "creada (5 columnas, sin cuadrícula)"
 
 
+ENCABEZADO_PENDIENTES = ["ID REMITO", "N° REMITO", "FECHA", "PROVEEDOR", "PRODUCTO", "UNIDAD",
+    "CANTIDAD IMPRESA", "CANTIDAD RECIBIDA", "PRECIO INFORMADO", "VALOR ESTIMADO", "ORIGEN PRECIO",
+    "ANULADO", "ESTADO", "FACTURA ASOCIADA", "ARCHIVO", "ALERTAS"]
+
+
+def filas_remitos_pendientes(remitos: list[dict]) -> list[list]:
+    import hashlib
+    filas = []
+    for reg in remitos:
+        ident = "|".join([str(reg.get("remito") or reg.get("archivo") or ""),
+                          norm(reg.get("proveedor")), str(reg.get("local") or "")])
+        rid = hashlib.sha256(ident.encode()).hexdigest()[:24]
+        for i, r in enumerate(reg["renglones"]):
+            recibida = 0 if r["anulado"] else r.get("cantidad_real")
+            if not r["anulado"] and (r.get("unidad") or "").upper() == "KG" and r.get("peso_real_recibido_kg") is not None:
+                recibida = r["peso_real_recibido_kg"]
+            filas.append([f"{rid}:{i}", reg.get("remito") or "SIN NUMERO: REVISAR", reg.get("fecha") or "",
+                          reg.get("proveedor_oficial") or reg.get("proveedor") or "", r["descripcion"], r.get("unidad") or "",
+                          r.get("cantidad_facturada_remito"), recibida, r.get("precio_unitario"), r.get("total_estimado"),
+                          r.get("precio_origen") or "sin estimación", "SI" if r["anulado"] else "NO", reg["estado"],
+                          str(reg.get("factura_definitiva") or ""), reg.get("archivo") or "",
+                          " | ".join(reg.get("alertas") or []) + (" | " + r["nota"] if r.get("nota") else "")])
+    return filas
+
+
+def push_remitos_proveedor_drive(local: str, remitos: list[dict], confirmado: bool = False) -> dict:
+    """Registro separado de Facturas y de transferencias: no vuelve a imputar gasto/stock."""
+    filas = filas_remitos_pendientes(remitos)
+    if not confirmado or local not in IDS_PLANILLAS or not filas:
+        return {"escrito": False, "local": local, "motivo": "sin confirmación, destino o renglones", "plan": filas}
+    gc, _ = _gspread()
+    sh = gc.open_by_key(IDS_PLANILLAS[local])
+    ws = next((w for w in sh.worksheets() if w.title == "Remitos_Pendientes"), None)
+    if ws is None:
+        ws = sh.add_worksheet(title="Remitos_Pendientes", rows=1000, cols=16)
+        ws.update(range_name="A1:P1", values=[ENCABEZADO_PENDIENTES], value_input_option="RAW")
+        ws.freeze(rows=1)
+    actuales = ws.get_all_values()
+    if actuales and actuales[0][:16] != ENCABEZADO_PENDIENTES:
+        raise ValueError("Remitos_Pendientes tiene otra estructura; no se modifica")
+    idx = {fila[0]: n for n, fila in enumerate(actuales[1:], 2) if fila and fila[0]}
+    proxima = len(actuales) + 1
+    updates = []
+    for fila in filas:
+        n = idx.get(fila[0])
+        if n is None:
+            n = proxima
+            proxima += 1
+            idx[fila[0]] = n
+        updates.append({"range": f"A{n}:P{n}", "values": [["" if x is None else x for x in fila]]})
+    ws.batch_update(updates, value_input_option="RAW")
+    for u in updates:
+        leido = ws.get(u["range"], value_render_option="UNFORMATTED_VALUE")
+        expected = u["values"][0]
+        actual = (list(leido[0]) if leido else [])
+        actual += [""] * (len(expected) - len(actual))
+        if ["" if x is None else x for x in actual] != expected:
+            raise ValueError("No se verificó la escritura de remitos; se conserva pendiente para reintentar")
+    return {"escrito": True, "local": local, "tipo": "remitos_proveedor", "planilla": sh.title,
+            "sheet_id": IDS_PLANILLAS[local], "hoja": ws.title, "filas": len(filas),
+            "desde_fila": min(idx[f[0]] for f in filas), "hasta_fila": max(idx[f[0]] for f in filas), "detalle": []}
+
+
 def push_remitos_drive(local: str, remitos: list[dict], confirmado: bool = False) -> dict:
     """Remitos del Obrador hacia la pestaña 'Remitos' de la planilla REAL del local receptor, en sus 5 columnas:
     A FECHA (DD/MM) · B PRODUCTO · C CANT. U/MEDIDA · D PRECIO U. · E PRECIO TOTAL (=C*D). Sin fila de total general.
@@ -1467,7 +1530,7 @@ def push_drive(local: str, filas: list[dict], confirmado: bool = False, demo: bo
 def deshacer_push(registro: dict) -> dict:
     """Borra de la planilla real las filas de una inyección anterior (registro devuelto por push_drive), verificando
     que cada fila siga teniendo el mismo N° y proveedor antes de borrar."""
-    if not registro or not registro.get("escrito"):
+    if not registro or not registro.get("escrito") or not registro.get("detalle") or registro.get("tipo") == "remitos_proveedor":
         return {"deshecho": False, "motivo": "no hay una inyección en vivo registrada"}
     gc, _ = _gspread()
     es_remito = registro.get("tipo") == "remitos"

@@ -56,7 +56,25 @@ def sha(path: Path) -> str:
 # --------------------------------------------------------------------------- #
 # Nivel 1: clasificación
 # --------------------------------------------------------------------------- #
-def clasificar_carpeta(carpeta: Path) -> dict:
+def separar_destinos_remito(comp: dict) -> list[dict]:
+    """Una anotación de local por renglón no cambia el destino de todo el documento."""
+    if comp.get("tipo") != "Remito" or not any(it.get("local_destino") for it in comp.get("items", [])):
+        return [comp]
+    destinos = {}
+    for it in comp["items"]:
+        local = it.get("local_destino") or comp.get("local_destino_base")
+        destinos.setdefault(local, []).append(it)
+    out = []
+    for local, items in destinos.items():
+        c = dict(comp)
+        c.update({"items": items, "archivo_origen": comp["archivo"],
+                  "archivo": comp["archivo"] + f" [destino {local or 'REVISAR'}]",
+                  "local_destino_renglon": local})
+        out.append(c)
+    return out
+
+
+def clasificar_carpeta(carpeta: Path, escribir_cache: bool = True) -> dict:
     """Devuelve {'comprobantes': [...], 'informes': [Path], 'listas': [Path], 'duplicados': [(Path, Path)]}."""
     out = {"comprobantes": [], "informes": [], "listas": [], "duplicados": [], "otros": []}
     vistos: dict[str, Path] = {}
@@ -86,7 +104,7 @@ def clasificar_carpeta(carpeta: Path) -> dict:
                 c["sha256"] = h
                 out["comprobantes"].append(c)
         elif ext in IMG_EXT:
-            if h not in cache and not any(k.startswith(h + "#") for k in cache):
+            if escribir_cache and h not in cache and not any(k.startswith(h + "#") for k in cache):
                 try:                                       # misma foto recomprimida por Telegram: match por parecido + OCR
                     reutil = ip.reutilizar_lectura_por_parecido(p)
                 except Exception as e:
@@ -108,6 +126,8 @@ def clasificar_carpeta(carpeta: Path) -> dict:
                 continue
             else:
                 try:
+                    if not escribir_cache:
+                        raise RuntimeError("dry-run: imagen sin lectura en caché; requiere extracción")
                     leidos = ip.leer_imagen_vision(p)
                     LOG.info("%s: leída con visión multimodal (%d comprobante/s)", p.name, len(leidos))
                     for k, v in enumerate(leidos, 1):
@@ -120,8 +140,8 @@ def clasificar_carpeta(carpeta: Path) -> dict:
                     LOG.warning("%s: visión no disponible (%s); se usa OCR", p.name, str(e)[:100])
                 LOG.warning("%s: no está en cache_facturas.json; se intenta OCR (baja confianza)", p.name)
                 try:
-                    c = ip.procesar_comprobante(p)
-                    c.setdefault("tipo", "Factura")
+                    c = ip.procesar_comprobante(p, usar_cache=escribir_cache)
+                    c.setdefault("tipo", ip.tipo_comprobante(c.get("texto_encabezado") or ""))
                     c["advertencias"] = (c.get("advertencias") or []) + ["leída por OCR sin revisión visual"]
                 except ip.OCRNoDisponible as e:
                     c = {"archivo": p.name, "tipo": "Ilegible", "items": [], "advertencias": [str(e)], "sha256": h}
@@ -129,12 +149,13 @@ def clasificar_carpeta(carpeta: Path) -> dict:
             out["comprobantes"].append(c)
         else:
             out["otros"].append(p)
+    out["comprobantes"] = [parte for c in out["comprobantes"] for parte in separar_destinos_remito(c)]
     # duplicados semánticos (la misma factura en PDF y en foto): se conserva el PDF y se anota
     por_clave: dict[tuple, dict] = {}
     finales = []
     for c in out["comprobantes"]:
         k = (imp.ultimo_entero(c.get("numero_factura")), imp.norm(c.get("proveedor_detectado")).split(" ")[0],
-             c.get("fecha_factura"), c.get("tipo"))
+             c.get("fecha_factura"), c.get("tipo"), c.get("local_destino_renglon"))
         if k[0] is not None and k in por_clave:
             previo = por_clave[k]
             for campo in ("sello", "firmas", "anotaciones_manuscritas", "direccion_entrega"):   # se queda con el que trae sello
@@ -171,6 +192,8 @@ def analizar(comp: dict, locales: dict, ap: dict) -> dict:
         comp["proveedor_detectado"] = m0["proveedor_planilla"]
     if m0:
         comp["proveedor_planilla"] = m0["proveedor_planilla"]       # nombre con el que figura en la planilla
+    if "local_destino_renglon" in comp:
+        regla = {"local": comp["local_destino_renglon"], "regla": "destino por renglón: entrega base y anotación específica", "alertas": []}
     local, por = regla["local"], regla["regla"]
     alertas = list(regla["alertas"])
     if local is None and m0:
@@ -197,7 +220,11 @@ def estado_de(comp: dict, an: dict, remito_conciliado: bool = False) -> str:
     t = comp.get("tipo")
     if t == "RemitoObrador":
         return f"REMITO_OBRADOR → {an['local']}"
+    if t in ("Desconocido", "Ilegible", "ND"):
+        return "TIPO_REVISAR"
     if t == "Remito":
+        if an["local"] is None:
+            return "REMITO_SIN_LOCAL_REVISAR"
         return "REMITO_PENDIENTE" + (" → CONCILIADO" if remito_conciliado else "")
     if t == "Captura_planilla":
         return "EVIDENCIA_PLANILLA"
@@ -294,10 +321,11 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     .confirmo_escribir_produccion. Devuelve (reporte, locales, ap, clasificación)."""
     # ---- Nivel 1 ------------------------------------------------------------
     try:
-        ip.indexar_dhash(BASE_DIR / "Facturas Mishiguene")     # huella visual de las lecturas ya guardadas
+        if escribir:
+            ip.indexar_dhash(BASE_DIR / "Facturas Mishiguene")     # huella visual de las lecturas ya guardadas
     except Exception as e:
         LOG.debug("indexar_dhash: %s", e)
-    cl = clasificar_carpeta(carpeta)
+    cl = clasificar_carpeta(carpeta, escribir_cache=escribir)
     informes_idx, bench = None, None
     if escribir and indexar_informes:
         import datos_operativos
@@ -327,7 +355,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     analisis: dict[str, dict] = {}
     claves_remitos = {imp._clave_remito(x.get("numero_factura")) for x in cl["comprobantes"] if x.get("tipo") == "Remito"}
     for c in cl["comprobantes"]:
-        c.setdefault("tipo", "Factura")
+        c.setdefault("tipo", ip.tipo_comprobante(c.get("texto_encabezado") or ""))
         c.setdefault("extra", {})
         c["validacion"] = c.get("validacion") or {}
         c["_remitos_lote"] = {c["remito_asociado"]} if c.get("remito_asociado") and             imp._clave_remito(c["remito_asociado"]) in claves_remitos else set()
@@ -375,32 +403,51 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
 
     # ---- remitos -------------------------------------------------------------
     remitos = imp.cargar_remitos()
-    facturas_por_remito = {imp._clave_remito(c.get("remito_asociado")): c for c in cl["comprobantes"]
-                           if c.get("remito_asociado")}
+    facturas_por_remito = {
+        (imp._clave_remito(c.get("remito_asociado")), imp.norm(c.get("proveedor_detectado"))): c
+        for c in cl["comprobantes"] if c.get("tipo") == "Factura" and c.get("remito_asociado")}
+    # El número de remito no es único entre proveedores. Mantener identidad y local.
+    def identidad_remito(reg):
+        return (imp._clave_remito(reg.get("remito")) or reg.get("archivo"), imp.norm(reg.get("proveedor")), reg.get("local"))
+    def conciliar_explicito(reg):
+        fac = facturas_por_remito.get((imp._clave_remito(reg.get("remito")), imp.norm(reg.get("proveedor"))))
+        if fac and reg.get("local") and analisis[fac["archivo"]]["local"] == reg["local"]:
+            conc = imp.conciliar_remito_factura(reg, fac)
+            reg.update({"estado": "CONCILIADO", "factura_definitiva": fac.get("numero_factura"),
+                        "alertas": conc["alertas"], "conciliacion": conc})
+        return fac
+    # También conciliar los guardados cuando la factura llega en un lote posterior.
+    for previo in remitos.values():
+        if previo.get("estado") == "PENDIENTE":
+            conciliar_explicito(previo)
     remitos_lote: list[dict] = []
     for c in cl["comprobantes"]:
         if c.get("tipo") != "Remito":
             continue
         reg = imp.procesar_remito(c)
-        loc_r = locales.get(analisis[c["archivo"]]["local"] or "Congreso") or locales["Congreso"]
-        imp.completar_remito(reg, loc_r, ap)
-        reg["proveedor_oficial"] = imp.mapear_proveedor(reg["proveedor"], "", loc_r.proveedores)[0]
-        clave = imp._clave_remito(c.get("numero_factura"))
-        fac = facturas_por_remito.get(clave)
-        if fac:
-            conc = imp.conciliar_remito_factura(reg, fac)
-            reg.update({"estado": "CONCILIADO", "factura_definitiva": fac.get("numero_factura"),
-                        "alertas": conc["alertas"], "conciliacion": conc})
-        if reg["estado"] == "PENDIENTE":
+        reg["local"] = analisis[c["archivo"]]["local"]
+        loc_r = locales.get(reg["local"])
+        if loc_r is not None:
+            imp.completar_remito(reg, loc_r, ap)
+            reg["proveedor_oficial"] = imp.mapear_proveedor(reg["proveedor"], "", loc_r.proveedores)[0]
+        else:
+            reg["alertas"].append("REVISAR: local indeterminado; no se carga en un local por defecto")
+        prev_key = next((k for k, v in remitos.items() if identidad_remito(v) == identidad_remito(reg) or (v.get("archivo") and v.get("archivo") == reg.get("archivo"))), None)
+        if prev_key is not None and remitos[prev_key].get("estado") == "CONCILIADO":
+            for campo in ("estado", "factura_definitiva", "conciliacion", "alertas"):
+                if campo in remitos[prev_key]:
+                    reg[campo] = remitos[prev_key][campo]
+        conciliar_explicito(reg)
+        if reg["estado"] == "PENDIENTE" and loc_r is not None:
             ya = imp.remito_ya_cargado_como_total(reg, loc_r)
             if ya:
-                reg.update({"estado": "CONCILIADO", "factura_definitiva": ya["N"],
-                            "alertas": [f"ya cargado en Facturas como total N° {ya['N']} ({ya['fecha']}, "
-                                        f"${ya['total']:,.0f}; difiere {ya['diferencia_pct']:+.1f} % del estimado del remito)"]})
+                reg["posible_factura"] = ya
+                reg["alertas"].append(f"REVISAR conciliación: factura {ya['N']} coincide aproximadamente en fecha/monto; falta referencia explícita")
         c["_remito"] = reg
-        remitos[str(c.get("numero_factura"))] = reg
+        key = prev_key or "|".join(str(x or "") for x in identidad_remito(reg))
+        remitos[key] = reg
         remitos_lote.append(reg)
-    if escribir and remitos_lote:
+    if escribir and remitos:
         imp.guardar_remitos(remitos)
 
     # ---- remitos del Obrador a un local (5 columnas de la pestaña 'Remitos' del receptor) -----------
@@ -454,10 +501,14 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     revision_filas: list[dict] = []
     if escribir and not demo:
         remitos_tab_por_local: dict[str, list[dict]] = {}
-        for c in cl["comprobantes"]:
-            if c.get("tipo") == "Remito":
-                n = analisis[c["archivo"]]["local"] or "Congreso"
-                remitos_tab_por_local.setdefault(n, []).append(c["_remito"])
+        locales_por_archivo = {c["archivo"]: analisis[c["archivo"]]["local"] for c in cl["comprobantes"]}
+        for reg in remitos.values():
+            n = reg.get("local") or locales_por_archivo.get(reg.get("archivo"))
+            if n in locales:
+                reg["local"] = n
+                remitos_tab_por_local.setdefault(n, []).append(reg)
+        if remitos:
+            imp.guardar_remitos(remitos)
         for nombre in sorted(set(plan_por_local) | set(marcas_por_local) | set(remitos_tab_por_local)
                              | set(remitos_obrador_por_local)):
             loc = locales.get(nombre) or imp.Local(nombre)
@@ -478,23 +529,24 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     if escribir and not demo:
         escribir_carpeta_revision(revision_filas, analisis, cl)
     pushes = {}
-    if args.push_drive:
+    if args.push_drive and not getattr(args, "dry_run", False):
+        import registro_fallos as rf
         for nombre, filas in plan_por_local.items():
-            pushes[nombre] = imp.push_drive(nombre, filas, confirmado=args.confirmo_escribir_produccion, demo=demo)
-        for c_ in cl["comprobantes"]:
-            reg = c_.get("_remito")
-            if not reg or reg["estado"] != "PENDIENTE":
-                continue
-            local_r = analisis[c_["archivo"]]["local"] or "Congreso"
-            prov_corto = (reg.get("proveedor_oficial") or reg.get("proveedor") or "Proveedor").split(" (")[0].title()
-            adaptado = {"remito": reg["remito"], "fecha": reg["fecha"], "tipo": "PROVEEDOR", "renglones": [
-                {"fecha": reg["fecha"], "producto": f"{r['descripcion']} ({prov_corto} {imp.ultimo_entero(reg['remito'])})",
-                 "cantidad": r["cantidad_facturada_remito"],
-                 "precio_unitario": r.get("precio_final") if r.get("precio_final") is not None else r["precio_unitario"],
-                 "total": r.get("total_estimado")}
-                for r in reg["renglones"] if not r["anulado"]]}
-            pushes[f"Remito proveedor {local_r} {reg['remito']}"] = imp.push_remitos_drive(
-                local_r, [adaptado], confirmado=args.confirmo_escribir_produccion)
+            try:
+                pushes[nombre] = imp.push_drive(nombre, filas, confirmado=args.confirmo_escribir_produccion, demo=demo)
+                rf.evento(f"push:{nombre}", "push_facturas", "OK" if pushes[nombre].get("escrito") else "NO_ESCRITO",
+                          local=nombre, motivo=pushes[nombre].get("motivo", ""))
+            except Exception as e:                       # cada destino es independiente; se re-lanza al terminar
+                rf.evento(f"push:{nombre}", "push_facturas", "ERROR", error=e, local=nombre)
+                pushes[nombre] = {"escrito": False, "local": nombre, "motivo": "ERROR " + rf.detalle_excepcion(e)["tipo"],
+                                  "error": rf.detalle_excepcion(e)}
+        proveedores_por_local = {}
+        for reg in remitos.values():
+            if reg.get("local") in locales:
+                proveedores_por_local.setdefault(reg["local"], []).append(reg)
+        for local_r, regs in proveedores_por_local.items():
+            pushes[f"Remitos proveedores {local_r}"] = imp.push_remitos_proveedor_drive(
+                local_r, regs, confirmado=args.confirmo_escribir_produccion)
         for receptor, regs in remitos_obrador_por_local.items():
             pushes[f"Remitos {receptor}"] = imp.push_remitos_drive(
                 receptor, regs, confirmado=args.confirmo_escribir_produccion)
@@ -508,8 +560,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
         an = analisis[c["archivo"]]
         rem_conc = c.get("_remito", {}).get("estado") == "CONCILIADO" if c.get("tipo") == "Remito" else False
         # remito de Zuccardi (sin precios): conciliado con la factura por el N° de remito
-        if c.get("tipo") == "Remito" and rem_conc is False and imp._clave_remito(c.get("numero_factura")) in facturas_por_remito:
-            rem_conc = True
+        # Solo el estado persistido con referencia explícita acredita la conciliación.
         filas_aud.append({
             "archivo": c["archivo"], "tipo": c.get("tipo"), "numero": c.get("numero_factura"),
             "fecha": c.get("fecha_factura"), "proveedor": c.get("proveedor_detectado"),

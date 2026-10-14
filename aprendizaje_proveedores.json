@@ -488,6 +488,14 @@
    "presentacion": "Filet de mero",
    "ultima": "2026-10-13"
   },
+  "buenos mares|filet de mero cod 11919 cancela factura 125209": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Filet de mero",
+   "ultima": "2026-10-14"
+  },
   "buenos mares|filet de trucha crudo": {
    "locales": [
     "Lafinur"
@@ -4364,8 +4372,8 @@
    "locales": [
     "Congreso"
    ],
-   "n": 6,
-   "presentacion": "Envio",
+   "n": 1,
+   "presentacion": "Varios",
    "ultima": "2026-10-14"
   },
   "mix 57|etiqueta il vip 50x20": {
@@ -4375,6 +4383,14 @@
    "n": 2,
    "presentacion": "Etiqueta IL VIP 50x20",
    "ultima": "2026-10-13"
+  },
+  "mix 57|etiqueta il vip 50x20 2000u b25 1b imp fecha de elaborcion": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "Etiqueta IL VIP 50x20",
+   "ultima": "2026-10-14"
   },
   "mix 57|etiqueta il vip 50x50 1000u b25 1b circ imp logo celeste p 284c": {
    "locales": [
@@ -5572,7 +5588,7 @@
    "locales": [
     "Congreso"
    ],
-   "n": 9,
+   "n": 10,
    "presentacion": "Varios",
    "ultima": "2026-10-14"
   },

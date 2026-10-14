@@ -788,16 +788,23 @@ def separar_copias(texto: str) -> str:
 
 
 def tipo_comprobante(texto: str) -> str:
-    cab = _plano(texto[:700])
-    if re.search(r"nota de credito", cab):
+    """Clasifica por evidencia del encabezado; no convierte un desconocido en factura."""
+    cab = unicodedata.normalize("NFKD", texto[:1800]).encode("ascii", "ignore").decode().lower()
+    if re.search(r"nota\s+de\s+credito", cab):
         return "NC"
-    if re.search(r"nota de debito", cab):
+    if re.search(r"nota\s+de\s+debito", cab):
         return "ND"
     if re.search(r"lista\s+(naturales|de precios)", cab):
         return "Lista"
-    if re.search(r"documento no valido como factura", cab):
+    if re.search(r"(?:documento\s+)?no\s+valido\s+como\s+factura", cab):
         return "Remito"
-    return "Factura"
+    # Una factura puede mencionar el remito asociado: esa referencia no cambia su tipo.
+    if re.search(r"\bfactura\s*(?:electronica\b|[abcme]\b|n[°ºo]|nro|numero|[-/]?\s*\d)", cab) or re.search(
+            r"(?m)^\s*(?:[abcme]\s+)?factura\s*$", cab) or re.search(r"cod\.?\s*0*0[16]\b", cab):
+        return "Factura"
+    if re.search(r"(?m)^\s*(?:remito|rto\.?)\b", cab):
+        return "Remito"
+    return "Desconocido"
 
 
 _FMT_AFIP = re.compile(
@@ -1047,10 +1054,10 @@ _PROMPT_VISION = (
     "Respetá las correcciones a mano en birome (cantidades tachadas o reescritas, 'NO', pesos reales): la cantidad "
     "vigente es la manuscrita. Devolvé SOLO un JSON (sin texto extra) con una lista de objetos: "
     '{{"tipo":"Factura|Remito|NC|RemitoObrador","numero_factura":"PPPPP-NNNNNNNN","fecha_factura":"YYYY-MM-DD",'
-    '"proveedor_detectado":"...","sello":"texto del sello o null","direccion_entrega":"...|null",'
+    '"local_destino_base":"local de entrega base o null","proveedor_detectado":"...","sello":"texto del sello o null","direccion_entrega":"...|null",'
     '"razon_social_cliente":"...","firmas":[...],"anotaciones_manuscritas":[...],"total_comprobante":0,'
-    '"items":[{{"descripcion_original":"...","cantidad":0,"unidad_detectada":"UN|KG|...","precio_unitario":0,'
-    '"descuento_pct":0,"total_linea":0}}]}}. Usá RemitoObrador si lo emite Mishiguene (Av. Cerviño 4417) a un local.')
+    '"items":[{{"local_destino":"local solo si anotado para este renglon, o null","descripcion_original":"...","cantidad":0,"unidad_detectada":"UN|KG|...","precio_unitario":0,'
+    '"descuento_pct":0,"total_linea":0}}]}}. Una flecha en un renglón afecta solo ese renglón, con local_destino; local_destino_base conserva la entrega del resto. Usá RemitoObrador si lo emite Mishiguene (Av. Cerviño 4417) a un local.')
 
 
 def leer_imagen_vision(path: str | Path, timeout: int = 240) -> list[dict]:

@@ -168,7 +168,9 @@ def limpiar(api: "TelegramAPI", chat_id: int | str, est: dict, extra_ids: list[i
 
 
 def guardar_estado(e: dict) -> None:
-    STATE_JSON.write_text(json.dumps(e, ensure_ascii=False, indent=1), encoding="utf-8")
+    temporal = STATE_JSON.with_suffix(".tmp")
+    temporal.write_text(json.dumps(e, ensure_ascii=False, indent=1), encoding="utf-8")
+    temporal.replace(STATE_JSON)
 
 
 def adjuntos(msg: dict) -> list[tuple[str, str]]:
@@ -227,7 +229,10 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
            push: bool = False) -> dict:
     """Una consulta a Telegram + procesamiento de lo nuevo. Devuelve estadísticas."""
     t0 = time.perf_counter()
+    push = push and escribir
     est = cargar_estado()
+    offset_inicial = est.get("offset")
+    fallo = False
     ups = api.get_updates(est.get("offset"), timeout=timeout)
     stats = {"updates": len(ups), "archivos": 0, "duplicados": 0, "respondidos": 0, "ms": 0}
     if not ups:
@@ -235,7 +240,8 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
             for ch, mid in api.enviados:
                 registrar_ids(est, ch, [mid])
             api.enviados.clear()
-            guardar_estado(est)
+            if escribir:
+                guardar_estado(est)
         stats["ms"] = round((time.perf_counter() - t0) * 1000)
         return stats
     ENTRADA.mkdir(parents=True, exist_ok=True)
@@ -251,6 +257,8 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
             continue
         registrar_ids(est, chat, [msg["message_id"]])                # todo lo que entra al grupo
         texto_msg = (msg.get("text") or "").strip().lower()
+        if not escribir and texto_msg.split("@")[0] in ("/limpiar", "/deshacer"):
+            continue
         if texto_msg.split("@")[0] == "/limpiar":
             r = limpiar(api, chat, est, [msg["message_id"]])
             stats["limpiado"] = r
@@ -269,7 +277,8 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
             continue
         demo = bool(DEMO_RE.search(msg.get("caption") or ""))
         for file_id, nombre in adjuntos(msg):
-            ruta = api.descargar(file_id, ENTRADA / nombre)
+            nombre = Path(nombre).name
+            ruta = api.descargar(file_id, ENTRADA / f"{chat}_{msg['message_id']}_{nombre}")
             h = hashlib.sha256(ruta.read_bytes()).hexdigest()
             if demo:                                              # DEMO / PRUEBA: se re-procesa aunque ya esté en caché
                 pendientes.append((ruta, {"chat": chat, "mid": msg["message_id"], "demo": True}))
@@ -277,8 +286,8 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
                 continue
             if h in est["sha256"]:
                 stats["duplicados"] += 1
-                ruta.unlink(missing_ok=True)
-                api.responder(chat, "Ya lo tenía procesado (mismo contenido).", msg["message_id"])
+                if escribir:
+                    api.responder(chat, "Ya lo tenía procesado (mismo contenido).", msg["message_id"])
                 continue
             pendientes.append((ruta, {"chat": chat, "mid": msg["message_id"]}))
             stats["archivos"] += 1
@@ -298,7 +307,13 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
                 reporte, *_ = lote.ejecutar(tmp, escribir and not demo_grupo, ns, indexar_informes=False,
                                             forzar_nuevas=demo_grupo, demo=demo_grupo)
                 pushes = [r for r in (reporte.get("push_drive") or {}).values() if r]
-                escritos = [r for r in pushes if r.get("escrito") and "detalle" in r]
+                errores_push = [r for r in pushes if r.get("error")]
+                if errores_push:                              # no se registra SHA como éxito ni se avanza el offset
+                    class _PushFallido(RuntimeError):
+                        pass
+                    e0 = errores_push[0]["error"]
+                    raise _PushFallido(f"{e0.get('tipo')} HTTP {e0.get('http_status')} {e0.get('http_mensaje', '')}")
+                escritos = [r for r in pushes if r.get("escrito") and r.get("detalle") and r.get("tipo") != "remitos_proveedor"]
                 if escritos:
                     est["ultima_inyeccion"] = escritos[-1]       # para /deshacer
                 resumen_push = "\n".join(texto_push(r) for r in pushes)
@@ -308,23 +323,34 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
                         txt += f"\n🚚 Remito Obrador {rr['remito']} → {rr['receptor']}: {len(rr['renglones'])} renglones, ${rr['total']:,.2f}"
                     if resumen_push:
                         txt += "\n" + resumen_push
-                    api.responder(meta["chat"], txt, meta["mid"])
-                    stats["respondidos"] += 1
-                    if not demo_grupo:
+                    if escribir:
+                        api.responder(meta["chat"], txt, meta["mid"])
+                        stats["respondidos"] += 1
+                    if escribir and not demo_grupo:
                         h = hashlib.sha256(p.read_bytes()).hexdigest()
                         est["sha256"][h] = {"archivo": p.name, "chat": meta["chat"], "message_id": meta["mid"]}
             except Exception as e:                               # un archivo roto no frena el resto
                 LOG.exception("falló el procesamiento")
+                fallo = True
+                import registro_fallos as rf
+                det = rf.detalle_excepcion(e)
+                for p_, _m in grupo:
+                    rf.evento(hashlib.sha256(p_.read_bytes()).hexdigest(), "procesar_lote", "ERROR", error=e,
+                              archivo=p_.name, demo=demo_grupo)
+                cod = f" HTTP {det['http_status']} {det.get('http_status_texto', '')}".rstrip() if det.get("http_status") else ""
                 for _, meta in grupo:
-                    api.responder(meta["chat"], f"No pude procesar el comprobante ({type(e).__name__}). Queda para "
-                                                "revisión.", meta["mid"])
+                    if not escribir:
+                        continue
+                    api.responder(meta["chat"], f"No pude procesar el comprobante ({det['tipo']}{cod}). Queda en cola "
+                                                "para reintentar; detalle en logs/pipeline_eventos.jsonl.", meta["mid"])
             finally:
                 shutil.rmtree(tmp, ignore_errors=True)
-    est["offset"] = ultimo
+    est["offset"] = offset_inicial if fallo else ultimo
     for ch, mid in api.enviados:                                   # los mensajes del bot también se registran
         registrar_ids(est, ch, [mid])
     api.enviados.clear()
-    guardar_estado(est)
+    if escribir:
+        guardar_estado(est)
     stats["ms"] = round((time.perf_counter() - t0) * 1000)
     return stats
 

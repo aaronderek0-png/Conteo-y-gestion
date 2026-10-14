@@ -177,3 +177,20 @@ Toda fila que el agente inyecta (copias o `--push-drive`) va pintada en A:I: **`
 `python telegram_ingestor.py --conectar <TOKEN>`: guarda `TELEGRAM_BOT_TOKEN` en `.env`, detecta el grupo `Facturas Mishiguene`
 (o el último grupo con actividad), guarda `TELEGRAM_CHAT_ID`, manda el mensaje de prueba y procesa lo pendiente en `Facturas Mishiguene/`.
 El bot debe estar en el grupo y escribir algo antes (Group Privacy desactivada en @BotFather o bot admin). `.env` está en `.gitignore`.
+
+
+## Corrección verificada de ruteo — 14/10/2026
+Esta sección actualiza las descripciones históricas anteriores.
+- Chimidoha SÍ tiene planilla real: `imputacion_facturas.IDS_PLANILLAS["Chimidoha"]`, título verificado `CHIMIDOHA Congreso`.
+- Remitos de proveedores: registro persistente `remitos_pendientes.json` y pestaña `Remitos_Pendientes` de su local. Nunca entran en `Facturas` como gasto provisorio ni en `Remitos` de transferencias.
+- `Remitos` de 5 columnas se mantiene para transferencias del Obrador. No mezclar ambos circuitos.
+- Sin evidencia de local: REVISAR. No usar Congreso como destino por defecto.
+- La ausencia de letra A no define un remito: una factura C sigue siendo factura. Encabezado desconocido: REVISAR.
+- Conciliación nueva automática: referencia explícita, mismo proveedor y mismo local. Fecha/monto aproximados solo sugieren revisión. Se preservan las conciliaciones históricas y sus referencias.
+- Al reconstruir Remitos_Pendientes de una copia se incluyen también los registros anteriores del local. Identificar por proveedor, remito y local; sin número, por archivo.
+- Kilos manuscritos y renglones anulados se conservan. Valores de lista/costo y pesos por bulto son estimaciones: no deben transformarse en gasto definitivo.
+- `--dry-run` no publica en Google Sheets ni consume offset/SHA de Telegram. Las imágenes sin caché no invocan Claude durante esa prueba.
+- En caso de fallo de lote, Telegram conserva el offset anterior para reintentar; no borra los adjuntos duplicados.
+- No se cambiaron credenciales, permisos de acceso, configuración de Telegram ni procesos en ejecución durante esta corrección.
+
+- Ruteo por renglón: Wigen del 07/07/2026 (IMG20260707124118.jpg) tiene 10 kg de nueces partidas + 2 kg de almendras para Congreso; solo el renglón de 1 kg de nueces lleva flecha a Lafinur. La caché fue corregida tras inspeccionar la foto. Se preserva el registro agregado anterior como REEMPLAZADO_RUTEO, sin destino activo.
