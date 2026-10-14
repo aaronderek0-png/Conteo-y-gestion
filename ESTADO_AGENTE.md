@@ -22,3 +22,12 @@ Bot: PID 23916, commit 9866f59. Eventos: `logs/pipeline_eventos.jsonl`.
   (03/06 Flan 4×461,75; mammoul 10×192,43; Lock food 230 100×269; Lock food 390 100×278; Caja pizza 1×185; total $58.656,30).
 - Comparador: $346.639/mes estimado, 124/324 insumos con match (46,9 s). Sin referencia: 206 productos = 81,4 % del gasto Dossier (scouting_sin_referencia.py).
 - BOM (motor_recetas): 1833 recetas; 1660 coinciden con C_UN ±2 %, 117 difieren, 25 incompletas.
+
+## 14/10/2026 ~10:50 — causa observada del APIError y bloqueo real
+- Reproducido con el remito 3727: `APIError [400] Range (Remitos!A609:E613) exceeds grid limits. Max rows: 608`. La pestaña Remitos de
+  Cabello tiene la grilla llena (608/608) y está PROTEGIDA: `add_rows` devuelve `400 You are trying to edit a protected cell or object`.
+  No se escribió nada (backup en backups_recuperacion/Cabello_*_Remitos.json). El código ahora agrega filas cuando la hoja no está protegida.
+- Acción pendiente (dueño de la planilla): ampliar ≥25 filas en CABELLO/Remitos o quitar la protección / dejar a la Service Account
+  como editora de ese rango. Luego `python recuperar_lote.py apply` (vigencia del plan se revalida sola).
+- BOM: `bom_diferencias.py` → 142 recetas con diferencia (25 incompletas, 24 con factor entero = hoja sin dividir por REND,
+  93 sin patrón). Cálculo sobre export local Recetas.xlsx, no Drive en vivo. No se publica ningún costo.

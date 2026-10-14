@@ -214,16 +214,20 @@ def aplicar_remitos(reporte: dict) -> None:
         res = imp.push_remitos_drive(r["receptor"], [r], confirmado=True)
         rf.evento(f"remito:{r['remito']}", "push_remitos", "OK" if res.get("escrito") else "NO_ESCRITO",
                   local=r["receptor"], motivo=res.get("motivo", ""))
+        if res.get("escrito"):                                    # read-back de TODAS las celdas A:E escritas
+            leido = ws0.get(f"A{res['desde_fila']}:E{res['hasta_fila']}", value_render_option="UNFORMATTED_VALUE")
+            malas = 0
+            for d, fila in zip(res["detalle"], leido):
+                ok = (imp.norm(fila[1]) == imp.norm(d["PRODUCTO"]) and abs(float(fila[2]) - float(d["CANT"])) < 1e-6
+                      and abs(float(fila[3]) - float(d["PRECIO U"])) < 0.005
+                      and abs(float(fila[4]) - float(d["CANT"]) * float(d["PRECIO U"])) < 0.01)
+                malas += 0 if ok else 1
+            tot = sum(float(f[4]) for f in leido)
+            print(f"read-back: {len(leido) * 5} celdas leídas, filas con diferencia: {malas}; suma E = {tot:,.2f}")
         print(f"Remito Obrador {r['remito']} -> {r['receptor']}: " + (
             f"filas {res['desde_fila']}-{res['hasta_fila']} en «{res['planilla']}»/{res['hoja']}" if res.get("escrito")
             else f"no escribió ({res.get('motivo')})"))
-    for r in prov:
-        res = imp.push_remitos_proveedor_drive(r["local"], [r], confirmado=True)
-        rf.evento(f"remito:{r.get('remito')}", "push_remitos_pendientes", "OK" if res.get("escrito") else "NO_ESCRITO",
-                  local=r["local"], motivo=res.get("motivo", ""))
-        print(f"Remito proveedor {r.get('remito')} -> {r['local']}: " + (
-            f"fila {res['desde_fila']} en «{res['planilla']}»/{res['hoja']}" if res.get("escrito")
-            else f"no escribió ({res.get('motivo')})"))
+    # Raíces 8528 ya está en Remitos_Pendientes (Codex, verificado en vivo): esta autorización cubre solo el remito Obrador.
 
 
 if __name__ == "__main__":

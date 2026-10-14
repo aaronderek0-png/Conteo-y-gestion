@@ -40,6 +40,22 @@
    "consulta": "2026-10-14T03:25:26",
    "vigencia": null,
    "version": 1
+  },
+  "cabello.remitos.grilla": {
+   "valor": "608 filas, 100 % ocupadas; hoja protegida (sheetId 958856307): add_rows -> 400 'protected cell or object'",
+   "estado": "observado",
+   "fuente": "lectura viva 14/10/2026 + intento controlado recuperar_lote apply",
+   "consulta": "2026-10-14T10:50:52",
+   "vigencia": null,
+   "version": 1
+  },
+  "apiError.causa.remito3727": {
+   "valor": "400 'Range Remitos!A609:E613 exceeds grid limits. Max rows: 608' (grilla llena)",
+   "estado": "observado",
+   "fuente": "traza gspread en recuperar_lote apply 14/10/2026 ~10:46",
+   "consulta": "2026-10-14T10:50:52",
+   "vigencia": null,
+   "version": 1
   }
  }
 }

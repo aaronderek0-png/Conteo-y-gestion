@@ -1413,6 +1413,15 @@ def push_remitos_proveedor_drive(local: str, remitos: list[dict], confirmado: bo
             "desde_fila": min(idx[f[0]] for f in filas), "hasta_fila": max(idx[f[0]] for f in filas), "detalle": []}
 
 
+def _asegurar_filas(ws, ultima: int) -> int:
+    """La API de Sheets rechaza (400 'exceeds grid limits') escribir fuera de la grilla: agrega las filas que falten.
+    Devuelve cuántas agregó. Es la causa confirmada del APIError al cargar el remito 3727 en Cabello (grilla de 608)."""
+    falta = ultima - ws.row_count
+    if falta > 0:
+        ws.add_rows(falta + 20)
+    return max(falta, 0)
+
+
 def push_remitos_drive(local: str, remitos: list[dict], confirmado: bool = False) -> dict:
     """Remitos del Obrador hacia la pestaña 'Remitos' de la planilla REAL del local receptor, en sus 5 columnas:
     A FECHA (DD/MM) · B PRODUCTO · C CANT. U/MEDIDA · D PRECIO U. · E PRECIO TOTAL (=C*D). Sin fila de total general.
@@ -1447,6 +1456,7 @@ def push_remitos_drive(local: str, remitos: list[dict], confirmado: bool = False
     if not filas:
         return {"escrito": False, "motivo": "el remito ya estaba cargado (no se duplica)", "hoja": estado_hoja}
     ultima = primera + len(filas) - 1
+    _asegurar_filas(ws, ultima)
     ws.update(f"A{primera}:E{ultima}", filas, value_input_option="USER_ENTERED")
     ws.batch_format([{"range": f"A{primera}:E{ultima}",
                       "format": {"backgroundColor": {"red": 1.0, "green": 0.973, "blue": 0.882},
@@ -1509,6 +1519,7 @@ def push_drive(local: str, filas: list[dict], confirmado: bool = False, demo: bo
         sc = _col_letra(cols["sku_col"])
         datos.append({"range": f"'{ws.title}'!{sc}{primera}:{sc}{ultima}",
                       "values": [[f.get("sku") or ""] for f, _ in nuevas]})
+    _asegurar_filas(ws, ultima)
     sh.values_batch_update({"valueInputOption": "USER_ENTERED", "data": datos})
     amarillo = {"backgroundColor": {"red": 1.0, "green": 0.973, "blue": 0.882}}      # #FFF8E1
     rojo = {"backgroundColor": {"red": 1.0, "green": 0.922, "blue": 0.933}}          # #FFEBEE
