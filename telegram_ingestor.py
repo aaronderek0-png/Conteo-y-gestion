@@ -27,6 +27,7 @@ Las fotos leídas por Tesseract (sin la revisión visual de Claude) nunca se iny
 from __future__ import annotations
 
 import argparse
+import re
 import hashlib
 import json
 import logging
@@ -40,12 +41,40 @@ from types import SimpleNamespace
 from typing import Any, Callable
 
 BASE_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(BASE_DIR))
 STATE_JSON = BASE_DIR / "telegram_state.json"
 ENTRADA = BASE_DIR / "Facturas Mishiguene"          # carpeta diaria (sin guiones); lo que llega por Telegram cae acá
 ENV_FILE = BASE_DIR / ".env"
 NOMBRE_GRUPO = "Facturas Mishiguene"
 API = "https://api.telegram.org"
 LOG = logging.getLogger("telegram_ingestor")
+DEMO_RE = re.compile(r"\b(demo|prueba)\b", re.I)
+
+
+def deshacer_push(registro):
+    import imputacion_facturas as imp
+    return imp.deshacer_push(registro)
+
+
+def texto_push(res: dict) -> str:
+    """Resumen legible de una escritura en la planilla real (fila exacta, valores y color)."""
+    if not res:
+        return ""
+    if not res.get("escrito"):
+        return f"ℹ Planilla real {res.get('local', '')}: no escribí ({res.get('motivo', '')})."
+    hoja = res.get("hoja", "Facturas")
+    filas = (f"fila {res['desde_fila']}" if res["desde_fila"] == res["hasta_fila"]
+             else f"filas {res['desde_fila']} a {res['hasta_fila']}")
+    l = [f"✍ Escribí en Google Sheets «{res.get('planilla')}», pestaña {hoja}, {filas}"
+         + (" (DEMO: se borra con /deshacer)" if res.get("demo") else "") + ":"]
+    for d in res["detalle"][:8]:
+        if res.get("tipo") == "remitos":
+            l.append(f"   fila {d['fila']}: {d['FECHA']} · {d['PRODUCTO']} · cant {d['CANT']} · ${d['PRECIO U']} · total ${d['TOTAL']}")
+        else:
+            l.append(f"   fila {d['fila']}: N° {d['N']} · {d['proveedor']} · {d['E']} · cant {d['G']} · ${d['H']} · {d['color']}")
+    if res.get("omitidas"):
+        l.append(f"   (no dupliqué {len(res['omitidas'])} fila(s) que ya estaban cargadas)")
+    return "\n".join(l)
 EXT_OK = {".jpg", ".jpeg", ".png", ".webp", ".pdf"}
 
 
@@ -194,7 +223,8 @@ def texto_respuesta(reporte: dict, archivos: list[str]) -> str:
 # --------------------------------------------------------------------------- #
 # Pasada
 # --------------------------------------------------------------------------- #
-def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None = None, timeout: int = 0) -> dict:
+def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None = None, timeout: int = 0,
+           push: bool = False) -> dict:
     """Una consulta a Telegram + procesamiento de lo nuevo. Devuelve estadísticas."""
     t0 = time.perf_counter()
     est = cargar_estado()
@@ -228,36 +258,68 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
             api.responder(chat, f"🧹 Listo: {r['borrados']} mensajes borrados"
                                 + (" (el fijado se conserva)." if r["fijado"] else "."))
             continue
+        if texto_msg.split("@")[0] == "/deshacer":
+            r = deshacer_push(est.get("ultima_inyeccion"))
+            if r.get("deshecho"):
+                est["ultima_inyeccion"] = None
+                api.responder(chat, f"↩ Deshecho: borré {r['filas']} fila(s) ({r['desde_fila']}-{r['hasta_fila']}) de "
+                                    f"«{r['planilla']}».", msg["message_id"])
+            else:
+                api.responder(chat, f"No deshice nada: {r['motivo']}", msg["message_id"])
+            continue
+        demo = bool(DEMO_RE.search(msg.get("caption") or ""))
         for file_id, nombre in adjuntos(msg):
             ruta = api.descargar(file_id, ENTRADA / nombre)
             h = hashlib.sha256(ruta.read_bytes()).hexdigest()
+            if demo:                                              # DEMO / PRUEBA: se re-procesa aunque ya esté en caché
+                pendientes.append((ruta, {"chat": chat, "mid": msg["message_id"], "demo": True}))
+                stats["archivos"] += 1
+                continue
             if h in est["sha256"]:
                 stats["duplicados"] += 1
                 ruta.unlink(missing_ok=True)
                 api.responder(chat, "Ya lo tenía procesado (mismo contenido).", msg["message_id"])
                 continue
-            est["sha256"][h] = {"archivo": ruta.name, "chat": chat, "message_id": msg["message_id"]}
             pendientes.append((ruta, {"chat": chat, "mid": msg["message_id"]}))
             stats["archivos"] += 1
     if pendientes:
         import procesar_lote_wpp as lote
-        tmp = BASE_DIR / "Carpeta Revision" / "lote actual temporal"
-        tmp.mkdir(exist_ok=True)
-        for p, _ in pendientes:
-            shutil.copy2(p, tmp / p.name)
-        ns = SimpleNamespace(push_drive=False, confirmo_escribir_produccion=False, dry_run=not escribir, json=None)
-        try:
-            reporte, *_ = lote.ejecutar(tmp, escribir, ns, indexar_informes=False)
-            for p, meta in pendientes:
-                api.responder(meta["chat"], texto_respuesta(reporte, [p.name]), meta["mid"])
-                stats["respondidos"] += 1
-        except Exception as e:                                   # un archivo roto no frena el resto
-            LOG.exception("falló el procesamiento")
-            for _, meta in pendientes:
-                api.responder(meta["chat"], f"No pude procesar el comprobante ({type(e).__name__}). Queda para revisión.",
-                              meta["mid"])
-        finally:
+        for demo_grupo in (False, True):
+            grupo = [(p, m) for p, m in pendientes if bool(m.get("demo")) == demo_grupo]
+            if not grupo:
+                continue
+            tmp = BASE_DIR / "Carpeta Revision" / ("lote demo temporal" if demo_grupo else "lote actual temporal")
             shutil.rmtree(tmp, ignore_errors=True)
+            tmp.mkdir(parents=True, exist_ok=True)
+            for p, _ in grupo:
+                shutil.copy2(p, tmp / p.name)
+            ns = SimpleNamespace(push_drive=push, confirmo_escribir_produccion=push, dry_run=not escribir, json=None)
+            try:
+                reporte, *_ = lote.ejecutar(tmp, escribir and not demo_grupo, ns, indexar_informes=False,
+                                            forzar_nuevas=demo_grupo, demo=demo_grupo)
+                pushes = [r for r in (reporte.get("push_drive") or {}).values() if r]
+                escritos = [r for r in pushes if r.get("escrito") and "detalle" in r]
+                if escritos:
+                    est["ultima_inyeccion"] = escritos[-1]       # para /deshacer
+                resumen_push = "\n".join(texto_push(r) for r in pushes)
+                for p, meta in grupo:
+                    txt = texto_respuesta(reporte, [p.name])
+                    for rr in reporte.get("remitos_obrador") or []:
+                        txt += f"\n🚚 Remito Obrador {rr['remito']} → {rr['receptor']}: {len(rr['renglones'])} renglones, ${rr['total']:,.2f}"
+                    if resumen_push:
+                        txt += "\n" + resumen_push
+                    api.responder(meta["chat"], txt, meta["mid"])
+                    stats["respondidos"] += 1
+                    if not demo_grupo:
+                        h = hashlib.sha256(p.read_bytes()).hexdigest()
+                        est["sha256"][h] = {"archivo": p.name, "chat": meta["chat"], "message_id": meta["mid"]}
+            except Exception as e:                               # un archivo roto no frena el resto
+                LOG.exception("falló el procesamiento")
+                for _, meta in grupo:
+                    api.responder(meta["chat"], f"No pude procesar el comprobante ({type(e).__name__}). Queda para "
+                                                "revisión.", meta["mid"])
+            finally:
+                shutil.rmtree(tmp, ignore_errors=True)
     est["offset"] = ultimo
     for ch, mid in api.enviados:                                   # los mensajes del bot también se registran
         registrar_ids(est, ch, [mid])
@@ -302,7 +364,7 @@ def _norm_titulo(t: str) -> str:
     return " ".join(str(t or "").lower().replace("_", " ").replace("-", " ").split())
 
 
-def conectar(token: str, http: Callable[..., Any] | None = None, escribir: bool = True) -> dict:
+def conectar(token: str, http: Callable[..., Any] | None = None, escribir: bool = True, push: bool = False) -> dict:
     """--conectar TOKEN: guarda el token en .env, detecta el chat_id del grupo 'Facturas Mishiguene' (o el último grupo
     donde hayan hablado), lo guarda como TELEGRAM_CHAT_ID, manda el mensaje de prueba y procesa lo pendiente."""
     api = TelegramAPI(token, http)
@@ -325,14 +387,14 @@ def conectar(token: str, http: Callable[..., Any] | None = None, escribir: bool 
     guardar_env("TELEGRAM_CHAT_ID", str(chat_id))
     api.responder(chat_id, f"✅ Agente Mishiguene conectado a {NOMBRE_GRUPO}. "
                            "Mandá fotos o PDFs acá y los proceso solos.")
-    stats = pasada(api, escribir=escribir, chat_permitido=str(chat_id))
+    stats = pasada(api, escribir=escribir, chat_permitido=str(chat_id), push=push)
     return {"conectado": True, "bot": me.get("username"), "grupo": elegido.get("title"), "chat_id": chat_id,
             "coincide_nombre": _norm_titulo(elegido.get("title")) == _norm_titulo(NOMBRE_GRUPO), "pasada": stats}
 
 
 def crear_tarea(minutos: int = 15) -> list[str]:
     cmd = ["schtasks", "/Create", "/SC", "MINUTE", "/MO", str(minutos), "/TN", "Mishiguene_Telegram_Ingestor",
-           "/TR", f'"{sys.executable}" "{Path(__file__).resolve()}" --once', "/F"]
+           "/TR", f'"{sys.executable}" "{Path(__file__).resolve()}" --once --push-drive', "/F"]
     return cmd
 
 
@@ -346,6 +408,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--interval", type=int, default=60, help="Segundos entre consultas en --watch")
     ap.add_argument("--minutos", type=int, default=15)
     ap.add_argument("--dry-run", action="store_true", help="Procesa sin escribir en las copias")
+    ap.add_argument("--push-drive", action="store_true",
+                    help="Escribe EN VIVO en la planilla real del local (amarillo #FFF8E1 OK / rojo #FFEBEE revisar)")
     ap.add_argument("--limpiar", action="store_true",
                     help="Borra para todos los mensajes del grupo salvo el fijado (también: /limpiar en el grupo)")
     ap.add_argument("--conectar", metavar="TOKEN", help="Guarda el token en .env, detecta el grupo y manda el mensaje de prueba")
@@ -353,7 +417,7 @@ def main(argv: list[str] | None = None) -> int:
     cargar_env()
 
     if args.conectar:
-        r = conectar(args.conectar.strip(), escribir=not args.dry_run)
+        r = conectar(args.conectar.strip(), escribir=not args.dry_run, push=args.push_drive)
         if r["conectado"]:
             print(f"Conectado: bot @{r['bot']} -> grupo '{r['grupo']}' (chat_id {r['chat_id']}); .env actualizado. "
                   f"Pendientes procesados: {r['pasada']}")
@@ -384,13 +448,13 @@ def main(argv: list[str] | None = None) -> int:
               f"(fijado conservado: {r['fijado']}).")
         return 0
     if args.once or not args.watch:
-        s = pasada(api, escribir=not args.dry_run, chat_permitido=chat)
+        s = pasada(api, escribir=not args.dry_run, chat_permitido=chat, push=args.push_drive)
         LOG.info("pasada: %s", s)
         return 0
     LOG.info("modo vivo cada %d s (Ctrl+C para salir)", args.interval)
     while True:
         try:
-            s = pasada(api, escribir=not args.dry_run, chat_permitido=chat)
+            s = pasada(api, escribir=not args.dry_run, chat_permitido=chat, push=args.push_drive)
             if s["updates"]:
                 LOG.info("pasada: %s", s)
         except Exception:

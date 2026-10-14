@@ -950,6 +950,60 @@ def leer_pdf_comprobante(path: str | Path) -> dict:
     }
 
 
+_PROMPT_VISION = (
+    "Sos un lector de comprobantes argentinos (facturas, remitos, notas de crédito). Leé la imagen {ruta} con la "
+    "herramienta Read. Puede haber MÁS DE UN comprobante en la misma foto (p. ej. dos facturas lado a lado): separalos. "
+    "Respetá las correcciones a mano en birome (cantidades tachadas o reescritas, 'NO', pesos reales): la cantidad "
+    "vigente es la manuscrita. Devolvé SOLO un JSON (sin texto extra) con una lista de objetos: "
+    '{{"tipo":"Factura|Remito|NC|RemitoObrador","numero_factura":"PPPPP-NNNNNNNN","fecha_factura":"YYYY-MM-DD",'
+    '"proveedor_detectado":"...","sello":"texto del sello o null","direccion_entrega":"...|null",'
+    '"razon_social_cliente":"...","firmas":[...],"anotaciones_manuscritas":[...],"total_comprobante":0,'
+    '"items":[{{"descripcion_original":"...","cantidad":0,"unidad_detectada":"UN|KG|...","precio_unitario":0,'
+    '"descuento_pct":0,"total_linea":0}}]}}. Usá RemitoObrador si lo emite Mishiguene (Av. Cerviño 4417) a un local.')
+
+
+def leer_imagen_vision(path: str | Path, timeout: int = 240) -> list[dict]:
+    """Fallback multimodal para fotos que no están en cache_facturas.json: invoca `claude -p` (Claude Code en modo
+    no interactivo, con la herramienta Read) para separar los comprobantes de la foto, respetar la birome y devolver
+    la estructura. Cada comprobante se guarda en cache_facturas.json por SHA-256 ('<sha>' o '<sha>#n' si son varios)."""
+    import subprocess
+    path = Path(path)
+    exe = shutil.which("claude")
+    if not exe:
+        raise OCRNoDisponible("no está el comando `claude` en el PATH (visión multimodal no disponible)")
+    h = sha256_archivo(path)
+    cache = _leer_cache()
+    if h in cache:
+        return [cache[h]]
+    previos = [v for k, v in cache.items() if k.startswith(h + "#")]
+    if previos:
+        return previos
+    cmd = [exe, "-p", _PROMPT_VISION.format(ruta=str(path.resolve())), "--allowedTools", "Read",
+           "--output-format", "text"]
+    r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", timeout=timeout,
+                       cwd=str(path.resolve().parent))
+    txt = (r.stdout or "").strip()
+    m = re.search(r"\[.*\]|\{.*\}", txt, re.S)
+    if r.returncode != 0 or not m:
+        raise RuntimeError(f"claude -p no devolvió JSON ({r.returncode}): {(r.stderr or txt)[:200]}")
+    datos = json.loads(m.group(0))
+    datos = datos if isinstance(datos, list) else [datos]
+    out = []
+    for i, c in enumerate(datos):
+        for it in c.get("items", []):
+            it.setdefault("descuento_pct", 0.0)
+            it.setdefault("total_linea", round(it["cantidad"] * it["precio_unitario"] * (1 - it["descuento_pct"] / 100), 2))
+            it["linea_consistente"] = abs(it["cantidad"] * it["precio_unitario"] * (1 - it["descuento_pct"] / 100)
+                                          - it["total_linea"]) <= max(1.0, 0.02 * abs(it["total_linea"]))
+        c.update({"archivo": path.name if len(datos) == 1 else f"{path.name} [comprobante {i + 1}]", "sha256": h,
+                  "motor": "vision-multimodal (claude -p)", "validacion": validar_aritmetica(
+                      c.get("items", []), c.get("total_comprobante"), c.get("extra")), "texto_encabezado": ""})
+        cache[h if len(datos) == 1 else f"{h}#{i + 1}"] = c
+        out.append(c)
+    CACHE_FACTURAS.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
+    return out
+
+
 def _resumen(res: dict) -> str:
     v = res.get("validacion", {})
     return (f"{res.get('archivo', '?')} | {res.get('motor')} | local={res.get('local_destino')} | "

@@ -86,10 +86,29 @@ def clasificar_carpeta(carpeta: Path) -> dict:
                 c["sha256"] = h
                 out["comprobantes"].append(c)
         elif ext in IMG_EXT:
+            multi = [v for k, v in cache.items() if k.startswith(h + "#")]
             if h in cache:
                 c = dict(cache[h])
                 c["archivo"] = p.name
+            elif multi:                                    # foto con 2+ comprobantes ya leída
+                for k, v in enumerate(multi, 1):
+                    cc = dict(v)
+                    cc["archivo"] = f"{p.name} [comprobante {k}]"
+                    cc["sha256"] = h
+                    out["comprobantes"].append(cc)
+                continue
             else:
+                try:
+                    leidos = ip.leer_imagen_vision(p)
+                    LOG.info("%s: leída con visión multimodal (%d comprobante/s)", p.name, len(leidos))
+                    for k, v in enumerate(leidos, 1):
+                        cc = dict(v)
+                        cc["archivo"] = p.name if len(leidos) == 1 else f"{p.name} [comprobante {k}]"
+                        cc["sha256"] = h
+                        out["comprobantes"].append(cc)
+                    continue
+                except Exception as e:                     # sin `claude`/sin red: queda el OCR de Tesseract
+                    LOG.warning("%s: visión no disponible (%s); se usa OCR", p.name, str(e)[:100])
                 LOG.warning("%s: no está en cache_facturas.json; se intenta OCR (baja confianza)", p.name)
                 try:
                     c = ip.procesar_comprobante(p)
@@ -167,6 +186,8 @@ def analizar(comp: dict, locales: dict, ap: dict) -> dict:
 
 def estado_de(comp: dict, an: dict, remito_conciliado: bool = False) -> str:
     t = comp.get("tipo")
+    if t == "RemitoObrador":
+        return f"REMITO_OBRADOR → {an['local']}"
     if t == "Remito":
         return "REMITO_PENDIENTE" + (" → CONCILIADO" if remito_conciliado else "")
     if t == "Captura_planilla":
@@ -369,6 +390,18 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     if escribir and remitos_lote:
         imp.guardar_remitos(remitos)
 
+    # ---- remitos del Obrador a un local (5 columnas de la pestaña 'Remitos' del receptor) -----------
+    remitos_obrador_por_local: dict[str, list[dict]] = {}
+    for c in cl["comprobantes"]:
+        if c.get("tipo") != "RemitoObrador":
+            continue
+        receptor = analisis[c["archivo"]]["local"]
+        if receptor:
+            loc_rx = locales.get(receptor) or imp.Local(receptor)
+            reg = imp.procesar_remito_obrador(c, loc_rx, ap)
+            c["_remito_obrador"] = reg
+            remitos_obrador_por_local.setdefault(receptor, []).append(reg)
+
     # ---- imputación de lo NUEVO ---------------------------------------------
     plan_por_local: dict[str, list[dict]] = {}
     marcas_por_local: dict[str, list[tuple[int, str]]] = {}
@@ -412,11 +445,13 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
             if c.get("tipo") == "Remito":
                 n = analisis[c["archivo"]]["local"] or "Congreso"
                 remitos_tab_por_local.setdefault(n, []).append(c["_remito"])
-        for nombre in sorted(set(plan_por_local) | set(marcas_por_local) | set(remitos_tab_por_local)):
+        for nombre in sorted(set(plan_por_local) | set(marcas_por_local) | set(remitos_tab_por_local)
+                             | set(remitos_obrador_por_local)):
             loc = locales.get(nombre) or imp.Local(nombre)
             rep = imp.aplicar_a_copia([{"filas": plan_por_local.get(nombre, [])}], loc,
                                       remitos=remitos_tab_por_local.get(nombre),
-                                      marcar=marcas_por_local.get(nombre))
+                                      marcar=marcas_por_local.get(nombre),
+                                      remitos_obrador=remitos_obrador_por_local.get(nombre))
             escrituras[nombre] = {"copia": loc.copia.name, "filas": rep["escritas"], "verificadas": rep["verificadas"],
                                   "marcadas": len(marcas_por_local.get(nombre, []))}
             for r_, f_ in rep["filas"]:
@@ -433,7 +468,10 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     if args.push_drive:
         for nombre, filas in plan_por_local.items():
             pushes[nombre] = imp.push_drive(nombre, filas, confirmado=args.confirmo_escribir_produccion, demo=demo)
-        pend = [r for r in remitos_lote if r["estado"] == "PENDIENTE"]
+        for receptor, regs in remitos_obrador_por_local.items():
+            pushes[f"Remitos {receptor}"] = imp.push_remitos_drive(
+                receptor, regs, confirmado=args.confirmo_escribir_produccion)
+        pend = []
         if pend and not demo:
             pushes["Remitos"] = imp.push_remitos_drive("Congreso", pend, confirmado=args.confirmo_escribir_produccion)
 
@@ -466,6 +504,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
         filas_aud.append({"archivo": p.name, "tipo": "Duplicado", "numero": "-", "proveedor": "-",
                           "sello_firma": "—", "local": "—", "estado": f"DUPLICADO de {orig.name}", "alertas": []})
     reporte = {"generado": datetime.now().isoformat(timespec="seconds"), "auditoria": filas_aud,
+               "remitos_obrador": [r for rs in remitos_obrador_por_local.values() for r in rs],
                "escrituras": escrituras, "push_drive": pushes, "remitos": remitos_lote,
                "informes": informes_idx, "benchmark_items": len(bench["items"]) if bench else 0,
                "planes": {n: [{k: f.get(k) for k in ("A", "B", "D", "presentacion", "G", "H", "I", "accion", "motivos",
