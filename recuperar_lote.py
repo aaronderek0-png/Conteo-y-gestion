@@ -29,7 +29,9 @@ import registro_fallos as rf               # noqa: E402
 
 ENTRADA = BASE / "Facturas Mishiguene"
 ADJUNTOS = ["IMG20260828153210.jpg", "IMG20260819152602.jpg", "IMG20260808100551.jpg",
-            "IMG20260804133616.jpg", "IMG20260707124118.jpg", "IMG20260725120055.jpg"]
+            "IMG20260804133616.jpg", "IMG20260707124118.jpg", "IMG20260725120055.jpg",
+            # fotos de la prueba anterior: Miño 421/423, Raíces 8528 y remito Obrador 3727 (Cabello)
+            "IMG20260706112445.jpg", "IMG20260707095646.jpg", "WhatsApp Image 2026-10-14 at 00.53.06 (2).jpeg"]
 PLAN = BASE / "recuperacion_plan.json"
 BACKUPS = BASE / "backups_recuperacion"
 
@@ -72,14 +74,58 @@ def previsto(local: str, filas: list[dict]) -> dict:
             "escribir": ok, "fuera_por_revisar": revisar, "ya_cargadas": dup}
 
 
+REMITO_PROV = "00008528"          # Raíces 0001-00008528 (única fila de remito de proveedor a publicar)
+REMITO_OBR = "00003727"           # Obrador 00011-00003727 -> Cabello
+
+
+def remitos_objetivo(reporte: dict) -> tuple[list[dict], list[dict]]:
+    obr = [r for r in reporte.get("remitos_obrador") or [] if REMITO_OBR in str(r.get("remito"))]
+    prov = [r for r in reporte.get("remitos") or [] if REMITO_PROV in str(r.get("remito") or "")
+            and r.get("estado") == "PENDIENTE" and r.get("local")]
+    return obr, prov
+
+
+def previsto_remitos(reporte: dict) -> dict:
+    obr, prov = remitos_objetivo(reporte)
+    out = {"obrador": [], "proveedor": []}
+    for r in obr:
+        sh, ws = _hoja(r["receptor"]) if False else (None, None)
+        gc, _ = imp._gspread()
+        sh = gc.open_by_key(imp.IDS_PLANILLAS[r["receptor"]])
+        ws = imp._hoja_por_clave(sh, "remito")
+        col_a, col_b = ws.col_values(1), ws.col_values(2)
+        ya = {(a[:5], b.strip().lower()) for a, b in zip(col_a[1:], col_b[1:])}
+        filas = [[imp._celda_a_texto_fecha(x["fecha"])[:5], x["producto"], x["cantidad"], x["precio_unitario"]]
+                 for x in r["renglones"]]
+        out["obrador"].append({"local": r["receptor"], "planilla": sh.title, "hoja": ws.title,
+                               "remito": r["remito"], "primera_libre": len(col_a) + 1,
+                               "filas": [f for f in filas if (f[0], f[1].strip().lower()) not in ya],
+                               "ya_cargadas": [f for f in filas if (f[0], f[1].strip().lower()) in ya],
+                               "total": r.get("total")})
+    for r in prov:
+        gc, _ = imp._gspread()
+        sh = gc.open_by_key(imp.IDS_PLANILLAS[r["local"]])
+        ws = next((w for w in sh.worksheets() if w.title == "Remitos_Pendientes"), None)
+        vivo = {x[0] for x in ws.get_all_values()[1:]} if ws else set()
+        filas = imp.filas_remitos_pendientes([r])
+        out["proveedor"].append({"local": r["local"], "planilla": sh.title, "hoja": "Remitos_Pendientes",
+                                 "filas": [f[:8] for f in filas if f[0] not in vivo],
+                                 "ya_cargadas": [f[0] for f in filas if f[0] in vivo]})
+    return out
+
+
 def huella(plan: dict) -> str:
-    base = {l: [p["planilla"], p["primera_libre"], p["escribir"]] for l, p in plan.items()}
+    base = {l: [p["planilla"], p["primera_libre"], p["escribir"]] for l, p in plan.items() if l != "_remitos"}
+    base["_r"] = {k: [[x.get("local"), x.get("primera_libre"), x.get("filas")] for x in v]
+                  for k, v in (plan.get("_remitos") or {}).items()}
     return hashlib.sha256(json.dumps(base, sort_keys=True, default=str).encode()).hexdigest()[:16]
 
 
 def hacer_plan() -> dict:
     reporte, por_local = construir()
     plan = {l: previsto(l, fs) for l, fs in por_local.items() if l in imp.IDS_PLANILLAS and fs}
+    rem = previsto_remitos(reporte)
+    plan["_remitos"] = rem
     sin_destino = [a for a in reporte["auditoria"] if a["archivo"].split(" [")[0] in ADJUNTOS and not a.get("filas_imputadas")]
     salida = {"generado": datetime.now().isoformat(timespec="seconds"), "huella": huella(plan), "plan": plan,
               "sin_filas_a_imputar": [{k: a.get(k) for k in ("archivo", "tipo", "numero", "proveedor", "local", "estado")}
@@ -87,6 +133,8 @@ def hacer_plan() -> dict:
     PLAN.write_text(json.dumps(salida, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
     print(f"Plan guardado en {PLAN.name} (huella {salida['huella']}). NO se escribió nada.")
     for l, p in plan.items():
+        if l == "_remitos":
+            continue
         print(f"\n== {l}: {p['planilla']} / pestaña {p['hoja']} · última fila {p['ultima_fila_actual']} · "
               f"escribiría desde la fila {p['primera_libre']} en {', '.join(p['columnas_manuales'])}"
               f" (respeta fórmulas en {', '.join(p['columnas_con_formula_respetadas']) or '—'})")
@@ -96,6 +144,19 @@ def hacer_plan() -> dict:
             print(f"  [NO se escribe: REVISAR] N° {fila[0]} {fila[3]} · {fila[5][:90]}")
         for fila in p["ya_cargadas"]:
             print(f"  [ya estaba cargada] N° {fila[0]} {fila[3]}")
+    for o in rem["obrador"]:
+        print()
+        print(f"== Remito Obrador {o['remito']} -> {o['local']}: «{o['planilla']}»/{o['hoja']} desde fila {o['primera_libre']} "
+              f"(A:E; E = =C*D), total {o['total']}")
+        for i, f in enumerate(o["filas"]):
+            print(f"  fila {o['primera_libre'] + i}: " + " | ".join(str(x) for x in f))
+        print(f"  ya cargadas (no se duplican): {len(o['ya_cargadas'])}")
+    for o in rem["proveedor"]:
+        print()
+        print(f"== Remito proveedor -> {o['local']}: «{o['planilla']}»/{o['hoja']} (upsert por ID de renglón)")
+        for f in o["filas"]:
+            print("  nueva: " + " | ".join("" if x is None else str(x) for x in f))
+        print(f"  ya cargadas: {o['ya_cargadas']}")
     for s in salida["sin_filas_a_imputar"]:
         print(f"  [sin filas] {s['archivo']} · {s['tipo']} · {s['estado']}")
     return salida
@@ -107,11 +168,14 @@ def aplicar() -> None:
     guardado = json.loads(PLAN.read_text(encoding="utf-8"))
     reporte, por_local = construir()
     plan_vivo = {l: previsto(l, fs) for l, fs in por_local.items() if l in imp.IDS_PLANILLAS and fs}
+    plan_vivo["_remitos"] = previsto_remitos(reporte)
     if huella(plan_vivo) != guardado["huella"]:
         sys.exit("La planilla o la lectura cambió desde el plan aprobado: volvé a correr `plan` y aprobar de nuevo.")
     BACKUPS.mkdir(exist_ok=True)
     sello = datetime.now().strftime("%Y%m%d_%H%M%S")
     for local, p in plan_vivo.items():
+        if local == "_remitos":
+            continue
         filas = [f for f in por_local[local] if f.get("accion") == "INYECTAR"]
         if not p["escribir"]:
             print(f"{local}: nada para escribir")
@@ -136,6 +200,30 @@ def aplicar() -> None:
               f"read-back {buenos}/{r['filas']} · backup {local}_{sello}")
         (BACKUPS / f"{local}_{sello}_resultado.json").write_text(
             json.dumps(r, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    aplicar_remitos(reporte)
+
+
+def aplicar_remitos(reporte: dict) -> None:
+    obr, prov = remitos_objetivo(reporte)
+    for r in obr:
+        gc, _ = imp._gspread()
+        ws0 = imp._hoja_por_clave(gc.open_by_key(imp.IDS_PLANILLAS[r["receptor"]]), "remito")
+        BACKUPS.mkdir(exist_ok=True)
+        (BACKUPS / f"{r['receptor']}_{datetime.now():%Y%m%d_%H%M%S}_Remitos.json").write_text(
+            json.dumps(ws0.get_all_values(), ensure_ascii=False), encoding="utf-8")
+        res = imp.push_remitos_drive(r["receptor"], [r], confirmado=True)
+        rf.evento(f"remito:{r['remito']}", "push_remitos", "OK" if res.get("escrito") else "NO_ESCRITO",
+                  local=r["receptor"], motivo=res.get("motivo", ""))
+        print(f"Remito Obrador {r['remito']} -> {r['receptor']}: " + (
+            f"filas {res['desde_fila']}-{res['hasta_fila']} en «{res['planilla']}»/{res['hoja']}" if res.get("escrito")
+            else f"no escribió ({res.get('motivo')})"))
+    for r in prov:
+        res = imp.push_remitos_proveedor_drive(r["local"], [r], confirmado=True)
+        rf.evento(f"remito:{r.get('remito')}", "push_remitos_pendientes", "OK" if res.get("escrito") else "NO_ESCRITO",
+                  local=r["local"], motivo=res.get("motivo", ""))
+        print(f"Remito proveedor {r.get('remito')} -> {r['local']}: " + (
+            f"fila {res['desde_fila']} en «{res['planilla']}»/{res['hoja']}" if res.get("escrito")
+            else f"no escribió ({res.get('motivo')})"))
 
 
 if __name__ == "__main__":
@@ -146,3 +234,4 @@ if __name__ == "__main__":
         aplicar()
     else:
         sys.exit(__doc__)
+

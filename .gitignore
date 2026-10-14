@@ -53,3 +53,6 @@ aprendizaje_transferencias.json
 logs/
 backups_recuperacion/
 recuperacion_plan.json
+estado/
+conocimiento/estado_cache.json
+verificacion_vivo.json

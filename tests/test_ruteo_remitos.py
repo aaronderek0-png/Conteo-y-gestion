@@ -1,3 +1,8 @@
+import os
+import tempfile
+_T = tempfile.mkdtemp()
+os.environ.setdefault('MISHI_ESTADO_DIR', _T)
+os.environ.setdefault('MISHI_LOG_DIR', os.environ['MISHI_ESTADO_DIR'])
 from pathlib import Path
 import sys, unittest, tempfile, json
 from unittest.mock import patch

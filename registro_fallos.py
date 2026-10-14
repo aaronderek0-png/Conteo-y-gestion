@@ -6,13 +6,14 @@ fallo, intento, resultado y mensaje saneado. Nunca guarda tokens, claves, URLs c
 from __future__ import annotations
 
 import json
+import os
 import re
 import time
 from datetime import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-LOG_DIR = BASE_DIR / "logs"
+LOG_DIR = Path(os.environ.get("MISHI_LOG_DIR") or BASE_DIR / "logs")
 EVENTOS = LOG_DIR / "pipeline_eventos.jsonl"
 
 _SECRETOS = [

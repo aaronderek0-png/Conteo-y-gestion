@@ -1,0 +1,45 @@
+{
+ "version": 1,
+ "datos": {
+  "destino.wigen.07-07": {
+   "valor": "10 kg nueces + 2 kg almendras → Congreso; 1 kg nueces → Lafinur",
+   "estado": "observado",
+   "fuente": "IMG20260707124118.jpg (inspección visual)",
+   "consulta": "2026-10-14T03:25:26",
+   "vigencia": null,
+   "version": 1
+  },
+  "regla.compra_centralizada": {
+   "valor": "Lafinur 3368 SRL o sello Cerviño → Congreso",
+   "estado": "validado",
+   "fuente": "CLAUDE.md / usuario",
+   "consulta": "2026-10-14T03:25:26",
+   "vigencia": null,
+   "version": 1
+  },
+  "regla.remito_proveedor": {
+   "valor": "Remitos de proveedor → Remitos_Pendientes; nunca Facturas",
+   "estado": "validado",
+   "fuente": "CLAUDE.md 14/10/2026",
+   "consulta": "2026-10-14T03:25:26",
+   "vigencia": null,
+   "version": 1
+  },
+  "regla.umbral_variacion": {
+   "valor": "±50 % no se inyecta; ±25 % revisión",
+   "estado": "validado",
+   "fuente": "CLAUDE.md",
+   "consulta": "2026-10-14T03:25:26",
+   "vigencia": null,
+   "version": 1
+  },
+  "regla.bulto_kg_default": {
+   "valor": "estimación: no es medición real",
+   "estado": "estimacion",
+   "fuente": "imputacion_facturas.BULTO_KG_DEFAULT",
+   "consulta": "2026-10-14T03:25:26",
+   "vigencia": null,
+   "version": 1
+  }
+ }
+}

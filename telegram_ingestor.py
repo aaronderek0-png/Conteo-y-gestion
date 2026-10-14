@@ -90,8 +90,24 @@ class TelegramAPI:
             http = requests.request
         self._http = http
 
+    IDEMPOTENTES = {"getUpdates", "getFile", "getChat"}      # sendMessage/deleteMessage no se reintentan: duplicarían
+
     def _call(self, metodo: str, **params) -> dict:
-        r = self._http("POST", f"{API}/bot{self.token}/{metodo}", data=params, timeout=30)
+        intentos = 4 if metodo in self.IDEMPOTENTES else 1
+        for n in range(1, intentos + 1):
+            try:
+                r = self._http("POST", f"{API}/bot{self.token}/{metodo}", data=params, timeout=30)
+                break
+            except Exception as e:                   # ConnectionResetError 10054, timeouts, DNS: fallo de red de Telegram
+                try:
+                    import registro_fallos as rf
+                    rf.evento(f"telegram:{metodo}", "red_telegram", "ERROR_TRANSITORIO" if n < intentos else "ERROR",
+                              intento=n, error=e)
+                except Exception:
+                    pass
+                if n >= intentos:
+                    raise
+                time.sleep(min(2 ** n, 15))
         r.raise_for_status()
         d = r.json()
         if not d.get("ok"):
@@ -289,6 +305,11 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
                 if escribir:
                     api.responder(chat, "Ya lo tenía procesado (mismo contenido).", msg["message_id"])
                 continue
+            try:
+                import coordinador
+                coordinador.Cola().registrar(h, ruta.name, "telegram", chat=str(chat), message_id=msg["message_id"])
+            except Exception:                                    # la cola nunca debe frenar la recepción
+                LOG.exception("no pude registrar el trabajo en la cola")
             pendientes.append((ruta, {"chat": chat, "mid": msg["message_id"]}))
             stats["archivos"] += 1
     if pendientes:
@@ -329,12 +350,31 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
                     if escribir and not demo_grupo:
                         h = hashlib.sha256(p.read_bytes()).hexdigest()
                         est["sha256"][h] = {"archivo": p.name, "chat": meta["chat"], "message_id": meta["mid"]}
+                        try:
+                            import coordinador
+                            q = coordinador.Cola()
+                            audit = next((x for x in reporte.get("auditoria", []) if x["archivo"].split(" [")[0] == p.name), {})
+                            est_a = str(audit.get("estado", ""))
+                            for e_ in ("LEIDO", "VALIDADO"):
+                                q.transicion(h, e_, forzar=True)
+                            q.transicion(h, "REVISAR" if "REVISAR" in est_a else "ESCRITO",
+                                         {"estado_pipeline": est_a, "push": [r.get("planilla") for r in pushes if r.get("escrito")]},
+                                         forzar=True)
+                        except Exception:
+                            LOG.exception("no pude actualizar la cola")
             except Exception as e:                               # un archivo roto no frena el resto
                 LOG.exception("falló el procesamiento")
                 fallo = True
                 import registro_fallos as rf
                 det = rf.detalle_excepcion(e)
                 for p_, _m in grupo:
+                    try:
+                        import coordinador
+                        coordinador.Cola().transicion(hashlib.sha256(p_.read_bytes()).hexdigest(), "ERROR",
+                                                      error=f"{det['tipo']} {det.get('http_status', '')} {det.get('http_mensaje', '')}",
+                                                      forzar=True)
+                    except Exception:
+                        pass
                     rf.evento(hashlib.sha256(p_.read_bytes()).hexdigest(), "procesar_lote", "ERROR", error=e,
                               archivo=p_.name, demo=demo_grupo)
                 cod = f" HTTP {det['http_status']} {det.get('http_status_texto', '')}".rstrip() if det.get("http_status") else ""
