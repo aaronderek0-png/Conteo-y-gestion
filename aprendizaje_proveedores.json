@@ -176,6 +176,14 @@
    "presentacion": "Manteca 5 kg",
    "ultima": "2026-10-13"
   },
+  "alyser sa|manteca corlasa x 25kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 12,
+   "presentacion": "Manteca 25 kg",
+   "ultima": "2026-10-13"
+  },
   "alyser sa|sal entrefina celusal x 25kg": {
    "locales": [
     "Lafinur"
@@ -896,6 +904,30 @@
    "presentacion": "Verduleria",
    "ultima": "2026-10-13"
   },
+  "cleopatra dist kosta|bolson trigo burgol grueso 10 x 500 g ararat": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Trigo Burgol grueso",
+   "ultima": "2026-10-13"
+  },
+  "cleopatra dist kosta|caja 3 pouch hojas de parra x 3 kg la emilia": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "REVISAR / NO CATALOGADO",
+   "ultima": "2026-10-13"
+  },
+  "cleopatra dist kosta|caja hojas de parra 3 x 3 kg la emilia": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 12,
+   "presentacion": "Hoja parra",
+   "ultima": "2026-10-13"
+  },
   "cleopatra dist kosta|hoja parra": {
    "locales": [
     "Congreso"
@@ -925,6 +957,14 @@
     "Congreso"
    ],
    "n": 1,
+   "presentacion": "Trigo Burgol grueso x 10u",
+   "ultima": "2026-10-13"
+  },
+  "cleopatra dist kosta|trigo grueso 10 x 500 g ararat": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
    "presentacion": "Trigo Burgol grueso x 10u",
    "ultima": "2026-10-13"
   },
@@ -976,12 +1016,28 @@
    "presentacion": "Mantenimiento",
    "ultima": "2026-10-13"
   },
+  "daich marcos roberto|aluminio x kilo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "REVISAR / NO CATALOGADO",
+   "ultima": "2026-10-13"
+  },
   "daich marcos roberto|bandas elasticas": {
    "locales": [
     "Arcos"
    ],
    "n": 1,
    "presentacion": "Bandas Elasticas",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|bobina 20 x 400 x 2 sedapel": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "REVISAR / NO CATALOGADO",
    "ultima": "2026-10-13"
   },
   "daich marcos roberto|bobina papel tissue": {
@@ -1316,7 +1372,7 @@
    "locales": [
     "Congreso"
    ],
-   "n": 2,
+   "n": 6,
    "presentacion": "Etiqueta 44X55",
    "ultima": "2026-10-13"
   },
@@ -1360,6 +1416,14 @@
    "presentacion": "Folex 25*35 * KG",
    "ultima": "2026-10-13"
   },
+  "daich marcos roberto|folex 25x35 x kilo": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "REVISAR / NO CATALOGADO",
+   "ultima": "2026-10-13"
+  },
   "daich marcos roberto|folex 37 x 50 antartida panaderia": {
    "locales": [
     "Cabello"
@@ -1400,6 +1464,14 @@
    "presentacion": "Guantes de nitrilo",
    "ultima": "2026-10-13"
   },
+  "daich marcos roberto|guantes nitrilo negro bulto x 100uds": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Guantes de nitrilo",
+   "ultima": "2026-10-13"
+  },
   "daich marcos roberto|harpic limpiador de inodoros": {
    "locales": [
     "Lafinur"
@@ -1424,12 +1496,28 @@
    "presentacion": "P.B Consorcio 80x100x30 Negra",
    "ultima": "2026-10-13"
   },
+  "daich marcos roberto|p b consorcio 80x100x30 negra bulto x 50uds": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "P.B Consorcio 80x100x30 Negra",
+   "ultima": "2026-10-13"
+  },
   "daich marcos roberto|pack bolsa negra 45 60": {
    "locales": [
     "Congreso"
    ],
    "n": 1,
    "presentacion": "Pack Bolsa Negra 45*60",
+   "ultima": "2026-10-13"
+  },
+  "daich marcos roberto|papel film 45x1000": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "REVISAR / NO CATALOGADO",
    "ultima": "2026-10-13"
   },
   "daich marcos roberto|papel higienico 300 m eco": {
@@ -2792,6 +2880,14 @@
    "presentacion": "Varios",
    "ultima": "2026-10-13"
   },
+  "ecobaires ambiental|desinsectacion septiembre 2026": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Servicio",
+   "ultima": "2026-10-13"
+  },
   "ecobaires ambiental|fumigacion": {
    "locales": [
     "Cabello"
@@ -3280,6 +3376,14 @@
    "presentacion": "tonica lata",
    "ultima": "2026-10-13"
   },
+  "ferreyra juan carlos|correspondiente a 50 de anticipo sobre nuestra oferta por cortinas roller sun screen": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Gastos Varios",
+   "ultima": "2026-10-13"
+  },
   "ferreyra juan carlos|gastos varios": {
    "locales": [
     "Congreso"
@@ -3344,12 +3448,28 @@
    "presentacion": "Papa Baston PREMIUM",
    "ultima": "2026-10-13"
   },
+  "free|papa entera comun x kg bolsa 5 kgs": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Papa Entera Pelada PREMIUM",
+   "ultima": "2026-10-13"
+  },
   "free|papa entera pelada premium": {
    "locales": [
     "Congreso"
    ],
    "n": 43,
    "presentacion": "Papa Entera Pelada PREMIUM",
+   "ultima": "2026-10-13"
+  },
+  "frimaq srl|freezer vertical fam 1 puerta de vidrio fam": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Freezzer Vertical",
    "ultima": "2026-10-13"
   },
   "frimaq srl|freezzer vertical": {
@@ -3672,6 +3792,14 @@
    "presentacion": "Asesoramiento de seguridad/higiene",
    "ultima": "2026-10-13"
   },
+  "jms packaging sa|pote aderezos 60 cc bamboo natural x 50 unidades": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Pote aderezos 60cc x 50",
+   "ultima": "2026-10-13"
+  },
   "jms packaging sa|pote aderezos 60cc x 50": {
    "locales": [
     "Congreso"
@@ -3688,11 +3816,27 @@
    "presentacion": "Tapa cristal Pote 45-60-75 cc x 100u",
    "ultima": "2026-10-13"
   },
+  "jms packaging sa|tapa cristal pote negro darnel 45 60 75 cc x 100 unidades": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Tapa cristal Pote 45-60-75 cc x 100u",
+   "ultima": "2026-10-13"
+  },
   "juan grande|queso feta": {
    "locales": [
     "Congreso"
    ],
    "n": 5,
+   "presentacion": "Queso Feta",
+   "ultima": "2026-10-13"
+  },
+  "juan grande|queso feta horma 3 cajas": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
    "presentacion": "Queso Feta",
    "ultima": "2026-10-13"
   },
@@ -3928,6 +4072,14 @@
    "presentacion": "Queso crema Tipico",
    "ultima": "2026-10-13"
   },
+  "lacteos la delfina|queso crema tp x 4 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Queso crema Tipico",
+   "ultima": "2026-10-13"
+  },
   "lacteos la delfina|yogurt natural x 3 8": {
    "locales": [
     "Congreso"
@@ -3996,7 +4148,15 @@
    "locales": [
     "Congreso"
    ],
-   "n": 17,
+   "n": 23,
+   "presentacion": "Croissant",
+   "ultima": "2026-10-13"
+  },
+  "levando alveolo sa|croissant ps00001": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
    "presentacion": "Croissant",
    "ultima": "2026-10-13"
   },
@@ -4032,12 +4192,28 @@
    "presentacion": "Uniformes",
    "ultima": "2026-10-13"
   },
+  "master supply|mbf8113 freezer vertical atosa eu mbf8113": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
   "master supply|varios": {
    "locales": [
     "Congreso"
    ],
    "n": 1,
    "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
+  "megaenvases sa|frasco morronero 200ml conserv ades dorado": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 4,
+   "presentacion": "REVISAR / NO CATALOGADO",
    "ultima": "2026-10-13"
   },
   "melena|envio": {
@@ -4088,12 +4264,44 @@
    "presentacion": "Baguel Cebolla",
    "ultima": "2026-10-13"
   },
+  "mino gaston alejandro|beguel": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Baguel",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|beguel amapola": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Baguel Amapola",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|beguel cebolla": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Baguel Cebolla",
+   "ultima": "2026-10-13"
+  },
   "mino gaston alejandro|hojaldre": {
    "locales": [
     "Congreso"
    ],
    "n": 10,
    "presentacion": "Hojaldre",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|lafa": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Laffa",
    "ultima": "2026-10-13"
   },
   "mino gaston alejandro|laffa": {
@@ -4124,8 +4332,16 @@
    "locales": [
     "Congreso"
    ],
-   "n": 22,
+   "n": 28,
    "presentacion": "Pita",
+   "ultima": "2026-10-13"
+  },
+  "mino gaston alejandro|pletsalej": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Pletzalej",
    "ultima": "2026-10-13"
   },
   "mino gaston alejandro|pletzalej": {
@@ -4144,12 +4360,28 @@
    "presentacion": "Vte lopez",
    "ultima": "2026-10-13"
   },
+  "mix 57|envio enviamelo ssp pp": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Envio",
+   "ultima": "2026-10-13"
+  },
   "mix 57|etiqueta il vip 50x20": {
    "locales": [
     "Congreso"
    ],
    "n": 2,
    "presentacion": "Etiqueta IL VIP 50x20",
+   "ultima": "2026-10-13"
+  },
+  "mix 57|etiqueta il vip 50x50 1000u b25 1b circ imp logo celeste p 284c": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "REVISAR / NO CATALOGADO",
    "ultima": "2026-10-13"
   },
   "mix 57|varios": {
@@ -4296,6 +4528,14 @@
    "presentacion": "Aceite alto oleico",
    "ultima": "2026-10-13"
   },
+  "nogada|aceite girasol alto oleico areco caj x 4 un x 5 lts pet": {
+   "locales": [
+    "Chimidoha"
+   ],
+   "n": 3,
+   "presentacion": "Aceite alto oleico",
+   "ultima": "2026-10-13"
+  },
   "open fruit land fruit|ajo entero": {
    "locales": [
     "Lafinur"
@@ -4373,6 +4613,14 @@
     "Cabello"
    ],
    "n": 1,
+   "presentacion": "Huevo cajon",
+   "ultima": "2026-10-13"
+  },
+  "open fruit land fruit|huevos x cajon 12 maples": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
    "presentacion": "Huevo cajon",
    "ultima": "2026-10-13"
   },
@@ -4720,6 +4968,14 @@
    "presentacion": "Extracto De Tomate",
    "ultima": "2026-10-13"
   },
+  "posta|extracto tomate inalpa x 150 gr x 18 un": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Extracto de Tomate",
+   "ultima": "2026-10-13"
+  },
   "posta|fideo tirabuzon": {
    "locales": [
     "Arcos"
@@ -4880,6 +5136,14 @@
    "presentacion": "Sal EntreFina X 5KG",
    "ultima": "2026-10-13"
   },
+  "posta|sal fina dos anclas x 25 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Sal entrefina celusal X 25KG",
+   "ultima": "2026-10-13"
+  },
   "posta|sal gruesa x 25kg": {
    "locales": [
     "Congreso"
@@ -4960,6 +5224,14 @@
    "presentacion": "te hurlingham x 50",
    "ultima": "2026-10-13"
   },
+  "posta|tirabuzon matarazzo x 500 gr x 15 un": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Fideo tirabuzon",
+   "ultima": "2026-10-13"
+  },
   "posta|vinagre de alcohol": {
    "locales": [
     "Arcos"
@@ -4982,6 +5254,14 @@
    ],
    "n": 1,
    "presentacion": "Asesoramiento de seguridad/higiene",
+   "ultima": "2026-10-13"
+  },
+  "procamp|limpieza de campana ductos y motor": {
+   "locales": [
+    "Arcos"
+   ],
+   "n": 6,
+   "presentacion": "Limpieza De Campanas",
    "ultima": "2026-10-13"
   },
   "procamp|limpieza de campanas": {
@@ -5168,6 +5448,14 @@
    "presentacion": "Stella Artois (cerveza tirada)",
    "ultima": "2026-10-13"
   },
+  "quilmes|stella artois pm slim keg ret b": {
+   "locales": [
+    "Cabello"
+   ],
+   "n": 6,
+   "presentacion": "Stella Artois (cerveza tirada)",
+   "ultima": "2026-10-13"
+  },
   "quilmes|varios": {
    "locales": [
     "Arcos"
@@ -5190,6 +5478,14 @@
    ],
    "n": 1,
    "presentacion": "Compras por caja",
+   "ultima": "2026-10-13"
+  },
+  "raices|huevo caja": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "Verduleria",
    "ultima": "2026-10-13"
   },
   "raices|huevo cajon": {
@@ -5272,6 +5568,14 @@
    "presentacion": "Vinagre de vino tinto",
    "ultima": "2026-10-13"
   },
+  "resta sanitarios sucesores de domingo resta y cia sa|termotanque saiar multigas de pie 120 lt": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Varios",
+   "ultima": "2026-10-13"
+  },
   "resta sanitarios sucesores de domingo resta y cia sa|varios": {
    "locales": [
     "Congreso"
@@ -5296,12 +5600,29 @@
    "presentacion": "Bolsa vacio 20x30",
    "ultima": "2026-10-13"
   },
+  "roberto o rodofeli y cia s r l|bolsas vacio 20x30 mp": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 4,
+   "presentacion": "REVISAR / NO CATALOGADO",
+   "ultima": "2026-10-13"
+  },
   "rupajo s a|pan arabe clasico bolsa": {
    "locales": [
     "Arcos"
    ],
    "n": 6,
    "presentacion": "Pan Arabe Clasico Bolsa",
+   "ultima": "2026-10-13"
+  },
+  "rupajo s a|pan arabe clasico bolsa cristal x300g": {
+   "locales": [
+    "Arcos",
+    "Congreso"
+   ],
+   "n": 1,
+   "presentacion": "PAN PITA X 4",
    "ultima": "2026-10-13"
   },
   "rupajo s a|pan pita x 4": {
@@ -5936,6 +6257,14 @@
    "presentacion": "Datiles",
    "ultima": "2026-10-13"
   },
+  "villares|garbanzo salteno x 25 kg sauco comun": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Garbanzos Villares (1kg)",
+   "ultima": "2026-10-13"
+  },
   "villares|garbanzos villares 1kg": {
    "locales": [
     "Congreso"
@@ -5952,12 +6281,28 @@
    "presentacion": "Harina de almendras",
    "ultima": "2026-10-13"
   },
+  "villares|hinojo x 1 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Semilla De Hinojo",
+   "ultima": "2026-10-13"
+  },
   "villares|mostaza en grano x kg": {
    "locales": [
     "Congreso"
    ],
    "n": 1,
    "presentacion": "Mostaza en grano x KG",
+   "ultima": "2026-10-13"
+  },
+  "villares|nc merc bonificada fc 282797 28 08": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Varios",
    "ultima": "2026-10-13"
   },
   "villares|paleta de cerdo": {
@@ -5998,6 +6343,14 @@
    ],
    "n": 1,
    "presentacion": "Pimienta blanca en grano",
+   "ultima": "2026-10-13"
+  },
+  "villares|pimienta cayena molida x 1 kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Pimienta de cayena",
    "ultima": "2026-10-13"
   },
   "villares|pimienta de cayena": {
@@ -6056,6 +6409,14 @@
    "presentacion": "Sirope de datil",
    "ultima": "2026-10-13"
   },
+  "villares|tahina al kanater x 3 6 kg s gluten": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Tahina (Frasco X 3,6Kg)",
+   "ultima": "2026-10-13"
+  },
   "villares|tahina frasco x 3 6kg": {
    "locales": [
     "Arcos"
@@ -6106,9 +6467,10 @@
   },
   "villarino lorena|masa filo": {
    "locales": [
-    "Lafinur"
+    "Lafinur",
+    "Congreso"
    ],
-   "n": 10,
+   "n": 16,
    "presentacion": "Masa filo",
    "ultima": "2026-10-13"
   },
@@ -6118,6 +6480,15 @@
    ],
    "n": 1,
    "presentacion": "Bazar",
+   "ultima": "2026-10-13"
+  },
+  "wigen carballo fernando ariel|almendras non pareil x kg": {
+   "locales": [
+    "Congreso",
+    "Lafinur"
+   ],
+   "n": 12,
+   "presentacion": "Almendras peladas",
    "ultima": "2026-10-13"
   },
   "wigen carballo fernando ariel|almendras peladas": {
@@ -6134,6 +6505,30 @@
    ],
    "n": 3,
    "presentacion": "Arroz basmati x 1kg",
+   "ultima": "2026-10-13"
+  },
+  "wigen carballo fernando ariel|nueces chandle extra light partidas x kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Nuez cuartos (Nuez partida)",
+   "ultima": "2026-10-13"
+  },
+  "wigen carballo fernando ariel|nueces chandler extra light cuartos x kg": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Nuez cuartos (Nuez partida)",
+   "ultima": "2026-10-13"
+  },
+  "wigen carballo fernando ariel|nueces mariposa extra light x kg": {
+   "locales": [
+    "Lafinur"
+   ],
+   "n": 6,
+   "presentacion": "Nuez cuartos (Nuez partida)",
    "ultima": "2026-10-13"
   },
   "wigen carballo fernando ariel|nuez cuartos nuez partida": {
@@ -6176,6 +6571,14 @@
    "presentacion": "Espum. Santa Julia Extrabrut",
    "ultima": "2026-10-13"
   },
+  "zuccardi|fz genovesa 12x250 nuevo arte caj 12x250 ml": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Aceite de oliva Varietales",
+   "ultima": "2026-10-13"
+  },
   "zuccardi|poligonos che blanc": {
    "locales": [
     "Lafinur"
@@ -6215,6 +6618,93 @@
    "n": 1,
    "presentacion": "Zuccardi concreto malbec",
    "ultima": "2026-10-13"
+  },
+  "zuccardi|zuelo original bib 2x5000 caj 2x5000 ml": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 6,
+   "presentacion": "Aceite De Oliva Zuelo",
+   "ultima": "2026-10-13"
+  }
+ },
+ "modos_proveedor": {
+  "easy clean aguilera luis alberto": {
+   "concepto": "LAVADERO",
+   "conceptos": {
+    "LAVADERO": 6
+   },
+   "facturas_lote": [
+    "00003-00004462"
+   ],
+   "modo_carga": "AGRUPADO_TOTAL",
+   "proveedor_oficial": "EASY CLEAN - AGUILERA LUIS ALBERTO",
+   "ultima": "2026-10-13"
+  },
+  "lavadero estrella": {
+   "concepto": "Lavadero",
+   "conceptos": {},
+   "facturas_lote": [],
+   "historico": {
+    "facturas": 11,
+    "una_fila": 11
+   },
+   "modo_carga": "AGRUPADO_TOTAL",
+   "proveedor_oficial": "lavadero estrella"
+  },
+  "open fruit land fruit": {
+   "concepto": "Verduleria",
+   "conceptos": {},
+   "facturas_lote": [],
+   "historico": {
+    "facturas": 160,
+    "una_fila": 155
+   },
+   "modo_carga": "AGRUPADO_TOTAL",
+   "proveedor_oficial": "open fruit land fruit"
+  },
+  "raices": {
+   "concepto": "Verduleria",
+   "conceptos": {
+    "Verduleria": 20
+   },
+   "facturas_lote": [
+    "0001-00062530",
+    "0001-00062532",
+    "0001/00063554",
+    "0001/00063617"
+   ],
+   "historico": {
+    "facturas": 176,
+    "una_fila": 174
+   },
+   "modo_carga": "AGRUPADO_TOTAL",
+   "proveedor_oficial": "raices",
+   "ultima": "2026-10-13"
+  },
+  "sorrentino lucas javier": {
+   "concepto": "Flete",
+   "conceptos": {
+    "Flete": 6
+   },
+   "facturas_lote": [
+    "00001-00000057",
+    "00001-00000058"
+   ],
+   "modo_carga": "AGRUPADO_TOTAL",
+   "proveedor_oficial": "SORRENTINO LUCAS JAVIER",
+   "ultima": "2026-10-13"
+  },
+  "verduleria": {
+   "concepto": "Verduleria",
+   "conceptos": {},
+   "facturas_lote": [],
+   "historico": {
+    "facturas": 5,
+    "una_fila": 5
+   },
+   "modo_carga": "AGRUPADO_TOTAL",
+   "proveedor_oficial": "verduleria"
   }
  },
  "version": 1

@@ -38,3 +38,12 @@ GAS/_vacio/
 WebTest/
 reporte_gestion_*.html
 Reportes_Ahorro/
+Facturas_WPP/
+Datos_Operativos_Historicos/
+tessdata/
+telegram_state.json
+cache_facturas.json
+remitos_pendientes.json
+Precios/benchmark_grupo_free.json
+Precios/Listas_Mail/
+Precios/cache_listas.json
