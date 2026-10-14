@@ -716,7 +716,9 @@ def detectar_local(sello: str | None = None, direccion_entrega: str | None = Non
     Edificio Av. Congreso esq. Montañeses 1602 (Núñez): Planta Baja = Café Mishiguene Núñez (Chimidoha);
     Planta Alta = Centro de Producción (Congreso = Obrador, sello 'MISHIGUENE CERVIÑO').
     Devuelve {'local', 'regla', 'alertas'}."""
-    s, d, r, m = _plano(sello), _plano(direccion_entrega), _plano(razon_social), _plano(manuscrito)
+    # cada anotación manuscrita se evalúa por separado: 'Laffa 1 dev - mal estado' no anula 'Congreso (arriba a la derecha)'
+    notas_ok = [n_ for n_ in re.split(r"\s\|\s", manuscrito or "") if not re.search(r"\bdev", _plano(n_))]
+    s, d, r, m = _plano(sello), _plano(direccion_entrega), _plano(razon_social), _plano(" ".join(notas_ok))
     alertas: list[str] = []
     local, regla = None, None
 
@@ -950,6 +952,93 @@ def leer_pdf_comprobante(path: str | Path) -> dict:
         "texto_encabezado": t[:600], "motor": "pdf-texto (primera copia)",
         "validacion": validar_aritmetica(items, total) if items else {"ok": False, "motivo": "sin renglones"},
     }
+
+
+def dhash_imagen(path: str | Path, lado: int = 16) -> str:
+    """Hash perceptual (dHash 16x16 = 256 bits, hex). Sobrevive a la recompresión y al reescalado de Telegram/WhatsApp."""
+    import cv2
+    import numpy as np
+    img = cv2.cvtColor(_cargar_bgr(Path(path)), cv2.COLOR_BGR2GRAY)
+    r = cv2.resize(img, (lado + 1, lado), interpolation=cv2.INTER_AREA)
+    bits = (r[:, 1:] > r[:, :-1]).flatten()
+    return format(int("".join("1" if b else "0" for b in bits), 2), "x")
+
+
+def _hamming(a: str, b: str) -> int:
+    return bin(int(a, 16) ^ int(b, 16)).count("1")
+
+
+def _digitos_en_ocr(path: Path, numeros: list[str]) -> bool:
+    """Verificación rápida: el OCR (imagen reducida) tiene que ver los N° de los comprobantes candidatos."""
+    import cv2
+    nombre, ocr = _motor_ocr()
+    img = _cargar_bgr(path)
+    h, w = img.shape[:2]
+    if w > 1100:
+        img = cv2.resize(img, None, fx=1100 / w, fy=1100 / w, interpolation=cv2.INTER_AREA)
+    texto = re.sub(r"\D+", " ", ocr(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)))
+    return all(re.search(rf"(?<!\d)0*{n}(?!\d)", texto) for n in numeros if n)
+
+
+def reutilizar_lectura_por_parecido(path: str | Path, umbral: int = 40) -> list[dict]:
+    """Telegram/WhatsApp recomprimen las fotos y cambian el SHA-256. Busca en cache_facturas.json una lectura visual de la
+    misma foto por hash perceptual y la CONFIRMA con OCR rápido (los N° de comprobante tienen que figurar en la imagen).
+    Si coincide, registra el alias por SHA-256 y devuelve los comprobantes: respuesta en ~1-3 s sin llamar a `claude -p`."""
+    path = Path(path)
+    cache = _leer_cache()
+    try:
+        mio = dhash_imagen(path)
+    except Exception:
+        return []
+    h = sha256_archivo(path)
+    por_img: dict[str, list[tuple[str, dict]]] = {}
+    for k, v in cache.items():
+        if v.get("dhash") and _hamming(mio, v["dhash"]) <= umbral:
+            por_img.setdefault(str(v.get("sha256", k.split("#")[0])), []).append((k, v))
+    if not por_img:
+        return []
+    mejor = min(por_img.values(), key=lambda lst: _hamming(mio, lst[0][1]["dhash"]))
+    numeros = [str(int(re.findall(r"\d+", str(v.get("numero_factura") or ""))[-1])) for _, v in mejor
+               if re.findall(r"\d+", str(v.get("numero_factura") or ""))]
+    distancia = _hamming(mio, mejor[0][1]["dhash"])
+    if distancia > 6:                    # casi idéntica (<=6 de 256 bits) se acepta; si no, la confirma el OCR
+        if not numeros or not _digitos_en_ocr(path, numeros):
+            return []
+    out = []
+    for i, (_, v) in enumerate(mejor, 1):
+        c = dict(v)
+        c["sha256"] = h
+        c["archivo"] = path.name if len(mejor) == 1 else f"{path.name} [comprobante {i}]"
+        c["motor"] = (v.get("motor") or "") + " (reutilizada por parecido visual + OCR)"
+        cache[h if len(mejor) == 1 else f"{h}#{i}"] = c
+        out.append(c)
+    CACHE_FACTURAS.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
+    return out
+
+
+def indexar_dhash(carpeta: str | Path) -> int:
+    """Agrega 'dhash' a las lecturas de la caché cuyo archivo está en `carpeta` (se corre una vez por imagen)."""
+    carpeta = Path(carpeta)
+    cache = _leer_cache()
+    por_sha = {}
+    for p in carpeta.iterdir():
+        if p.is_file() and p.suffix.lower() in IMG_EXT | {""}:
+            try:
+                por_sha[sha256_archivo(p)] = p
+            except OSError:
+                continue
+    n = 0
+    for k, v in cache.items():
+        s = str(v.get("sha256", k.split("#")[0]))
+        if not v.get("dhash") and s in por_sha:
+            try:
+                v["dhash"] = dhash_imagen(por_sha[s])
+                n += 1
+            except Exception:
+                continue
+    if n:
+        CACHE_FACTURAS.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
+    return n
 
 
 _PROMPT_VISION = (

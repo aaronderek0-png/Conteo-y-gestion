@@ -86,6 +86,15 @@ def clasificar_carpeta(carpeta: Path) -> dict:
                 c["sha256"] = h
                 out["comprobantes"].append(c)
         elif ext in IMG_EXT:
+            if h not in cache and not any(k.startswith(h + "#") for k in cache):
+                try:                                       # misma foto recomprimida por Telegram: match por parecido + OCR
+                    reutil = ip.reutilizar_lectura_por_parecido(p)
+                except Exception as e:
+                    LOG.debug("parecido visual: %s", e)
+                    reutil = []
+                if reutil:
+                    cache = ip._leer_cache()
+                    LOG.info("%s: lectura reutilizada de la caché (parecido visual + OCR)", p.name)
             multi = [v for k, v in cache.items() if k.startswith(h + "#")]
             if h in cache:
                 c = dict(cache[h])
@@ -152,7 +161,7 @@ def analizar(comp: dict, locales: dict, ap: dict) -> dict:
     """Asigna local y busca en el historial. No escribe nada."""
     notas = comp.get("anotaciones_manuscritas") or []
     regla = ip.detectar_local(comp.get("sello"), comp.get("direccion_entrega"), comp.get("razon_social_cliente"),
-                              " ".join(notas), None)
+                              " | ".join(notas), None)
     matches = imp.buscar_en_historial(comp, locales) if comp.get("tipo") in ("Factura", "NC") else []
     matches.sort(key=lambda m: (-(m["modo"] in ("FILAS", "AGRUPADO_TOTAL")), -m["similitud_proveedor"]))
     m0 = matches[0] if matches else None
@@ -284,6 +293,10 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     """Núcleo reutilizable (lo usa también telegram_ingestor.py). `args` necesita .push_drive y
     .confirmo_escribir_produccion. Devuelve (reporte, locales, ap, clasificación)."""
     # ---- Nivel 1 ------------------------------------------------------------
+    try:
+        ip.indexar_dhash(BASE_DIR / "Facturas Mishiguene")     # huella visual de las lecturas ya guardadas
+    except Exception as e:
+        LOG.debug("indexar_dhash: %s", e)
     cl = clasificar_carpeta(carpeta)
     informes_idx, bench = None, None
     if escribir and indexar_informes:
@@ -468,6 +481,20 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     if args.push_drive:
         for nombre, filas in plan_por_local.items():
             pushes[nombre] = imp.push_drive(nombre, filas, confirmado=args.confirmo_escribir_produccion, demo=demo)
+        for c_ in cl["comprobantes"]:
+            reg = c_.get("_remito")
+            if not reg or reg["estado"] != "PENDIENTE":
+                continue
+            local_r = analisis[c_["archivo"]]["local"] or "Congreso"
+            prov_corto = (reg.get("proveedor_oficial") or reg.get("proveedor") or "Proveedor").split(" (")[0].title()
+            adaptado = {"remito": reg["remito"], "fecha": reg["fecha"], "tipo": "PROVEEDOR", "renglones": [
+                {"fecha": reg["fecha"], "producto": f"{r['descripcion']} ({prov_corto} {imp.ultimo_entero(reg['remito'])})",
+                 "cantidad": r["cantidad_facturada_remito"],
+                 "precio_unitario": r.get("precio_final") if r.get("precio_final") is not None else r["precio_unitario"],
+                 "total": r.get("total_estimado")}
+                for r in reg["renglones"] if not r["anulado"]]}
+            pushes[f"Remito proveedor {local_r} {reg['remito']}"] = imp.push_remitos_drive(
+                local_r, [adaptado], confirmado=args.confirmo_escribir_produccion)
         for receptor, regs in remitos_obrador_por_local.items():
             pushes[f"Remitos {receptor}"] = imp.push_remitos_drive(
                 receptor, regs, confirmado=args.confirmo_escribir_produccion)

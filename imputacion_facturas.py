@@ -1166,6 +1166,40 @@ IDS_PLANILLAS = {"Congreso": "1udLEQpQ29avK4c6fNnQig-w02xIV82IgLe85yVJXaOY",
                  "Cabello": "1zAxYyNB98Sb1-D0HtfokESXc6FrDS96EbFYyMmsseIE"}
 
 
+def _hoja_por_clave(sh, clave: str):
+    """Busca una pestaña por nombre ignorando emojis, candados y espacios ('🔒 Facturas', 'Remitos'...).
+    Prefiere el nombre exacto (singular o plural) y descarta '... pendientes'."""
+    letras = lambda s: re.sub(r"[^a-z]", "", unicodedata.normalize("NFKD", s.lower()).encode("ascii", "ignore").decode())
+    clave = clave.lower()
+    hojas = [w for w in sh.worksheets() if "pendiente" not in w.title.lower()]
+    for w in hojas:
+        if letras(w.title) in (clave, clave + "s"):
+            return w
+    return next((w for w in hojas if clave in letras(w.title)), None)
+
+
+def _columnas_de_carga(ws) -> dict:
+    """Mira la fila 2 de la pestaña real: las columnas con fórmula (=MAP/ARRAYFORMULA...) NO se pisan nunca.
+    Devuelve las columnas A:I de carga manual y, si el código/SKU (col W/X) no tiene fórmula, dónde inyectarlo."""
+    datos = ws.get("A1:AA2", value_render_option="FORMULA")
+    head = datos[0] if datos else []
+    fila2 = datos[1] if len(datos) > 1 else []
+    con_formula = {i for i, v in enumerate(fila2) if isinstance(v, str) and v.lstrip().startswith("=")}
+    manuales = [i for i in range(9) if i not in con_formula]
+    sku_col = next((i for i, h in enumerate(head) if i >= 9 and re.search(r"codigo|sku", norm(h))), None)
+    return {"manuales": manuales, "con_formula": sorted(con_formula),
+            "sku_col": sku_col if (sku_col is not None and sku_col not in con_formula) else None,
+            "sku_formula": sku_col is not None and sku_col in con_formula, "encabezado": head}
+
+
+def _col_letra(i: int) -> str:
+    s, i = "", i + 1
+    while i:
+        i, r = divmod(i - 1, 26)
+        s = chr(65 + r) + s
+    return s
+
+
 def _gspread():
     import gspread
     from google.oauth2.service_account import Credentials
@@ -1297,8 +1331,7 @@ def procesar_remito_obrador(comp: dict, loc_receptor: "Local", ap: dict) -> dict
 def asegurar_hoja_remitos_real(sh) -> str:
     """Planilla real: crea la pestaña 'Remitos' (5 columnas, sin cuadrícula) solo si no existe. Arcos, Cabello y Lafinur
     ya la tienen; Chimidoha no."""
-    titulos = {w.title for w in sh.worksheets()}
-    if "Remitos" in titulos:
+    if _hoja_por_clave(sh, "remito") is not None:
         return "ya existía"
     rem = sh.add_worksheet(title="Remitos", rows=1000, cols=5)
     rem.update("A1:E1", [ENCABEZADO_REMITOS])
@@ -1331,7 +1364,7 @@ def push_remitos_drive(local: str, remitos: list[dict], confirmado: bool = False
     gc, _ = _gspread()
     sh = gc.open_by_key(IDS_PLANILLAS[local])
     estado_hoja = asegurar_hoja_remitos_real(sh)
-    ws = sh.worksheet("Remitos")
+    ws = _hoja_por_clave(sh, "remito")
     col_a, col_b, col_c = ws.col_values(1), ws.col_values(2), ws.col_values(3)
     n_filas = len(col_a)
     ya = {(col_a[i][:5], (col_b[i] if i < len(col_b) else "").strip().lower(), (col_c[i] if i < len(col_c) else "").replace(",", "."))
@@ -1358,17 +1391,16 @@ def push_remitos_drive(local: str, remitos: list[dict], confirmado: bool = False
                      {"range": f"A{primera}:A{ultima}", "format": {"numberFormat": {"type": "DATE", "pattern": "dd/MM"}}},
                      {"range": f"D{primera}:E{ultima}", "format": {"numberFormat": {"type": "CURRENCY", "pattern": "$#,##0.00"}}}])
     return {"escrito": True, "tipo": "remitos", "local": local, "planilla": sh.title, "sheet_id": IDS_PLANILLAS[local],
-            "hoja": "Remitos", "hoja_estado": estado_hoja, "desde_fila": primera, "hasta_fila": ultima,
+            "hoja": ws.title, "hoja_estado": estado_hoja, "desde_fila": primera, "hasta_fila": ultima,
             "filas": len(filas), "detalle": detalle}
 
 
 def push_drive(local: str, filas: list[dict], confirmado: bool = False, demo: bool = False) -> dict:
-    """Agrega las filas A:I a la pestaña Facturas de la planilla REAL del local (Google Sheets, credentials.json), pintadas
-    #FFF8E1 (OK) o #FFEBEE (REVISAR). Antes de escribir lee la col A/D de la hoja real y NO duplica un N° ya cargado
-    (salvo `demo=True`, que sirve para mostrar en vivo la escritura y deja la nota 'DEMO IA - borrar con /deshacer').
-
-    Solo escribe con confirmado=True (flags --push-drive y --confirmo-escribir-produccion, o --push-drive del bot).
-    Devuelve el detalle exacto: hoja, filas y valores, para poder deshacerlo."""
+    """Agrega filas a la pestaña Facturas (se busca ignorando candados/emojis) de la planilla REAL del local, pintadas
+    #FFF8E1 (OK) o #FFEBEE (REVISAR). Escribe SOLO en las columnas de carga manual (A:I) que NO tengan fórmula en la fila 2
+    (=MAP/ARRAYFORMULA): jamás pisa una columna calculada. Si la columna de código/SKU (W/X) no tiene fórmula, inyecta
+    ahí el SKU oficial. No duplica un N° + proveedor ya cargado (salvo demo=True).
+    Solo escribe con confirmado=True. Devuelve el detalle exacto para poder deshacerlo."""
     if local not in IDS_PLANILLAS:
         return {"escrito": False, "local": local,
                 "motivo": f"{local} no tiene planilla real de Facturas; queda en la copia local"}
@@ -1379,7 +1411,10 @@ def push_drive(local: str, filas: list[dict], confirmado: bool = False, demo: bo
                 "planilla": IDS_PLANILLAS[local]}
     gc, _ = _gspread()
     sh = gc.open_by_key(IDS_PLANILLAS[local])
-    ws = sh.worksheet("Facturas")
+    ws = _hoja_por_clave(sh, "factura")
+    if ws is None:
+        return {"escrito": False, "local": local, "motivo": "no encontré la pestaña Facturas"}
+    cols = _columnas_de_carga(ws)
     col_a, col_d = ws.col_values(1), ws.col_values(4)
     existentes = {(ultimo_entero(a), norm(d)) for a, d in zip(col_a[1:], (col_d + [""] * len(col_a))[1:]) if a}
     nuevas, omitidas = [], []
@@ -1394,15 +1429,37 @@ def push_drive(local: str, filas: list[dict], confirmado: bool = False, demo: bo
                 "omitidas": omitidas}
     primera = len(col_a) + 1
     ultima = primera + len(nuevas) - 1
-    ws.update(f"A{primera}:I{ultima}", [fila for _, fila in nuevas], value_input_option="USER_ENTERED")
+    # bloques contiguos de columnas manuales
+    bloques, actual = [], []
+    for i in cols["manuales"]:
+        if actual and i != actual[-1] + 1:
+            bloques.append(actual)
+            actual = []
+        actual.append(i)
+    if actual:
+        bloques.append(actual)
+    datos = []
+    for bl in bloques:
+        datos.append({"range": f"'{ws.title}'!{_col_letra(bl[0])}{primera}:{_col_letra(bl[-1])}{ultima}",
+                      "values": [[fila[i] for i in bl] for _, fila in nuevas]})
+    if cols["sku_col"] is not None:
+        sc = _col_letra(cols["sku_col"])
+        datos.append({"range": f"'{ws.title}'!{sc}{primera}:{sc}{ultima}",
+                      "values": [[f.get("sku") or ""] for f, _ in nuevas]})
+    sh.values_batch_update({"valueInputOption": "USER_ENTERED", "data": datos})
     amarillo = {"backgroundColor": {"red": 1.0, "green": 0.973, "blue": 0.882}}      # #FFF8E1
     rojo = {"backgroundColor": {"red": 1.0, "green": 0.922, "blue": 0.933}}          # #FFEBEE
     ws.batch_format([{"range": f"A{primera + i}:I{primera + i}",
                       "format": rojo if f.get("accion") == "REVISAR" else amarillo}
                      for i, (f, _) in enumerate(nuevas)])
     return {"escrito": True, "local": local, "planilla": sh.title, "sheet_id": IDS_PLANILLAS[local],
-            "desde_fila": primera, "hasta_fila": ultima, "filas": len(nuevas), "demo": demo, "omitidas": omitidas,
+            "hoja": ws.title, "desde_fila": primera, "hasta_fila": ultima, "filas": len(nuevas), "demo": demo,
+            "omitidas": omitidas,
+            "columnas_escritas": [_col_letra(i) for i in cols["manuales"]]
+            + ([_col_letra(cols["sku_col"])] if cols["sku_col"] is not None else []),
+            "columnas_con_formula_respetadas": [_col_letra(i) for i in cols["con_formula"]],
             "detalle": [{"fila": primera + i, "N": fila[0], "proveedor": fila[3], "E": fila[4], "G": fila[6], "H": fila[7],
+                         "sku": f.get("sku"),
                          "color": "rojo suave #FFEBEE" if f.get("accion") == "REVISAR" else "amarillo suave #FFF8E1"}
                         for i, (f, fila) in enumerate(nuevas)]}
 
@@ -1414,7 +1471,8 @@ def deshacer_push(registro: dict) -> dict:
         return {"deshecho": False, "motivo": "no hay una inyección en vivo registrada"}
     gc, _ = _gspread()
     es_remito = registro.get("tipo") == "remitos"
-    ws = gc.open_by_key(registro["sheet_id"]).worksheet("Remitos" if es_remito else "Facturas")
+    sh_ = gc.open_by_key(registro["sheet_id"])
+    ws = _hoja_por_clave(sh_, "remito" if es_remito else "factura")
     a, b = registro["desde_fila"], registro["hasta_fila"]
     vals = ws.get(f"A{a}:I{b}")
     for esperado, real in zip(registro["detalle"], vals):
