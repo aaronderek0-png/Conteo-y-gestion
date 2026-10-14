@@ -1,0 +1,7 @@
+Scripts auxiliares de la sesion de carga de facturas (rescatados del scratchpad temporal).
+lecturas.py      -> lectura visual de las fotos de WhatsApp (fuente de cache_facturas.json)
+bloque_wpp.py    -> bloque de reglas de local y lectores de PDF que se incorporo a invoice_parser.py
+bloque_imp.py    -> bloque de retro-entrenamiento/remitos/NC/prorrateo incorporado a imputacion_facturas.py
+multimodal_block.py -> motor multimodal inicial de invoice_parser.py
+claude_add.md    -> texto de CLAUDE.md del lote
+aplicar_cambios*.py, cierre.py -> parches aplicados (referencia historica)

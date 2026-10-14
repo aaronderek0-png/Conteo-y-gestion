@@ -755,7 +755,8 @@ def detectar_local(sello: str | None = None, direccion_entrega: str | None = Non
         local, regla = "Chimidoha", "razón social Chimi Doha / Café Mishiguene Núñez"
     # alertas de conflicto
     if local == "Congreso" and re.search(r"chimi\s*doha", r + " " + _plano(texto_cliente)):
-        alertas.append("RAZÓN SOCIAL CHIMI DOHA con sello/nota Cerviño: verificar si es gasto del café (Chimidoha)")
+        alertas.append("INFO compra centralizada: razón social Chimi Doha pero sello Cerviño → Congreso (Obrador) compra "
+                       "y luego transfiere a Chimidoha con la matriz de recargos")
     if local == "Chimidoha" and re.search(r"\barcos\b", m):
         alertas.append("anotación 'Arcos' en un comprobante de Chimidoha: posible derivación/devolución")
     if local is None:

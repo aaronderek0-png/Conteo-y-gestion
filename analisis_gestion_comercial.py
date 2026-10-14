@@ -2505,6 +2505,15 @@ def main() -> int:
                     help="sucursales a procesar (por defecto todas)")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s", datefmt="%H:%M:%S")
+    # Pasamano Obrador -> Chimidoha/locales: matriz de recargos y aprendizaje de la hoja 'Remitos Chimidoha' (si ya existe)
+    import transferencias_obrador as tr
+    remitos_chimi = tr.buscar_remitos_chimidoha()
+    if remitos_chimi:
+        apr = tr.aprender_de_remitos_chimidoha(remitos_chimi)
+        LOG.info("Remitos Chimidoha: %s -> %s", [p.name for p in remitos_chimi], apr.get("por_tipo") or apr.get("estado"))
+    else:
+        LOG.info("Remitos Chimidoha: no hay archivo todavia; transferencias con la matriz por defecto "
+                 "(panificados/descartables x1.20, carnes/pescados x1.10, almacen al costo, elaborados por BOM)")
     resultados: list[dict[str, Any]] = []
     for mes in (args.meses or [args.mes]):
         if args.refresh_solo:

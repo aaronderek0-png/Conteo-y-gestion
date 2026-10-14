@@ -6,7 +6,7 @@ Archivos reconocidos (se copian a Datos_Operativos_Historicos/ y se resumen en i
     INFORME MOV.DE STOCK JULIO.xlsx    marketing, desperdicio, invitaciones por mozo, etc. (valor a precio de venta)
 
 Uso:
-    python datos_operativos.py [carpeta_origen]   # default Facturas_WPP/
+    python datos_operativos.py [carpeta_origen]   # default 'Facturas Mishiguene/'
 """
 
 from __future__ import annotations
@@ -112,7 +112,7 @@ def indexar_mov_stock(path: Path) -> dict:
     }
 
 
-def indexar(origen: Path = BASE_DIR / "Facturas_WPP", destino: Path = DESTINO) -> dict:
+def indexar(origen: Path = BASE_DIR / "Facturas Mishiguene", destino: Path = DESTINO) -> dict:
     destino.mkdir(exist_ok=True)
     idx: dict = {"generado": datetime.now().isoformat(timespec="seconds"), "origen": str(origen.name), "informes": []}
     for p in sorted(origen.iterdir()):
@@ -141,6 +141,6 @@ def indexar(origen: Path = BASE_DIR / "Facturas_WPP", destino: Path = DESTINO) -
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(message)s")
-    carpeta = Path(sys.argv[1]) if len(sys.argv) > 1 else BASE_DIR / "Facturas_WPP"
+    carpeta = Path(sys.argv[1]) if len(sys.argv) > 1 else BASE_DIR / "Facturas Mishiguene"
     res = indexar(carpeta)
     print(json.dumps(res, ensure_ascii=False, indent=1, default=str)[:6000])

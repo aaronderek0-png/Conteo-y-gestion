@@ -43,6 +43,12 @@ IMG_EXT = {".jpg", ".jpeg", ".png", ".webp"}
 DESTINO_PRECIOS = BASE_DIR / "Precios"
 
 
+def carpeta_por_defecto() -> Path:
+    """'Facturas Mishiguene/' (sin guiones); si todavía no existe se lee la carpeta vieja 'Facturas_WPP/'."""
+    nueva, vieja = BASE_DIR / "Facturas Mishiguene", BASE_DIR / "Facturas_WPP"
+    return nueva if nueva.is_dir() or not vieja.is_dir() else vieja
+
+
 def sha(path: Path) -> str:
     return ip.sha256_archivo(path)
 
@@ -142,6 +148,10 @@ def analizar(comp: dict, locales: dict, ap: dict) -> dict:
     if local is None and m0:
         local, por = m0["local"], f"historial: ya cargada en la planilla de {m0['local']} (el comprobante no trae sello)"
         alertas = [a for a in alertas if not a.startswith("local INDETERMINADO")]
+    if local is None and "Chimidoha" in locales and "chimi" in imp.norm(comp.get("razon_social_cliente")):
+        if imp.norm(comp.get("proveedor_detectado")) in locales["Chimidoha"]._idx_prov or \
+                imp.norm(comp.get("proveedor_planilla")) in locales["Chimidoha"]._idx_prov:
+            local, por = "Chimidoha", "proveedor con historial cargado directo en Chimidoha y razón social Chimi"
     if m0 and regla["local"] and m0["local"] != regla["local"]:
         alertas.append(f"CARGADA_EN_{m0['local'].upper()} pero {por} → corresponde {regla['local']}")
     if comp.get("remito_asociado"):
@@ -149,7 +159,7 @@ def analizar(comp: dict, locales: dict, ap: dict) -> dict:
                        if comp["remito_asociado"] not in comp.get("_remitos_lote", ()) else "")
     extra = comp.get("extra") or {}
     if extra.get("multilocal"):
-        alertas.append("MULTILOCAL: " + extra["multilocal"] + " → prorratear entre los locales de cada día")
+        alertas.append("MULTILOCAL (100 % en Congreso, etiqueta MULTILOCAL): " + extra["multilocal"])
     if comp.get("sello") is None and comp.get("tipo") in ("Factura", "NC") and not (comp.get("motor") or "").startswith("pdf"):
         alertas.append("sin sello de recepción")
     return {"regla": regla, "matches": matches, "m0": m0, "local": local, "por": por, "alertas": alertas}
@@ -181,10 +191,56 @@ def _num_cel(x):
     return imp.numero_a_celda(x)
 
 
+def escribir_carpeta_revision(filas: list[dict], analisis: dict, cl: dict) -> Path:
+    """'Carpeta Revision/Revision Facturas IA.xlsx': espejo de TODAS las filas pintadas por el agente que siguen en las
+    copias (amarillo #FFF8E1 = OK pre-aprobada, rojo #FFEBEE = a revisar) + alertas por comprobante."""
+    import openpyxl
+    from openpyxl.styles import PatternFill, Font
+    carpeta = BASE_DIR / "Carpeta Revision"
+    carpeta.mkdir(exist_ok=True)
+    nuevas = {(f["local"], f["fila_excel"]): f for f in filas}
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Filas inyectadas"
+    ws.append(["Local", "Fila en la copia", "N° factura", "Fecha", "Proveedor", "Presentación / marca", "Cantidad", "Precio",
+               "Desc.", "Estado", "Nota o motivo", "Precio transferencia P_UN"])
+    for c in ws[1]:
+        c.font = Font(bold=True)
+    for copia in sorted((imp.COPIAS_DIR).glob("*_FACTURAS_COPIA.xlsx")):
+        local = copia.name.replace("_FACTURAS_COPIA.xlsx", "")
+        hoja = openpyxl.load_workbook(copia)["Facturas"]
+        for r in range(2, hoja.max_row + 1):
+            col = (hoja.cell(r, 1).fill.fgColor.rgb or "") if hoja.cell(r, 1).fill and hoja.cell(r, 1).fill.fill_type else ""
+            col = str(col)[-6:].upper()
+            if col not in ("FFF8E1", "FFEBEE") or hoja.cell(r, 1).value in (None, ""):
+                continue
+            n = nuevas.get((local, r)) or {}
+            rojo = col == "FFEBEE"
+            ws.append([local, r, hoja.cell(r, 1).value, hoja.cell(r, 2).value, hoja.cell(r, 4).value, hoja.cell(r, 5).value,
+                       hoja.cell(r, 7).value, hoja.cell(r, 8).value, hoja.cell(r, 9).value,
+                       "REVISAR" if rojo else "OK (pre-aprobada)",
+                       hoja.cell(r, 6).value or "; ".join((n.get("motivos") or "",)), n.get("transferencia")])
+            for c in ws[ws.max_row]:
+                c.fill = PatternFill("solid", fgColor=col)
+    wa = wb.create_sheet("Alertas por comprobante")
+    wa.append(["Archivo", "Tipo", "N°", "Proveedor", "Local", "Regla de local", "Alerta"])
+    for c in cl["comprobantes"]:
+        an = analisis.get(c["archivo"])
+        if not an:
+            continue
+        for al in an["alertas"]:
+            if al:
+                wa.append([c["archivo"], c.get("tipo"), c.get("numero_factura"), c.get("proveedor_detectado"),
+                           an["local"], an["por"], al])
+    destino = carpeta / "Revision Facturas IA.xlsx"
+    wb.save(destino)
+    return destino
+
+
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s", datefmt="%H:%M:%S")
     ap_ = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap_.add_argument("carpeta", nargs="?", default=str(BASE_DIR / "Facturas_WPP"))
+    ap_.add_argument("carpeta", nargs="?", default=str(carpeta_por_defecto()))
     ap_.add_argument("--dry-run", action="store_true", help="No escribe ningún archivo")
     ap_.add_argument("--copias-dir", help="Carpeta de copias (pruebas)")
     ap_.add_argument("--push-drive", action="store_true", help="Muestra el plan para la planilla real (no escribe)")
@@ -350,6 +406,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True)
 
     # ---- escritura en copias -------------------------------------------------
     escrituras = {}
+    revision_filas: list[dict] = []
     if escribir:
         remitos_tab_por_local: dict[str, list[dict]] = {}
         for c in cl["comprobantes"]:
@@ -363,6 +420,16 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True)
                                       marcar=marcas_por_local.get(nombre))
             escrituras[nombre] = {"copia": loc.copia.name, "filas": rep["escritas"], "verificadas": rep["verificadas"],
                                   "marcadas": len(marcas_por_local.get(nombre, []))}
+            for r_, f_ in rep["filas"]:
+                revision_filas.append({"local": nombre, "fila_excel": r_, "N": f_.get("A"), "fecha": f_.get("B"),
+                                       "proveedor": f_.get("D"), "presentacion": f_.get("presentacion"),
+                                       "original": f_.get("descripcion_original"), "G": f_.get("G") or f_.get("cant_orig"),
+                                       "H": f_.get("H") or f_.get("precio_orig"), "I": f_.get("I"),
+                                       "estado": "REVISAR" if f_.get("accion") == "REVISAR" else "OK (pre-aprobada)",
+                                       "motivos": "; ".join((f_.get("motivos") or []) + (f_.get("avisos") or [])),
+                                       "transferencia": (f_.get("transferencia") or {}).get("p_un_transferencia")})
+    if escribir:
+        escribir_carpeta_revision(revision_filas, analisis, cl)
     pushes = {}
     if args.push_drive:
         for nombre, filas in plan_por_local.items():

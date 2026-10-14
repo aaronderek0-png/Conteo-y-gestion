@@ -44,6 +44,11 @@ from rapidfuzz import fuzz, process
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "Arcos_data"
+CARPETA_ENTRADA = BASE_DIR / "Facturas Mishiguene"          # carpeta diaria de comprobantes (sin guiones)
+CARPETA_ENTRADA_VIEJA = BASE_DIR / "Facturas_WPP"           # lectura retrocompatible
+CARPETA_REVISION = BASE_DIR / "Carpeta Revision"            # espejo de lo inyectado (OK / a revisar)
+COLOR_OK = "FFF8E1"                                         # amarillo suave: inyectada, falta aprobar
+COLOR_REVISAR = "FFEBEE"                                    # rojo suave: requiere revisión humana
 COPIAS_DIR = BASE_DIR / "Copias_Gestion"
 APRENDIZAJE_JSON = BASE_DIR / "aprendizaje_proveedores.json"
 MAESTRO_XLSX = DATA_DIR / "maestro.xlsx"
@@ -494,7 +499,8 @@ def aplicar_a_copia(resultados: list[dict], loc: Local, remitos: list[dict] | No
     wb = openpyxl.load_workbook(loc.copia)
     ws = wb["Facturas"]
     ultima = max((r for r in range(2, ws.max_row + 1) if ws.cell(r, 1).value not in (None, "")), default=1)
-    rojo = PatternFill("solid", fgColor="FFC7CE")
+    rojo = PatternFill("solid", fgColor="FFEBEE")         # requiere revisión (rojo suave)
+    ok_fill = PatternFill("solid", fgColor="FFF8E1")      # inyectada OK, pendiente de aprobación (amarillo suave)
     escritas = []
     for res in resultados:
         for f in res["filas"]:
@@ -513,8 +519,8 @@ def aplicar_a_copia(resultados: list[dict], loc: Local, remitos: list[dict] | No
                 valores[6] = f"{f['descripcion_original']}{sug} | {'; '.join(f['motivos'])}"[:250]
             for c, v in valores.items():
                 ws.cell(r, c).value = v
-                if reviso:
-                    ws.cell(r, c).fill = rojo
+            for c in range(1, 10):                      # toda fila nueva va pintada hasta que alguien la apruebe
+                ws.cell(r, c).fill = rojo if reviso else ok_fill
             escritas.append((r, valores, f))
     amarillo = PatternFill("solid", fgColor="FFF2CC")
     for fila, nota in (marcar or []):
@@ -1106,8 +1112,26 @@ def construir_filas(comp: dict, loc: "Local", ap: dict) -> dict:
             if f["accion"] == "INYECTAR":
                 f["accion"] = "REVISAR"
             f["motivos"].append(f"comprobante no cierra: {v.get('motivo')}")
+    _anotar_transferencia(filas, loc)
     return {"proveedor_oficial": proveedor, "modo": "PRORRATEO" if items is not comp.get("items") else "FILAS",
             "filas": filas, "notas": notas}
+
+
+def _anotar_transferencia(filas: list[dict], loc: "Local") -> None:
+    """Congreso (Obrador) compra y luego 'vende' a Chimidoha y a los locales: cada fila INYECTAR lleva el precio de
+    transferencia por la matriz (panificados/descartables x1.20, carnes/pescados x1.10, almacén al costo)."""
+    if loc.nombre != "Congreso":
+        return
+    import transferencias_obrador as tr
+    for f in filas:
+        if f.get("accion") != "INYECTAR" or not f.get("presentacion") or not f.get("P_UN"):
+            continue
+        cat = loc.catalogo[loc.catalogo["PRESENTACION"] == f["presentacion"]]
+        if cat.empty:
+            continue
+        cat2 = cat.iloc[0]["CAT2"]
+        f["transferencia"] = {"tipo": tr.tipo_transferencia(cat2), "factor": tr.factor_transferencia(cat2),
+                              "p_un_transferencia": tr.precio_transferencia(f["P_UN"], cat2)}
 
 
 # ---- publicación en la planilla real (solo con confirmación) ----------------- #
@@ -1143,6 +1167,9 @@ def push_drive(local: str, filas: list[dict], confirmado: bool = False) -> dict:
                 y, m, d = r[k].split("-")
                 r[k] = f"{d}/{m}/{y}"
     ws.update(f"A{primera}:I{primera + len(fmt) - 1}", fmt, value_input_option="USER_ENTERED")
+    # amarillo suave hasta que alguien las apruebe con el menú de GAS/aprobador_facturas_ia.gs
+    ws.format(f"A{primera}:I{primera + len(fmt) - 1}",
+              {"backgroundColor": {"red": 1.0, "green": 0.973, "blue": 0.882}})
     return {"escrito": True, "desde_fila": primera, "filas": len(fmt)}
 
 
@@ -1166,7 +1193,8 @@ def _resumen_cascada(resultados: list[dict], locales: list[str]) -> None:
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s", datefmt="%H:%M:%S")
     ap_ = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap_.add_argument("entrada", nargs="?", help="comprobante .json/.pdf/.jpg/... o carpeta")
+    ap_.add_argument("entrada", nargs="?", help="comprobante .json/.pdf/.jpg/... o carpeta "
+                                                "(default: 'Facturas Mishiguene/')")
     ap_.add_argument("--local", help="Local destino (si el comprobante no lo dice)")
     ap_.add_argument("--apply", action="store_true", help="Escribir en Copias_Gestion/ (sin esto es dry-run)")
     ap_.add_argument("--demo-historico", type=int, metavar="N", help="Prueba: reconstruye N facturas reales del local")
@@ -1212,8 +1240,11 @@ def main(argv: list[str] | None = None) -> int:
                 c = ip.procesar_comprobante(a, local=args.local)
                 comprobantes.append((c, c.get("local_destino") or args.local))
     else:
-        ap_.print_help()
-        return 1
+        carpeta = CARPETA_ENTRADA if CARPETA_ENTRADA.is_dir() else CARPETA_ENTRADA_VIEJA
+        if not carpeta.is_dir():
+            ap_.print_help()
+            return 1
+        return main([str(carpeta)] + [a for a in (argv if argv is not None else sys.argv[1:])])
 
     cache_locales: dict[str, Local] = {}
     resultados, locales = [], []

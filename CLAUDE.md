@@ -85,8 +85,9 @@ está vacío: sin peso → REVISAR). Una verdura fuera de esa lista que llega po
 - `aprendizaje_proveedores.json` se siembra con las solicitudes APROBADAS del Maestro y el historial de Facturas; crece con
   `imputacion_facturas.py --apply --aprender`.
 
-## Lote de WhatsApp (`Facturas_WPP/`): geografía, reglas y pipeline
+## Lote de WhatsApp (`Facturas Mishiguene/`): geografía, reglas y pipeline
 Ejecutar: `python procesar_lote_wpp.py` (escribe SOLO en copias; `--dry-run` no escribe; es idempotente).
+Carpeta de entrada: **`Facturas Mishiguene/`** (sin guiones; `Facturas_WPP/` se lee solo si la nueva no existe). Lo que requiere revisión se refleja en **`Carpeta Revision/`** (`Revision Facturas IA.xlsx`).
 Entrada: PDFs digitales (se usa solo la copia ORIGINAL; ignora DUPLICADO/TRIPLICADO), fotos `.jpeg` de WhatsApp (leídas con visión
 multimodal y guardadas en `cache_facturas.json` por SHA-256; sin lectura previa se usa Tesseract `spa` y todo queda a REVISAR),
 informes Maxirest (`Datos_Operativos_Historicos/`) y listas de precios.
@@ -144,3 +145,35 @@ comparar contra elaboración propia en el Obrador. No compite en el comparador.
 Tesseract lee bien el texto impreso pero **no** la birome (ej. "APIO 1,090 KG" → "MIO 4,080"): lo manuscrito se lee con visión.
 Las copias `*_FACTURAS_COPIA.xlsx` se guardan con openpyxl (sin valores cacheados de fórmulas): el agente siempre lee catálogo e
 historial del export original y de la copia solo las filas que agregó.
+
+## Compra centralizada y precios de transferencia (Obrador → Chimidoha y locales)
+**Ruteo.** Congreso (Obrador) **compra** la mercadería y luego se la "vende" internamente a Chimidoha y a los locales:
+- Razón social `Lafinur 3368 SRL` o sello físico `Cerviño` → se imputa en **Congreso**, aunque el cliente diga Chimi Doha SRL
+  (casos Kosta 1440 y Ecobaires 1610: quedan en Congreso con la alerta INFO de compra centralizada).
+- Si el proveedor ya tiene historial cargado directamente en Chimidoha con razón social de Chimi → Chimidoha. Fallback: sello
+  `CAFE MISHIGUENE NUÑEZ` o firma/anotación manuscrita `Núñez` / `Chimi`.
+- `Sorrentino 58` (flete `O;A;L;C`): 100 % en Congreso con etiqueta `MULTILOCAL`.
+
+**Matriz de recargos** (`transferencias_obrador.py`; la usan `imputacion_facturas.py` —cada fila inyectada en Congreso trae su precio
+de transferencia— y `analisis_gestion_comercial.py`):
+| Rubro | Precio de transferencia |
+|---|---|
+| Panificados y Descartables (insumos) | costo × 1.20 |
+| Proteínas (Carnes y Pescados) | costo × 1.10 |
+| Aceite e insumos normales de almacén | costo × 1.00 (al costo) |
+| Elaborados por el Obrador (`Ventas Obrador`) | explosión completa por unidad (GR, UN, PORC, KG) contra las recetas (BOM, `motor_recetas.py`) |
+
+**"Remitos Chimidoha"** (hoja/archivo que se carga a mano): `analisis_gestion_comercial.py` y `python transferencias_obrador.py` lo buscan
+(nombres tipo `Remitos Chimidoha*.xlsx` en la raíz, `Arcos_data/`, `Facturas Mishiguene/`, `Copias_Gestion/`), calculan el recargo real
+por rubro (precio remito / costo de compra en Congreso) y lo comparan con la matriz en `aprendizaje_transferencias.json`.
+
+## Inyección pre-aprobada, color y aprobación
+Toda fila que el agente inyecta (copias o `--push-drive`) va pintada en A:I: **`#FFF8E1`** amarillo suave = OK pendiente de aprobar,
+**`#FFEBEE`** rojo suave = requiere revisión. `GAS/aprobador_facturas_ia.gs` agrega al menú de la planilla
+`Facturas IA ▸ ✅ Aprobar Facturas IA (Quitar color)` (también "Aprobar TODAS las amarillas"). Hay que pegarlo en cada planilla real
+(Extensiones ▸ Apps Script) y compartir la planilla con la Service Account como **Editor** para que `--push-drive` pueda escribir.
+
+## Telegram: conexión
+`python telegram_ingestor.py --conectar <TOKEN>`: guarda `TELEGRAM_BOT_TOKEN` en `.env`, detecta el grupo `Facturas Mishiguene`
+(o el último grupo con actividad), guarda `TELEGRAM_CHAT_ID`, manda el mensaje de prueba y procesa lo pendiente en `Facturas Mishiguene/`.
+El bot debe estar en el grupo y escribir algo antes (Group Privacy desactivada en @BotFather o bot admin). `.env` está en `.gitignore`.
