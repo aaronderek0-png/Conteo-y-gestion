@@ -12,3 +12,13 @@
 
 Escrituras previstas a `Facturas` por la recuperación: **0 filas** (ninguna INYECTAR).
 Bot: PID 23916, commit 9866f59. Eventos: `logs/pipeline_eventos.jsonl`.
+
+## Actualización 14/10/2026 ~03:30
+- Bot: PID 16980 (arrancó 03:25), commit a531601, único consumidor; offset 223419362 sin cambios (sin mensajes nuevos).
+- Lectura viva (verificacion_vivo.json): Resta 97543 (Congreso fila 391), MIX-57 35844 (filas 93-94) y NC Buenos Mares 19303 (fila 34) están cargadas.
+  Rupajo 34674 no está en Congreso ni Lafinur (sin local: decisión humana). Miño 421/423 no están en Facturas (4 renglones REVISAR, no se publican).
+  Raíces 8528: sus 5 renglones ya están en Congreso/Remitos_Pendientes. Remito Obrador 3727 NO está en Cabello/Remitos.
+- PENDIENTE de aprobación (bloqueado por clasificador al ejecutar `python recuperar_lote.py apply`): escribir Cabello/Remitos filas 609-613
+  (03/06 Flan 4×461,75; mammoul 10×192,43; Lock food 230 100×269; Lock food 390 100×278; Caja pizza 1×185; total $58.656,30).
+- Comparador: $346.639/mes estimado, 124/324 insumos con match (46,9 s). Sin referencia: 206 productos = 81,4 % del gasto Dossier (scouting_sin_referencia.py).
+- BOM (motor_recetas): 1833 recetas; 1660 coinciden con C_UN ±2 %, 117 difieren, 25 incompletas.
