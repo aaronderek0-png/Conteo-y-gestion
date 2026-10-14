@@ -725,6 +725,8 @@ def detectar_local(sello: str | None = None, direccion_entrega: str | None = Non
             return None, None
         if "cervi" in t:
             return "Congreso", f"{origen}: Mishiguene Cerviño = Centro de Producción/Obrador (PA del 1602)"
+        if re.search(r"\bcongreso\b|\bobrador\b", t) and not re.search(r"nunez|chimi", t):
+            return "Congreso", f"{origen}: anotación 'Congreso' / Obrador (Planta Alta del 1602)"
         if re.search(r"cafe\s+mishiguene\s+nunez|\bnunez\b|\bchimi\b", t):
             return "Chimidoha", f"{origen}: Café Mishiguene Núñez (PB del 1602)"
         if re.search(r"cafe\s+mishiguene\s+cabello|\bcabello\b", t):
