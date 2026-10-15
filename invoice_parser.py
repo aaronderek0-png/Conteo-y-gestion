@@ -1107,10 +1107,16 @@ def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
         for modelo in _gemini_modelos():
             try:
                 _GEMINI_ULTIMA = time.time()
-                r = client.models.generate_content(
-                    model=modelo, contents=[_PROMPT_VISION.format(ruta=path.name), parte],
-                    config=types.GenerateContentConfig(temperature=0, response_mime_type="application/json"))
-                return r.text
+                for razonamiento in (types.ThinkingConfig(thinking_level="low"), None):   # low: 8 s vs 21 s, mismo resultado
+                    try:
+                        r = client.models.generate_content(
+                            model=modelo, contents=[_PROMPT_VISION.format(ruta=path.name), parte],
+                            config=types.GenerateContentConfig(temperature=0, response_mime_type="application/json",
+                                                               thinking_config=razonamiento))
+                        return r.text
+                    except Exception as e2:                  # noqa: BLE001
+                        if razonamiento is None or "hinking" not in str(e2):
+                            raise
             except Exception as e:                           # noqa: BLE001
                 ultimo = f"{modelo}: {type(e).__name__} {str(e)[:100]}".replace(key, "<clave>")
                 codigo = getattr(e, "code", None)
