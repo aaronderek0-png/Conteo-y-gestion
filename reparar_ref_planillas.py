@@ -40,6 +40,27 @@ def reparar_formula(f: str) -> str:
     return g
 
 
+RX_REL = re.compile(r'(?<![\w$])(\$?[A-Z]{1,3})(\d+)')
+
+
+def formula_desde_fila_anterior(f_prev: str) -> str:
+    """Referencias relativas de la fórmula de la fila anterior desplazadas una fila (E$1:E930 → E$1:E931; E931 → E932)."""
+    return RX_REL.sub(lambda m: f"{m.group(1)}{int(m.group(2)) + 1}", f_prev)
+
+
+def referencias_rotas(vals: list[list[str]]) -> list[dict]:
+    """Fórmulas con `#REF!` LITERAL (referencia borrada, no derrame): se reconstruyen desde la fila anterior sana."""
+    out = []
+    for i, fila in enumerate(vals[1:], 2):
+        for col in range(9, min(len(fila), 24)):
+            f = fila[col]
+            if isinstance(f, str) and f.startswith("=") and "#REF!" in f and i > 2:
+                prev = vals[i - 2][col] if col < len(vals[i - 2]) else ""
+                if isinstance(prev, str) and prev.startswith("=") and "#REF!" not in prev:
+                    out.append({"fila": i, "col": col, "formula": formula_desde_fila_anterior(prev)})
+    return out
+
+
 def analizar(valores_formula: list[list[str]]) -> dict:
     """valores_formula: filas 1..n (índice 0 = encabezado) de A:X con value_render_option=FORMULA."""
     cambios, a_sin_e = [], []
@@ -71,6 +92,9 @@ def main() -> int:
     ws = imp._hoja_por_clave(sh, "factura")
     vals = ws.get(f"A1:X{ws.row_count}", value_render_option="FORMULA")
     res = analizar(vals)
+    rotas = referencias_rotas(vals)
+    res["formulas_con_REF_literal"] = [{"fila": r["fila"], "col": "ABCDEFGHIJKLMNOPQRSTUVWX"[r["col"]]} for r in rotas][:20]
+    res["n_formulas_con_REF_literal"] = len(rotas)
     res.update({"local": a.local, "planilla": sh.title, "entorno": entornos.entorno(), "modo": "APPLY" if a.apply else "DRY-RUN"})
     print(json.dumps(res, ensure_ascii=False, indent=1))
     if not a.apply:
@@ -83,6 +107,8 @@ def main() -> int:
             if isinstance(f, str) and f.startswith("=") and reparar_formula(f) != f:
                 por_col[L].append((i, reparar_formula(f)))
     data = []
+    for r in rotas:                                      # referencias borradas: se restauran desde la fila anterior sana
+        data.append({"range": f"'{ws.title}'!{'ABCDEFGHIJKLMNOPQRSTUVWX'[r['col']]}{r['fila']}", "values": [[r["formula"]]]})
     for L, items in por_col.items():
         for i, f in items:
             data.append({"range": f"'{ws.title}'!{L}{i}", "values": [[f]]})
