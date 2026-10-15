@@ -53,3 +53,9 @@ Bot: PID 23916, commit 9866f59. Eventos: `logs/pipeline_eventos.jsonl`.
 - `procesar_lote_wpp.ejecutar(..., escribir_xlsx_local=False)`: no abre ni guarda `Copias_Gestion/*_FACTURAS_COPIA.xlsx`; deja aprendizaje + `Carpeta Revision/log_camino_rapido.csv` y escribe directo en Sheets.
 - En PRUEBA `--push-drive` es el defecto; `AgenteRecalculoCascada` solo con `--con-cascada`.
 - Carpeta raíz ordenada: `Reportes_Generados/`, `Archivo_Mantenimiento/`, `Documentacion/` (los scripts apuntan a las nuevas rutas).
+
+## Fase final (15/10/2026)
+- Push a Sheets en paralelo por local (`ThreadPoolExecutor`, cliente gspread por hilo): 5 locales 51,4 s → 12,2 s (cada push individual sigue ~7–12 s por latencia de API).
+- Multi-grupo Telegram: `grupos_telegram.py`, comando `/vincular_local <Local>` (solo si quien lo manda es miembro del grupo general), regla «grupo Telegram del local» y `ALERTA_GRUPO` si el sello contradice al grupo.
+- Sellos gastados: `conocimiento/patrones_sellos.json` (semilla + variantes aprendidas solo con local validado).
+- `telemetria_roi.py` → `estado/telemetria_roi.json`; `mishi.py estado|lote|pendientes|asignar|roi`.

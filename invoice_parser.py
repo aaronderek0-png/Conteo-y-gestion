@@ -706,6 +706,98 @@ def _plano(t: str | None) -> str:
     return re.sub(r"\s+", " ", unicodedata.normalize("NFKD", t or "").encode("ascii", "ignore").decode().lower()).strip()
 
 
+# --------------------------------------------------------------------------- #
+# Especialista en sellos y firmas: variantes sucias/parciales por local (conocimiento/patrones_sellos.json)
+# --------------------------------------------------------------------------- #
+PATRONES_SELLOS = BASE_DIR / "conocimiento" / "patrones_sellos.json"
+_SEMILLA_SELLOS = {
+    "Congreso": ["CERV RECIBIDO", "CERVINO RECIBIDO", "MISHIGUENE CERV", "MISHIGUENE CERVINO", "CERVINO 4417"],
+    "Chimidoha": ["NUNEZ", "CAFE MISHIGUENE NU", "CAFE MISHIGUENE NUNEZ RECIBIDO", "NUNEZ RECIBIDO"],
+    "Cabello": ["MISHIGUENE CAB", "CAFE MISHIGUENE CABELLO", "CABELLO RECIBIDO", "CAB RECIBIDO"],
+    "Arcos": ["MISHIGUENE ARCOS", "ARCOS RECIBIDO", "CAFE MISHIGUENE ARCOS"],
+    "Lafinur": ["LAFI RECIBIDO", "MISHIGUENE LAFINUR", "LAFINUR RECIBIDO"],
+}
+
+
+def cargar_patrones_sellos() -> dict:
+    """{local: {"variantes": [{"texto","n","fuentes"}], "firmas": [{"texto","n"}]}}; se siembra con las variantes
+    conocidas y crece con `aprender_variante_sello` (solo con local validado: sello legible, /asignar o grupo)."""
+    try:
+        d = json.loads(PATRONES_SELLOS.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        d = {}
+    for loc, vs in _SEMILLA_SELLOS.items():
+        e = d.setdefault(loc, {"variantes": [], "firmas": []})
+        ya = {v["texto"] for v in e["variantes"]}
+        e["variantes"] += [{"texto": v, "n": 0, "fuentes": ["semilla"]} for v in vs if v not in ya]
+    return d
+
+
+def local_por_patron_sello(texto: str | None) -> tuple[str | None, str | None]:
+    """Local cuyo patrón de sello aparece (exacto o con tolerancia a OCR sucio) en el texto. Ambiguo → (None, None)."""
+    import difflib
+    t = _plano(texto)
+    if len(t) < 4:
+        return None, None
+    toks = t.split()
+    hallados: dict[str, str] = {}
+    for loc, e in cargar_patrones_sellos().items():
+        for v in e["variantes"]:
+            vv = _plano(v["texto"])
+            n = len(vv.split())
+            if re.search(r"(?<![a-z0-9])" + re.escape(vv) + r"(?![a-z0-9])", t) if len(vv) < 8 else vv in t:
+                hallados.setdefault(loc, v["texto"])
+                break
+            if len(vv) >= 8:
+                for i in range(0, max(len(toks) - n + 1, 1)):
+                    ventana = " ".join(toks[i:i + n])
+                    if difflib.SequenceMatcher(None, vv, ventana).ratio() >= 0.84:
+                        hallados.setdefault(loc, v["texto"])
+                        break
+            if loc in hallados:
+                break
+    if len(hallados) == 1:
+        loc, v = next(iter(hallados.items()))
+        return loc, v
+    return None, None
+
+
+def aprender_variante_sello(local: str, sello: str | None, firmas: list[str] | None = None, fuente: str = "") -> bool:
+    """Guarda el texto del sello leído (sucio/parcial) y las firmas bajo `local`. Solo llamar con local VALIDADO."""
+    if not local:
+        return False
+    txt = re.sub(r"\s+", " ", _plano(sello)).strip().upper()
+    d = cargar_patrones_sellos()
+    e = d.setdefault(local, {"variantes": [], "firmas": []})
+    cambio = False
+    if len(txt) >= 5:
+        v = next((x for x in e["variantes"] if x["texto"] == txt), None)
+        if v is None:
+            e["variantes"].append({"texto": txt, "n": 1, "fuentes": [fuente][:1]})
+            cambio = True
+        else:
+            v["n"] += 1
+            if fuente and fuente not in v["fuentes"] and len(v["fuentes"]) < 5:
+                v["fuentes"].append(fuente)
+            cambio = True
+    for f in firmas or []:
+        ft = re.sub(r"\s+", " ", str(f)).strip()
+        if len(ft) < 3:
+            continue
+        x = next((z for z in e["firmas"] if z["texto"].lower() == ft.lower()), None)
+        if x is None:
+            e["firmas"].append({"texto": ft, "n": 1})
+        else:
+            x["n"] += 1
+        cambio = True
+    if cambio:
+        PATRONES_SELLOS.parent.mkdir(exist_ok=True)
+        tmp = PATRONES_SELLOS.with_suffix(".tmp")
+        tmp.write_text(json.dumps(d, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+        tmp.replace(PATRONES_SELLOS)
+    return cambio
+
+
 def detectar_local(sello: str | None = None, direccion_entrega: str | None = None, razon_social: str | None = None,
                    manuscrito: str | None = None, texto_cliente: str | None = None) -> dict:
     """Local de destino de un comprobante según la geografía real de Mishiguene.
@@ -741,6 +833,10 @@ def detectar_local(sello: str | None = None, direccion_entrega: str | None = Non
         return None, None
 
     local, regla = por_texto(s, "sello")
+    if local is None and s:                                  # sello gastado/parcial: patrones aprendidos por local
+        pl, variante = local_por_patron_sello(s)
+        if pl:
+            local, regla = pl, f"sello (patrón aprendido «{variante}»): {pl}"
     if local is None and m and not re.search(r"\bdev", m):     # 'DEVO ... ARCOS' es una devolución, no un destino
         local, regla = por_texto(m, "anotación manuscrita")
     if local is None and d:

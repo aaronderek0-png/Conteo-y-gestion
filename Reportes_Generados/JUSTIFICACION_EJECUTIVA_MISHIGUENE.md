@@ -1,6 +1,6 @@
-# Justificación ejecutiva — Agente Mishiguene (14/10/2026 22:17)
+# Justificación ejecutiva — Agente Mishiguene (15/10/2026 01:52)
 
-Cifras **medidas en esta máquina** el día del informe; lo no medido se indica. Costo de operación: **$0** (Python local; la lectura de fotos usa caché SHA/dHash, texto de PDF, VLM local, `claude -p` si existe y Tesseract como respaldo).
+Cifras **medidas en esta máquina** el día del informe; lo no medido se indica. Costo de operación: **$0** (Python local; la lectura de fotos usa caché SHA/dHash, texto de PDF, Gemini 3.8 Flash por API (nivel gratuito) y Tesseract como respaldo).
 
 ## 1. Arquitectura 100 % local
 Telegram/WhatsApp → **AgenteReceptor** (long polling 25 s, descarga paralela, SHA-256, cola persistente) → **AgenteProcesador** (único escritor; caché → aprendizaje → OCR/VLM; lote ≤ 20) → **escritura en bloque** a Google Sheets (una `values_batch_update` por planilla y lote, backoff ante 429/5xx) → **AgenteRecalculoCascada** (BOM, comparador, scouting).
@@ -11,8 +11,8 @@ Controles: `entornos.py` (PRUEBA/PRODUCCIÓN por ID), duplicados por N° + prove
 - **Gasto sin referencia comparable:** 206 productos = $38,773,446 de $47,656,232 (81.4 %). 32 son nuevos vs septiembre. Es el principal frente de scouting.
 - **BOM (export local de Recetas):** 1.833 recetas auditadas; 142 con diferencia vs la hoja: 93 diferencia sin patrón, 25 INCOMPLETA, 24 hoja = motor. Ningún costo dudoso se publicó.
 - **Precisión de imputación histórica:** la prueba de regresión reproduce 44 de 46 cargas históricas al peso (95,7 %); origen: `CLAUDE.md` (retro-entrenamiento), no re-medido hoy.
-- **Lecturas guardadas:** 48 entradas en `cache_facturas.json` (cada foto/PDF ya leído no se vuelve a leer).
-- **Cola actual:** {'REVISAR': 3}.
+- **Lecturas guardadas:** 55 entradas en `cache_facturas.json` (cada foto/PDF ya leído no se vuelve a leer).
+- **Cola actual:** {'REVISAR': 4}.
 
 ## 3. Cronometraje real de cada script (subproceso aislado, tracemalloc)
 | Script | Modo | Resultado | Tiempo (s) | Pico mem. (MB) | Nota |
@@ -73,8 +73,22 @@ Controles: `entornos.py` (PRUEBA/PRODUCCIÓN por ID), duplicados por N° + prove
 
 **11 de 11 escenarios en verde.** Suite `tests/`: Ran 31 tests in 0.558s  OK
 
-## 5. Horas humanas ahorradas
-**No medido.** No hay registro de cuánto tardaba la carga manual por comprobante. El sistema mide su propio tiempo (ver §3); para calcular horas ahorradas hace falta fijar un supuesto de minutos manuales por comprobante y multiplicar por los comprobantes mensuales.
+## 5. Telemetría de ROI: horas humanas liberadas
+**Modelo (supuesto auditable, no medición):** 45 s base + 25 s/renglón + 60 s si remito con birome o NC. Lo MEDIDO es lo que el agente procesó y su propio tiempo; los minutos humanos son el modelo aplicado a esas cantidades.
+
+- Comprobantes registrados: **56** (164 renglones; 2 con tiempo de máquina medido en 1 lotes).
+- Tiempo de máquina: 6.1 s en total, **3.07 s por comprobante** (promedio medido).
+- Tiempo humano estimado ahorrado hasta hoy: **2.06 h** (2.2 min por comprobante en promedio).
+- Monto de remitos a verificar con el proveedor (renglones anulados con NO + diferencias de balanza): **$57,600** — NO es dinero recuperado todavía.
+- Errores humanos evitados: 312,339 celdas con `#REF!`/derrame reescritas en las 5 copias PRUEBA, 0 fechas futuras bloqueadas, 0 duplicados frenados, 0 desvíos de precio > ±25 % alertados.
+
+**Proyección** (promedio de 2.2 min humanos por comprobante; hora humana supuesta $6,000 — confirmar valor real):
+
+| Comprobantes/mes | Horas humanas liberadas/mes | Horas liberadas/año | Ahorro $/mes | Ahorro $/año |
+|---:|---:|---:|---:|---:|
+| 1,000 | 36.7 | 440.5 | $220,232 | $2,642,786 |
+| 3,000 | 110.1 | 1,321.4 | $660,696 | $7,928,357 |
+| 10,000 | 367.1 | 4,404.6 | $2,202,321 | $26,427,857 |
 
 ## 6. Qué falta (honesto)
 - Copias de prueba en Drive (la cuota de la Service Account es 0; requiere que el dueño las cree: `GAS/crear_trials`).

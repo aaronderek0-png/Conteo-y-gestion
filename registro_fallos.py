@@ -50,6 +50,11 @@ def detalle_excepcion(e: BaseException) -> dict:
     return d
 
 
+import threading as _th
+
+_LOCK_EVENTOS = _th.Lock()
+
+
 def evento(trabajo: str, etapa: str, resultado: str, *, intento: int = 1, error: BaseException | None = None,
            **extra) -> dict:
     reg = {"ts": datetime.now().isoformat(timespec="seconds"), "trabajo": str(trabajo)[:16], "etapa": etapa,

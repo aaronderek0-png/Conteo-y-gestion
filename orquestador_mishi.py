@@ -107,6 +107,29 @@ class AgenteReceptor(Agente):
         except Exception as e:                                # noqa: BLE001
             return {**t, "error": e}
 
+    def _vincular(self, msg: dict, chat: str, texto: str) -> None:
+        """/vincular_local <Local>: ese grupo pasa a ser el grupo del local. Solo lo acepta si quien lo manda es miembro
+        del grupo general (TELEGRAM_CHAT_ID): cualquiera que agregue el bot a otro grupo no puede darse de alta solo."""
+        import grupos_telegram
+        partes = texto.split()
+        local = grupos_telegram.normalizar_local(partes[1]) if len(partes) > 1 else None
+        if not local:
+            self.api.responder(chat, "Uso: /vincular_local <Arcos|Congreso|Lafinur|Cabello|Chimidoha>", msg["message_id"])
+            return
+        uid = (msg.get("from") or {}).get("id")
+        try:
+            ok = bool(self.chat) and (str(chat) == str(self.chat) or self.api._call(
+                "getChatMember", chat_id=self.chat, user_id=uid).get("status") in ("creator", "administrator", "member"))
+        except Exception:                                    # noqa: BLE001
+            ok = False
+        if not ok:
+            self.api.responder(chat, "No puedo vincular este grupo: quien lo pide no es miembro del grupo general de "
+                                     "Facturas Mishiguene.", msg["message_id"])
+            return
+        grupos_telegram.vincular(chat, local)
+        self.api.responder(chat, f"✅ Este grupo quedó vinculado al local {local}: los comprobantes sin sello legible "
+                                 f"se imputan en {local} y si el sello dice otro local te aviso acá.", msg["message_id"])
+
     def ciclo(self) -> None:
         ti = self.ti
         with ESTADO_LOCK:
@@ -124,7 +147,12 @@ class AgenteReceptor(Agente):
             if not msg:
                 continue
             chat = str(msg["chat"]["id"])
-            if self.chat and chat != str(self.chat):
+            texto0 = (msg.get("text") or "").strip()
+            if texto0.lower().split("@")[0].split(" ")[0] == "/vincular_local":
+                self._vincular(msg, chat, texto0)
+                continue
+            import grupos_telegram
+            if self.chat and chat != str(self.chat) and chat not in grupos_telegram.chats_locales():
                 continue
             with ESTADO_LOCK:
                 e2 = ti.cargar_estado()
@@ -305,6 +333,10 @@ class AgenteProcesador(Agente):
                       + (" · DEMO" if demo else "")]
             for f, d in rev[:10]:
                 lineas.append(f"  ⚠ {d.get('archivo') or ''} → {d.get('estado_pipeline', '')}")
+            for a in rep.get("auditoria") or []:               # sello contradice al grupo del local: alerta inmediata
+                for al in a.get("alertas") or []:
+                    if str(al).startswith("ALERTA_GRUPO") and str(a.get("archivo", "")).startswith(chat + "_"):
+                        lineas.append(f"  🚨 {a.get('archivo')}: {al}")
             for rr in rep.get("remitos_obrador") or []:
                 lineas.append(f"  🚚 Remito Obrador {rr['remito']} → {rr['receptor']}: {len(rr['renglones'])} renglones, ${rr['total']:,.2f}")
             for r in pushes.values():
@@ -476,6 +508,37 @@ def otros_consumidores() -> list[int]:
     return [int(x) for x in r.stdout.split() if x.strip().isdigit()]
 
 
+def _ram() -> dict:
+    """Memoria del proceso y qué catálogos hay cargados en RAM (singleton de imputacion_facturas)."""
+    out: dict = {}
+    try:
+        import ctypes
+        from ctypes import wintypes
+
+        class PMC(ctypes.Structure):
+            _fields_ = [("cb", wintypes.DWORD), ("PageFaultCount", wintypes.DWORD), ("PeakWorkingSetSize", ctypes.c_size_t),
+                        ("WorkingSetSize", ctypes.c_size_t), ("a", ctypes.c_size_t), ("b", ctypes.c_size_t),
+                        ("c", ctypes.c_size_t), ("d", ctypes.c_size_t), ("PagefileUsage", ctypes.c_size_t),
+                        ("PeakPagefileUsage", ctypes.c_size_t)]
+        pmc = PMC()
+        pmc.cb = ctypes.sizeof(PMC)
+        k32, ps = ctypes.WinDLL("kernel32"), ctypes.WinDLL("psapi")
+        k32.GetCurrentProcess.restype = wintypes.HANDLE
+        ps.GetProcessMemoryInfo.argtypes = [wintypes.HANDLE, ctypes.POINTER(PMC), wintypes.DWORD]
+        ps.GetProcessMemoryInfo.restype = wintypes.BOOL
+        if ps.GetProcessMemoryInfo(k32.GetCurrentProcess(), ctypes.byref(pmc), pmc.cb):
+            out["rss_mb"] = round(pmc.WorkingSetSize / 1048576)
+    except Exception:                                          # noqa: BLE001
+        pass
+    try:
+        import imputacion_facturas as imp
+        out["locales_en_ram"] = {n: {"catalogo": len(l.catalogo), "facturas": len(l.facturas_precios)}
+                                 for n, l in imp._LOCALES_CACHE.items()}
+    except Exception:                                          # noqa: BLE001
+        pass
+    return out
+
+
 def latido(agentes: list[Agente], t0: float) -> None:
     ESTADO.mkdir(exist_ok=True)
     try:
@@ -492,7 +555,7 @@ def latido(agentes: list[Agente], t0: float) -> None:
              "uptime_s": round(time.time() - t0), "ahora": time.strftime("%Y-%m-%d %H:%M:%S"),
              "cola": cola, "lectura": stats, "batch_max": BATCH_MAX,
              "agentes": {a.nombre: {**_m(a.nombre), "vivo": a.is_alive()} for a in agentes},
-             "entorno": _entorno()}
+             "entorno": _entorno(), "ram": _ram()}
     tmp = LATIDO.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
     for n in range(8):

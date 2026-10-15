@@ -36,6 +36,7 @@ BASE_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(BASE_DIR))
 sys.path.insert(0, str(BASE_DIR / "Precios"))
 
+import grupos_telegram                       # noqa: E402
 import imputacion_facturas as imp          # noqa: E402
 import invoice_parser as ip                 # noqa: E402
 
@@ -213,6 +214,15 @@ def analizar(comp: dict, locales: dict, ap: dict) -> dict:
         regla = {"local": asig, "regla": "asignación manual por Telegram (/asignar)", "alertas": regla.get("alertas", [])}
     local, por = regla["local"], regla["regla"]
     alertas = list(regla["alertas"])
+    # grupo de Telegram del local = contexto validado (cuando el sello no alcanza); si el sello contradice al grupo, alerta
+    gl = grupos_telegram.local_de_archivo(comp.get("archivo"))
+    comp["grupo_local"] = gl
+    if gl and local is None:
+        local, por = gl, "grupo Telegram del local"
+        alertas = [a for a in alertas if not a.startswith("local INDETERMINADO")]
+    elif gl and local and local != gl and not asig:
+        alertas.append(f"ALERTA_GRUPO: el sello/anotación indica {local} pero el comprobante entró por el grupo de {gl}; "
+                       f"se respeta el sello ({por})")
     if local is None and m0:
         local, por = m0["local"], f"historial: ya cargada en la planilla de {m0['local']} (el comprobante no trae sello)"
         alertas = [a for a in alertas if not a.startswith("local INDETERMINADO")]
@@ -230,6 +240,13 @@ def analizar(comp: dict, locales: dict, ap: dict) -> dict:
         alertas.append("MULTILOCAL (100 % en Congreso, etiqueta MULTILOCAL): " + extra["multilocal"])
     if comp.get("sello") is None and comp.get("tipo") in ("Factura", "NC") and not (comp.get("motor") or "").startswith("pdf"):
         alertas.append("sin sello de recepción")
+    # aprendizaje de sellos: el local quedó validado por /asignar, grupo o historial → se guarda la variante sucia leída
+    if local and comp.get("sello") and (asig or por == "grupo Telegram del local" or (m0 and m0["local"] == local)):
+        try:
+            if ip.local_por_patron_sello(comp.get("sello"))[0] != local:
+                ip.aprender_variante_sello(local, comp.get("sello"), comp.get("firmas"), fuente=por[:40])
+        except Exception:                                    # noqa: BLE001
+            pass
     return {"regla": regla, "matches": matches, "m0": m0, "local": local, "por": por, "alertas": alertas}
 
 
@@ -361,6 +378,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     Google Sheets; no abre ni guarda los Copias_Gestion/*_FACTURAS_COPIA.xlsx de ~6 MB). None = False cuando hay
     push_drive y True en el resto (CLI clásico)."""
     global _ULTIMO_DHASH
+    t_ini = time.time()
     if escribir_xlsx_local is None:
         escribir_xlsx_local = not bool(getattr(args, "push_drive", False))
     rapido = not escribir_xlsx_local
@@ -372,6 +390,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     except Exception as e:
         LOG.debug("indexar_dhash: %s", e)
     cl = clasificar_carpeta(carpeta, escribir_cache=escribir)
+    t_leido = time.time()
     informes_idx, bench = None, None
     if escribir and indexar_informes:
         import datos_operativos
@@ -583,19 +602,10 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
         else:
             escribir_carpeta_revision(revision_filas, analisis, cl)
     pushes = {}
+    tiempos_push: dict = {}
     if args.push_drive and not getattr(args, "dry_run", False):
         import registro_fallos as rf
-        for nombre, filas in plan_por_local.items():
-            try:
-                pushes[nombre] = rf.con_reintentos(          # 429/5xx: backoff; push_drive no duplica (N° + proveedor)
-                    lambda n=nombre, f=filas: imp.push_drive(n, f, confirmado=args.confirmo_escribir_produccion, demo=demo),
-                    trabajo=f"push:{nombre}", etapa="push_facturas_lote", intentos=4, espera=6)
-                rf.evento(f"push:{nombre}", "push_facturas", "OK" if pushes[nombre].get("escrito") else "NO_ESCRITO",
-                          local=nombre, motivo=pushes[nombre].get("motivo", ""))
-            except Exception as e:                       # cada destino es independiente; se re-lanza al terminar
-                rf.evento(f"push:{nombre}", "push_facturas", "ERROR", error=e, local=nombre)
-                pushes[nombre] = {"escrito": False, "local": nombre, "motivo": "ERROR " + rf.detalle_excepcion(e)["tipo"],
-                                  "error": rf.detalle_excepcion(e)}
+        from concurrent.futures import ThreadPoolExecutor
         proveedores_por_local = {}
         # camino rápido: solo los remitos de este lote o cuyo estado cambió (conciliación); el resto ya está en la hoja
         ids_lote = {id(r) for r in remitos_lote}
@@ -604,15 +614,42 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
                 continue
             if reg.get("local") in locales:
                 proveedores_por_local.setdefault(reg["local"], []).append(reg)
-        for local_r, regs in proveedores_por_local.items():
-            pushes[f"Remitos proveedores {local_r}"] = imp.push_remitos_proveedor_drive(
-                local_r, regs, confirmado=args.confirmo_escribir_produccion)
-        for receptor, regs in remitos_obrador_por_local.items():
-            pushes[f"Remitos {receptor}"] = imp.push_remitos_drive(
-                receptor, regs, confirmado=args.confirmo_escribir_produccion)
-        pend = []
-        if pend and not demo:
-            pushes["Remitos"] = imp.push_remitos_drive("Congreso", pend, confirmado=args.confirmo_escribir_produccion)
+
+        def _push_local(nombre: str) -> dict:
+            """Todo lo de UNA planilla (Facturas → remitos de proveedor → remitos del Obrador), en orden: cada local es
+            otro Spreadsheet y corre en su propio hilo con su propio cliente gspread."""
+            out: dict = {}
+            if nombre in plan_por_local:
+                filas = plan_por_local[nombre]
+                try:
+                    out[nombre] = rf.con_reintentos(          # 429/5xx: backoff; push_drive no duplica (N° + proveedor)
+                        lambda n=nombre, f=filas: imp.push_drive(n, f, confirmado=args.confirmo_escribir_produccion, demo=demo),
+                        trabajo=f"push:{nombre}", etapa="push_facturas_lote", intentos=4, espera=6)
+                    rf.evento(f"push:{nombre}", "push_facturas", "OK" if out[nombre].get("escrito") else "NO_ESCRITO",
+                              local=nombre, motivo=out[nombre].get("motivo", ""))
+                except Exception as e:                       # cada destino es independiente
+                    rf.evento(f"push:{nombre}", "push_facturas", "ERROR", error=e, local=nombre)
+                    out[nombre] = {"escrito": False, "local": nombre, "motivo": "ERROR " + rf.detalle_excepcion(e)["tipo"],
+                                   "error": rf.detalle_excepcion(e)}
+            if nombre in proveedores_por_local:
+                out[f"Remitos proveedores {nombre}"] = imp.push_remitos_proveedor_drive(
+                    nombre, proveedores_por_local[nombre], confirmado=args.confirmo_escribir_produccion)
+            if nombre in remitos_obrador_por_local:
+                out[f"Remitos {nombre}"] = imp.push_remitos_drive(
+                    nombre, remitos_obrador_por_local[nombre], confirmado=args.confirmo_escribir_produccion)
+            return out
+
+        destinos = sorted(set(plan_por_local) | set(proveedores_por_local) | set(remitos_obrador_por_local))
+        t_push = time.time()
+        if len(destinos) > 1 and not __import__("os").environ.get("MISHI_PUSH_SECUENCIAL"):
+            with ThreadPoolExecutor(max_workers=min(5, len(destinos)), thread_name_prefix="push") as ex:
+                for parcial in ex.map(_push_local, destinos):      # re-lanza la primera excepción al terminar
+                    pushes.update(parcial)
+        else:
+            for n_ in destinos:
+                pushes.update(_push_local(n_))
+        tiempos_push = {"push_seg": round(time.time() - t_push, 2), "hilos": min(5, max(len(destinos), 1)),
+                        "locales": destinos}
 
     # ---- reporte --------------------------------------------------------------
     filas_aud = []
@@ -644,13 +681,23 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
     cl["_plan_por_local"] = plan_por_local                  # filas completas (para recuperar_lote.py)
     reporte = {"generado": datetime.now().isoformat(timespec="seconds"), "auditoria": filas_aud,
                "remitos_obrador": [r for rs in remitos_obrador_por_local.values() for r in rs],
-               "escrituras": escrituras, "push_drive": pushes, "remitos": remitos_lote,
+               "escrituras": escrituras, "push_drive": pushes, "tiempos_push": tiempos_push, "remitos": remitos_lote,
                "informes": informes_idx, "benchmark_items": len(bench["items"]) if bench else 0,
                "planes": {n: [{k: f.get(k) for k in ("A", "B", "D", "presentacion", "G", "H", "I", "accion", "motivos",
                                                     "avisos", "descripcion_original", "confianza", "metodo", "sku")}
                               for f in fs] for n, fs in plan_por_local.items()},
                "simulaciones": simulaciones,
                "modos_proveedor": ap.get("modos_proveedor"), "marcas": {n: m for n, m in marcas_por_local.items()}}
+    if escribir and not demo:                               # telemetría de ROI: nunca debe romper el lote
+        try:
+            import telemetria_roi
+            ahora = time.time()
+            telemetria_roi.registrar_lote(
+                cl["comprobantes"], analisis, reporte, ahora - t_ini,
+                {"leer": t_leido - t_ini, "rutear_imputar": max(ahora - t_leido - tiempos_push.get("push_seg", 0), 0),
+                 "escribir_sheets": tiempos_push.get("push_seg", 0)})
+        except Exception as e_:                              # noqa: BLE001
+            LOG.debug("telemetría: %s", e_)
     return reporte, locales, ap, cl
 
 

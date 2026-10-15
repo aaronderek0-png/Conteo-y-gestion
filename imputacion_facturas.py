@@ -1331,15 +1331,16 @@ def _col_letra(i: int) -> str:
     return s
 
 
-_GC_CACHE: tuple | None = None
+_GC_LOCAL = _threading.local()
 
 
 def _gspread():
-    """Cliente autorizado reutilizado en el proceso (el token se renueva solo): no se re-autentica en cada push."""
-    global _GC_CACHE
-    if _GC_CACHE is None:
-        _GC_CACHE = _gspread_nuevo()
-    return _GC_CACHE
+    """Cliente autorizado por HILO (requests.Session no es thread-safe): cada hilo de push crea el suyo una sola vez y
+    lo reutiliza; el token se renueva solo."""
+    c = getattr(_GC_LOCAL, "gc", None)
+    if c is None:
+        c = _GC_LOCAL.gc = _gspread_nuevo()
+    return c
 
 
 def _gspread_nuevo():

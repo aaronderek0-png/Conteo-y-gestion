@@ -26,6 +26,9 @@ cache = jl(B / "cache_facturas.json", {})
 cola = jl(B / "estado" / "trabajos.json", {"trabajos": {}})["trabajos"]
 lat = jl(B / "estado" / "orquestador_estado.json", {})
 arbol = jl(B / "conocimiento" / "arbol_sistema.json", {"scripts": [], "gas": {}})
+import telemetria_roi as _roi
+_roi.sembrar_historico()
+roi = _roi.resumen()
 
 # ---- ahorro / sin referencia / BOM -------------------------------------------------------
 res = pd.read_excel(B / "Reportes_Ahorro" / "Reporte_Ahorro_Resumen.xlsx", sheet_name="Resumen Cadena Octubre")
@@ -53,7 +56,7 @@ n_cache = len(cache)
 # ---- Markdown ----------------------------------------------------------------------------
 md = [f"# Justificación ejecutiva — Agente Mishiguene ({hoy})", "",
       "Cifras **medidas en esta máquina** el día del informe; lo no medido se indica. Costo de operación: **$0** (Python local; "
-      "la lectura de fotos usa caché SHA/dHash, texto de PDF, VLM local, `claude -p` si existe y Tesseract como respaldo).", "",
+      "la lectura de fotos usa caché SHA/dHash, texto de PDF, Gemini 3.8 Flash por API (nivel gratuito) y Tesseract como respaldo).", "",
       "## 1. Arquitectura 100 % local",
       "Telegram/WhatsApp → **AgenteReceptor** (long polling 25 s, descarga paralela, SHA-256, cola persistente) → "
       "**AgenteProcesador** (único escritor; caché → aprendizaje → OCR/VLM; lote ≤ 20) → **escritura en bloque** a Google Sheets "
@@ -85,10 +88,24 @@ md += ["", f"**{ok_s} de {len(bm['scripts'])} scripts** compilan y ejecutan en s
 for e in esc:
     md.append(f"| {e['escenario']} | {'OK' if e['ok'] else 'FALLA'} | {e['ms']} | {str(e['detalle'])[:90].replace('|', '/')} |")
 md += ["", f"**{ok_e} de {len(esc)} escenarios en verde.** Suite `tests/`: {' '.join(bm.get('tests', {}).get('resumen', []))}", "",
-       "## 5. Horas humanas ahorradas",
-       "**No medido.** No hay registro de cuánto tardaba la carga manual por comprobante. El sistema mide su propio tiempo "
-       "(ver §3); para calcular horas ahorradas hace falta fijar un supuesto de minutos manuales por comprobante y multiplicar por "
-       "los comprobantes mensuales.", "",
+       "## 5. Telemetría de ROI: horas humanas liberadas",
+       f"**Modelo (supuesto auditable, no medición):** {roi['modelo']}. Lo MEDIDO es lo que el agente procesó y su propio tiempo; "
+       "los minutos humanos son el modelo aplicado a esas cantidades.", "",
+       f"- Comprobantes registrados: **{roi['comprobantes_procesados']}** ({roi['renglones_totales']} renglones; "
+       f"{roi['comprobantes_medidos']} con tiempo de máquina medido en {roi['lotes']} lotes).",
+       f"- Tiempo de máquina: {roi['seg_maquina_total']} s en total, **{roi['seg_maquina_promedio']} s por comprobante** (promedio medido).",
+       f"- Tiempo humano estimado ahorrado hasta hoy: **{roi['horas_humanas_estimadas_ahorradas']} h** "
+       f"({roi['min_humanos_por_comprobante_modelo']} min por comprobante en promedio).",
+       f"- Monto de remitos a verificar con el proveedor (renglones anulados con NO + diferencias de balanza): "
+       f"**${roi['dinero_a_verificar_remitos']:,.0f}** — NO es dinero recuperado todavía.",
+       f"- Errores humanos evitados: {roi['errores_humanos_evitados']['celdas_ref_reparadas']:,} celdas con `#REF!`/derrame reescritas en las 5 copias PRUEBA, "
+       f"{roi['errores_humanos_evitados']['fechas_futuras_bloqueadas']} fechas futuras bloqueadas, "
+       f"{roi['errores_humanos_evitados']['duplicados_frenados']} duplicados frenados, "
+       f"{roi['errores_humanos_evitados']['desvios_precio_mayor_25pct']} desvíos de precio > ±25 % alertados.", "",
+       f"**Proyección** (promedio de {roi['min_humanos_por_comprobante_modelo']} min humanos por comprobante; "
+       f"hora humana supuesta ${roi['hora_humana_ars']:,.0f} — confirmar valor real):", "",
+       "| Comprobantes/mes | Horas humanas liberadas/mes | Horas liberadas/año | Ahorro $/mes | Ahorro $/año |", "|---:|---:|---:|---:|---:|"] +       [f"| {v['comprobantes_mes']:,} | {v['horas_humanas_liberadas_mes']:,} | {v['horas_humanas_liberadas_anio']:,} | "
+       f"${v['ahorro_ars_mes']:,} | ${v['ahorro_ars_anio']:,} |" for v in roi["proyeccion"].values()] + [""] + [
        "## 6. Qué falta (honesto)",
        "- Copias de prueba en Drive (la cuota de la Service Account es 0; requiere que el dueño las cree: `GAS/crear_trials`).",
        "- Remito 3727 en Cabello/Remitos: pestaña protegida y llena (respaldo en `Remitos_Pendientes`, estado BLOQUEADO_PERMISOS).",
@@ -145,7 +162,13 @@ border-radius:8px;padding:8px 12px}} .flow i{{color:var(--ac);font-style:normal}
 <h2>Cronometraje por script</h2><div class=wrap>{tabla(filas_sc, ['Script', 'Modo', 'Resultado', 'Segundos', 'Pico MB'])}</div>
 <h2>Escenarios representativos</h2><div class=wrap>{tabla([(e['escenario'], 'OK' if e['ok'] else 'FALLA', e['ms'], str(e['detalle'])[:90]) for e in esc], ['Escenario', 'Resultado', 'ms', 'Detalle'])}</div>
 <h2>Mayor gasto sin referencia</h2><div class=wrap>{tabla([(r['SKU'], r['Producto'], r['Categoría'], r['Proveedor actual'], f"${r['Monto total']:,.0f}") for _, r in top_sr.iterrows()], ['SKU', 'Producto', 'Categoría', 'Proveedor', 'Monto'])}</div>
-<p style="color:var(--mut);margin-top:24px">Horas humanas ahorradas: <b>no medido</b> (no hay línea base de carga manual). El ahorro del comparador es una estimación sobre listas, no realizado.</p>
+<h2>Telemetría de ROI — tiempo humano liberado</h2>
+<div class=kpis><div class=kpi><b>{roi['horas_humanas_estimadas_ahorradas']} h</b><span>horas humanas estimadas ahorradas ({roi['comprobantes_procesados']} comprobantes, modelo: {html.escape(roi['modelo'])})</span></div>
+<div class=kpi><b>{roi['seg_maquina_promedio']} s</b><span>tiempo de máquina por comprobante (medido, {roi['comprobantes_medidos']} comprobantes)</span></div>
+<div class=kpi><b>${roi['dinero_a_verificar_remitos']:,.0f}</b><span>remitos: monto a verificar con proveedores (no es dinero recuperado)</span></div>
+<div class=kpi><b>{roi['errores_humanos_evitados']['duplicados_frenados']}</b><span>duplicados frenados · {roi['errores_humanos_evitados']['fechas_futuras_bloqueadas']} fechas futuras · {roi['errores_humanos_evitados']['desvios_precio_mayor_25pct']} desvíos &gt; ±25 %</span></div></div>
+<div class=wrap>{tabla([(f"{v['comprobantes_mes']:,}", f"{v['horas_humanas_liberadas_mes']:,}", f"{v['horas_humanas_liberadas_anio']:,}", f"${v['ahorro_ars_mes']:,}", f"${v['ahorro_ars_anio']:,}") for v in roi['proyeccion'].values()], ['Comprobantes/mes', 'Horas liberadas/mes', 'Horas liberadas/año', 'Ahorro $/mes', 'Ahorro $/año'])}</div>
+<p style="color:var(--mut);margin-top:12px">Proyección con {roi['min_humanos_por_comprobante_modelo']} min humanos por comprobante y hora humana supuesta ${roi['hora_humana_ars']:,.0f} (confirmar). Base: {roi['proyeccion_basada_en']}. El ahorro del comparador es una estimación sobre listas, no realizado.</p>
 </main></body></html>"""
 (B / "Reportes_Generados" / "Panel_Ejecutivo_Agente_Mishiguene.html").write_text(page, encoding="utf-8")
 print("ok", ok_s, len(bm["scripts"]), ok_e, len(esc))

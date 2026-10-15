@@ -333,7 +333,7 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
         if not msg:
             continue
         chat = msg["chat"]["id"]
-        if chat_permitido and str(chat) != str(chat_permitido):
+        if chat_permitido and str(chat) != str(chat_permitido) and str(chat) not in __import__("grupos_telegram").chats_locales():
             continue
         registrar_ids(est, chat, [msg["message_id"]])                # todo lo que entra al grupo
         texto_msg = (msg.get("text") or "").strip().lower()
