@@ -1,0 +1,904 @@
+REPORTE DE ÍTEMS HUÉRFANOS - mapeo fallido
+==============================================================================
+Ítems cuyo consumo no tiene ventas/recetas que lo expliquen. Para cada uno se indica en qué
+archivos de ventas se buscó el código o nombre y dónde NO apareció. Para corregirlo, pasame
+la equivalencia manual 'CÓDIGO -> SKU de receta / artículo vendido'.
+
+ARCHIVOS DE VENTAS REVISADOS (con filas de ventas por artículo)
+  - Ventas Obrador/Obrador/Ventas_Obrador_Octubre 2026 › Historial_Productos: 613 filas | local: - | mes: 6,7,8,9,10
+  - Pendientes||//||Anotaciones globales/Resumen Ventas › Ventas: 316 filas | local: - | mes: -
+  - Pendientes||//||Anotaciones globales/Resumen Ventas › FALTANTES_PARA_REVISAR: 5 filas | local: - | mes: -
+  - Pendientes||//||Anotaciones globales/Resumen Ventas › RENTABILIDAD_POR_PLATO: 316 filas | local: - | mes: -
+  - Pendientes||//||Anotaciones globales/Ventas ARCOS 09-26 › Rentabilidad: 297 filas | local: Arcos | mes: 9
+  - Pendientes||//||Anotaciones globales/Ventas ARCOS 09-26 › Comentarios: 19 filas | local: Arcos | mes: 9
+  - Ventas Obrador/Obrador/Ventas_Obrador_Septiembre 2026 › Traspasos: 36 filas | local: - | mes: 9
+  - Lafinur/Remitos/MENSUAL LAFI -31.XLSX › Hoja1: 9 filas | local: Lafinur | mes: 8
+COPIAS IDÉNTICAS (se consultan una sola vez)
+  - Pendientes||//||Anotaciones globales/Resumen Ventas › Ventas  ==  Pendientes||//||Anotaciones globales/Ventas ARCOS 09-26, Arcos_data/resumen_ventas.xlsx, Arcos_data/ventas_arcos.xlsx
+  - Pendientes||//||Anotaciones globales/Resumen Ventas › FALTANTES_PARA_REVISAR  ==  Arcos_data/resumen_ventas.xlsx
+  - Pendientes||//||Anotaciones globales/Resumen Ventas › RENTABILIDAD_POR_PLATO  ==  Arcos_data/resumen_ventas.xlsx
+  - Pendientes||//||Anotaciones globales/Ventas ARCOS 09-26 › Rentabilidad  ==  Arcos_data/ventas_arcos.xlsx
+  - Pendientes||//||Anotaciones globales/Ventas ARCOS 09-26 › Comentarios  ==  Arcos_data/ventas_arcos.xlsx
+  - Ventas Obrador/Obrador/Ventas_Obrador_Octubre 2026 › Historial_Productos  ==  Arcos_data/ventas_obrador_octubre.xlsx
+  - Ventas Obrador/Obrador/Ventas_Obrador_Septiembre 2026 › Traspasos  ==  Arcos_data/ventas_obrador_septiembre.xlsx
+ARCHIVOS SIN VENTAS POR ARTÍCULO (no aportan al cruce)
+  - Arcos/CONTEO ARCOS
+  - Arcos/Gestión mensual Arcos_septiembre2026_vf
+  - Lafinur/Gestion Mensual
+  - Arcos/Gestión mensual Arcos_septiembre2026
+  - Precios OBRADOR/Precio viejo//nuevo metodo.
+  - Lafinur/MENSUAL SEPTIEMBRE 2026 LAFINUR
+  - Cabello/Gestión Mensual Septiembre Cabello
+  - Tablero de control/Gastos Mishiguene_oct
+  - Congreso/Casi gestion
+  - Congreso/CONTEO OBRADOR
+  - Tablero de control/Ventas Mishiguene
+  - Cabello/INVENTARIO CAFE MISHIGUENE (CABELLO)
+  - Precios OBRADOR/PROFORMA/PROFORMA 7/10 chimi
+  - Precios OBRADOR/Precios Octubre 6/10 LAFINUR//CHIMIDOHA
+  - Congreso/Gestión Congreso Septiembre
+  - Congreso/Gestión Congreso Octubre
+  - Tablero de control/Gastos Mishiguene_sept
+  - Lafinur/Gestion semanal - mes
+  - Cabello/Próximamente/Gestion mensual cabello
+  - Cabello/Próximamente/Gestion semanal 
+  - Ventas Obrador/Obrador/Lista de precios OBRADOR/★ Lista de precios Obrador ★
+  - Ventas Obrador/Obrador/Lista de precios Obrador_16072026.xlsx
+  - Ventas Obrador/Obrador/Lista de precios Obrador_03042026 completo_vf.xlsx
+  - Arcos_data/casi_gestion.xlsx
+  - Arcos_data/conteo.xlsx
+  - Arcos_data/conteo_arcos_d.xlsx
+  - Arcos_data/conteo_obrador.xlsx
+
+##############################################################################
+## Congreso - 09/2026  (49 ítems)
+##############################################################################
+[AAO] Aceite alto oleico
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 20,00  | faltante $6.515
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Aceite alto oleico", 10,0 u., $32.113)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[ABA] Arroz basmati
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 6,00 KG | faltante $21.569
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[ALC] Alcaparras (Frasco X 650Grs)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 11,70  | faltante $441.000
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Alcaparras", 0,7 u., $23.000)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[ARROZPERSO] Arroz personal Don Marcos
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 10,00  | faltante $8.625
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[ArrozPerso] Arroz personal Don Marcos
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,68 KG | faltante $3.082
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[BCEBOLLA] Baguel cebolla
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 42,00 KG | faltante $82.800
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Bagel Ceboll", 164,0 u., $317.800)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Bagel Cebolla", 2,0 u., $7.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Bagel Cebolla", 2,0 u., $7.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Bagel Cebolla", 2,0 u., $7.000)
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Bagel Cebolla", 4,0 u., $7.600)
+    NO ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[FER] Ferfalaj
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 13,00 KG | faltante $85.800
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Farfalaj, UN. Farfalaj x 40", 4.071,0 u., $481.567)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[FIBUZON] Fideo tirabuzón
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,00 PAQUETE | faltante $5.144
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0092] Filet de Merluza
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 20,00 KG | faltante $170.000
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LV0150] Yogurth Batido TP
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,50  | faltante $21.269
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[MAN] Mostaza Antigua
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,75 KG | faltante $8.243
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Ad Mostaza Antigua", 12,0 u., $18.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Ad Mostaza Antigua", 12,0 u., $18.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Ad Mostaza Antigua", 12,0 u., $18.000)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[MDP] Menudos de pollo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 46,07  | faltante $58.369
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[MILAPP] Milanesa de pollo PERSONAL
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 8,40 KG | faltante $104.141
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[NPPC] Nuez cuartos (Nuez partida)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 16,82 KG | faltante $185.075
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PANK] Panko
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 17,00 KG | faltante $177.690
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PATAMUSLO] Pata y muslo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 262,34 KG | faltante $712.248
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PDPAVO] Pechuga de pavo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,00 KG | faltante $102.500
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PPVCORTE] Pastron
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 15,00 KG | faltante $329.929
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Pastro", 3,0 u., $2.449.503)
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Pastrón de pecho vacuno", 14,2 u., $461.337)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[PUDTO] Puré de tomate
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 7,00 UN | faltante $4.505
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[QCU] Queso cabra untar
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,02 KG | faltante $945
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Queso cabra untar", 5,0 u., $188.956)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[QFON] Queso fontina
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 7,28  | faltante $111.873
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Queso FONTIN", 13.855,0 u., $206.240)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[RBEEF] Roast beef
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,57 KG | faltante $34.887
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SING] Salsa inglesa
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,00 FRASCO | faltante $16.084
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. Salsa Ingles", 11,0 u., $58.973)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SUL] Sulfito
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,54 KG | faltante $5.390
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "gr. sulfit", 100,0 u., $1.008)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[TSE] Tomillo seco
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,38 KG | faltante $4.047
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[BAMAPOLA] Bagel Amapola
+    Origen : Venta sin receta/insumo - 13,00 unidades | venta $25.400
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Bagel Amapol", 153,0 u., $293.200)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Bagel Amapola", 4,0 u., $14.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Bagel Amapola", 4,0 u., $14.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Bagel Amapola", 4,0 u., $14.000)
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Bagel Amapola", 4,0 u., $7.600)
+    NO ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[BSESAMO] Baguel
+    Origen : Venta sin receta/insumo - 546,00 unidades | venta $624.360
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Bagel Sesam", 4.343,0 u., $4.865.615)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CAJAPIZZA] Caja de pizza 33 x33 x 50 un
+    Origen : Venta sin receta/insumo - 78,00 unidades | venta $17.415
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Caja pizz", 557,0 u., $113.307)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CARTUG] Caja de cartulina Grande
+    Origen : Venta sin receta/insumo - 15,00 unidades | venta $4.365
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. CAJA CARTUIL, UN. CAJA CARTULI", 251,0 u., $75.071)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CMISH] Caja Mishiguene
+    Origen : Venta sin receta/insumo - 90,00 unidades | venta $119.700
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0335] Caja sandwich - Chico
+    Origen : Venta sin receta/insumo - 500,00 unidades | venta $254.000
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. Caja sandwic", 1.600,0 u., $848.360)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0336] Caja sandiwch - Grande
+    Origen : Venta sin receta/insumo - 300,00 unidades | venta $180.600
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. Caja sandwic", 810,0 u., $499.660)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0337] Caja de postres
+    Origen : Venta sin receta/insumo - 50,00 unidades | venta $61.000
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. Caja Postr", 250,0 u., $329.400)
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Caja de postres", 25,0 u., $30.500)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[I0351] Caja Rectangular alta 28.5 x 14 x 10
+    Origen : Venta sin receta/insumo - 10,00 unidades | venta $14.350
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LAFFA] Laffa
+    Origen : Venta sin receta/insumo - 579,00 unidades | venta $311.950
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. masa lafa (120gr)", 4.497,0 u., $2.174.789)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PDM] PAN DE MIGA
+    Origen : Venta sin receta/insumo - 4,00 unidades | venta $33.056
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Pan de Mig", 36,0 u., $278.284)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PLETZ] PLETZALEJ
+    Origen : Venta sin receta/insumo - 474,00 unidades | venta $1.246.200
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Pletzalej Ob", 3.668,0 u., $8.801.341)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Pletzalej", 72,0 u., $285.600)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Pletzalej", 72,0 u., $285.600)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Pletzalej", 72,0 u., $285.600)
+    NO ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PNYP] Pan de nuez y pasas
+    Origen : Venta sin receta/insumo - 72,00 unidades | venta $347.400
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. Pan de Nuez", 748,0 u., $3.546.158)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Aceite de Oliva
+    Origen : Venta sin receta/insumo - 85,00 unidades | venta $1.213.085
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por nombre: "Aceite de Oliv", 625,0 u., $8.817.594)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: MENSUAL LAFI -31.XLSX › Hoja1 (por nombre: "Aceite de Oliva", 100,0 u., $1.414.100)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos
+[SIN SKU] Bagel Cebolla
+    Origen : Venta sin receta/insumo - 21,00 unidades | venta $41.500
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Bagel Cebolla", 2,0 u., $7.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Bagel Cebolla", 2,0 u., $7.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por nombre: "Bagel Cebolla", 4,0 u., $7.600)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] DIP Pote 60
+    Origen : Venta sin receta/insumo - 100,00 unidades | venta $1.800
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] DIP Tapa 60
+    Origen : Venta sin receta/insumo - 100,00 unidades | venta $3.500
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Farfalaj x 400 gr
+    Origen : Venta sin receta/insumo - 12,00 unidades | venta $84.000
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Pickles de Verdura
+    Origen : Venta sin receta/insumo - 1.500,00 unidades | venta $3.510
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Pulpa de Maracuya
+    Origen : Venta sin receta/insumo - 1.000,00 unidades | venta $8.800
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Zhough Rojo
+    Origen : Venta sin receta/insumo - 2.455,00 unidades | venta $29.656
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] alcaparra por 650 g
+    Origen : Venta sin receta/insumo - 11,00 unidades | venta $269.500
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] merguez salchicha
+    Origen : Venta sin receta/insumo - 1.106,00 unidades | venta $19.244
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] pasas de uva
+    Origen : Venta sin receta/insumo - 4.000,00 unidades | venta $16.400
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+
+##############################################################################
+## Arcos - 09/2026  (93 ítems)
+##############################################################################
+[ALCO] Alcaparron ( frasco la chacrita 650 grs )
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,00 FRASCO | faltante $67.500
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[ANCHOA] Anchoas exhibición (ACTUALMENTE NO SE COMPRAN)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,00 KG | faltante $105.000
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[ARROZPERSO] Arroz personal Don Marcos
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 6,00 KG | faltante $5.100
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[ATUNL] Atún en lata (personal)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,00 UND | faltante $19.828
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CASERECCE] FIDEOS CASARECCE
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,00 KG | faltante $14.454
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[DAT] Dátiles
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,00 KG | faltante $47.800
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "datiles x g", 1.000,0 u., $15.270)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[EDU] Edulcorante
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,32 KG | faltante $34.104
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[FER] FERFALAJ PESAJ (CAJA MORADA)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 11,00 UND | faltante $77.000
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Farfalaj, UN. Farfalaj x 40", 4.071,0 u., $481.567)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[FIBUZON] Fideos Tirabuzón (PERSONAL)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 8,00 KG | faltante $8.230
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[FSPA] Fideos Spaguetti (PERSONAL)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,00 KG | faltante $2.829
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[H000] HARINA 000
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,59 KG | faltante $3.810
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0007] Azúcar sobres
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,10 caja | faltante $24.378
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0033] Bondiola de cerdo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,21  | faltante $45.011
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0162] NODO CHARDONNAY
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,00 BOTELLA | faltante $36.570
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0187] Pimienta negra molida
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,62 KG | faltante $40.908
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0254] Té Africa
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,03 KG | faltante $3.598
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Te Africa", 3,0 u., $21.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Te Africa", 3,0 u., $21.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por nombre: "Te Africa", 3,0 u., $21.000)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0307] Costillas de cerdo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,40  | faltante $45.448
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0506] Cerveza michelob lata
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 28,00 UN | faltante $28
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0508] Cerveza stella porron
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,00 UN | faltante $4
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0509] Cerveza stella porron sin alcohol
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 47,00 UN | faltante $47
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0532] MATZA GALLETA X500GR(TODO LO QUE ESTA EN EL LOCAL)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,75 UND | faltante $6.375
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[I0533] MATZA HARINA X400GR (TODO LO QUE ESTE EN EL LOCAL)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,00 UND | faltante $17.000
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[JACOP] Jamón Cocido (Personal)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,95 KG | faltante $45.768
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LDES] Leche descremada
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 101,00 LTS | faltante $146.753
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. leche descre", 12,0 u., $16.836)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LENTE] Lentejas
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $1.850
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LV0111] Serie A Zuccardi  Malbec
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 12,00  | faltante $71.653
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LV0112] Serie A Zuccardi Bonarda
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 6,00  | faltante $35.826
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Zucardi Serie A Bonarda", 3,0 u., $81.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Zucardi Serie A Bonarda", 3,0 u., $81.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por nombre: "Zucardi Serie A Bonarda", 3,0 u., $81.000)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LV0143] Matambre
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,66  | faltante $46.040
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LV0147] vodka smirnoff
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00  | faltante $6.334
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LV0149] Paleta de cerdo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,56  | faltante $31.207
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[M246] ZHOUG ROJO
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,66 KG | faltante $19.992
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Zhough Roj", 11.819,0 u., $124.671)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[MAYOH] Mayonesa
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,00 KG | faltante $9.820
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[MILAPP] Milanesa de pollo PERSONAL
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 16,58  | faltante $205.498
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PDCAF] PAN DE CAMPO COMUN OBRADOR
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 6,00 UN | faltante $18.770
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Pan de Camp", 36,0 u., $112.759)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PONE] Porotos negros
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00  | faltante $562
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Porotos negros", 1,0 u., $562)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[PPITA] PAN PITA PAQUETE X4
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 26,00 UND | faltante $16.900
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Pita bols", 76,0 u., $54.080)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PUDTO] Puré de Tomate
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $644
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[QEPA] QEPA
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1.080,00  | faltante $13.576
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[QMU] Queso Mozzarella
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 11,87 KG | faltante $87.823
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Ques, GR. Queso muzzar", 35.077,0 u., $407.555)
+    ENCONTRADO EN: MENSUAL LAFI -31.XLSX › Hoja1 (por código: "GR. Queso muzzarella", 5.000,0 u., $37.000)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos
+[SDP] Suprema de pollo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,51  | faltante $18.858
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SUL] Sulfito
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,00 KG | faltante $16.652
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "gr. sulfit", 100,0 u., $1.008)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[TPPP] Tapa para pascualina (personal)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,00 PQT | faltante $4.869
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. Tapa pascual", 28,0 u., $33.388)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CARTUG] Caja de cartulina Grande
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 15,00 UN | faltante $5.230 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. CAJA CARTUIL, UN. CAJA CARTULI", 251,0 u., $75.071)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[M254] Shakshuka Verde
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 5.810,00 GR | faltante $21.952 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Shakshuka Ve", 40.742,0 u., $276.036)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Shakshuka verde", 43,0 u., $946.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Shakshuka verde", 43,0 u., $946.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Shakshuka verde", 43,0 u., $946.000)
+    NO ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[M54] GR. CREMA DE ALMENDRAS
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 1.125,00 GR | faltante $5.782 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. CREMA DE ALM", 16.525,0 u., $112.621)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR10] Pickles colifrol blanco
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 9.159,00 GR | faltante $27.668 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Gr. Pickles coli", 23.370,0 u., $54.897)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR13] Zhoug
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 990,00 GR | faltante $15.461 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Zhou", 2.411,0 u., $40.776)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Zhoug", 4,0 u., $18.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Zhoug", 4,0 u., $18.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Zhoug", 4,0 u., $18.000)
+    NO ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR141] Shnitzel de Pollo sand
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 69,00 UN | faltante $90.417 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Shnitzel de", 529,0 u., $673.384)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR155] MATBUJA
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 7.551,00 GR | faltante $36.172 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. MATBUJ", 16.680,0 u., $98.815)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR181] Pickles Coliflor Curcuma
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 9.465,00 GR | faltante $29.214 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Gr. Pickles Coli", 43.265,0 u., $104.873)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR183] cookie mishiguene
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 15,00 UN | faltante $19.740 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "un. cookie mishi", 205,0 u., $276.235)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Cookie Mishiguene", 16,0 u., $136.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Cookie Mishiguene", 16,0 u., $136.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Cookie Mishiguene", 16,0 u., $136.000)
+    NO ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR23] Shnitzel de Pollo plato
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 204,00 UN | faltante $534.639 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Shnitzel de", 1.223,0 u., $3.102.540)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR3024] Crema de Dulce de Leche
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 3.000,00 GR | faltante $24.615 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Crema de Dul", 13.410,0 u., $102.907)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR73] Mermelada de Frutilla
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 5.765,00 GR | faltante $45.070 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Mermelada d", 40.870,0 u., $289.830)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR79] Madre Gribenes
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 3.640,00 GR | faltante $8.500 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Madre Griben", 9.519,0 u., $21.637)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR81] Madre Jalapeño Encurtido
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 1.070,00 GR | faltante $12.694 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Madre Jalapeñ", 10.570,0 u., $148.544)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR82] Madre Harissa
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 4.812,00 GR | faltante $148.474 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Madre Hariss", 1.532,0 u., $26.454)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:alcaparra por 650 g] alcaparra por 650 g
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 7,00 UN | faltante $171.500 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:bolsa vacio 20*30 mediana] Bolsa vacio 20*30 MEDIANA
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 8,00 UN | faltante $1.232 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:chocolate fenix 87] chocolate fenix 87
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 160,00 GR | faltante $4.818 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:dip pote 60] DIP Pote 60
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 100,00 UN | faltante $1.800 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:dip tapa 60] DIP Tapa 60
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 100,00 UN | faltante $3.500 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:merguez salchicha] merguez salchicha
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 1.106,00 GR | faltante $19.244 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:ninos envueltos (6u)] Niños Envueltos (6u)
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 87,00 PORC | faltante $186.972 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Niños Envueltos (T)", 7,0 u., $166.149)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Niños Envueltos (T)", 7,0 u., $166.149)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Niños Envueltos (T)", 7,0 u., $166.149)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:pickles de verdura] Pickles de Verdura
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 1.500,00 GR | faltante $3.510 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[POGRANO] MADRE GRANOLA (1 GRS)
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 3.400,00 GR | faltante $38.912 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PORKACHA] RELLENO KACHAPURI (GR)
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 5.040,00 GR | faltante $50.984 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[POYOG] YOGURT GRS (1 GRAMO)
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 9.180,00 GR | faltante $14.953 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:M24] OBR?:M24
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:M267] OBR?:M267
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:MO2015] OBR?:MO2015
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR107] PAN DE QUESO
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR138] OBR?:OBR138
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR17] PICKLES REMOLACHAS 
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR22] GEHAKTE LEBER
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR24] NIÑOS ENVUELTOS
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Niños envueltos", 60,0 u., $1.200.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Niños envueltos", 60,0 u., $1.200.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Niños envueltos", 60,0 u., $1.200.000)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR3017] PICKLES ZANAHORIAS 
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR43] OBR?:OBR43
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR50] OBR?:OBR50
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR68] Baharat
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR69] ACEITE DE JALAPEÑO
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR83] POLVO ALMENDRAS CARAMELIZADAS
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR84] MADRE RAS AL HANOUT
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR85] MADRE SMALCHTZ
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[OBR?:OBR92] MADRE EMULSION DE LIMON
+    Origen : Obrador - sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[D10] Dely Box
+    Origen : Venta sin receta/insumo - 7,00 unidades | venta $301.000
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Dely Box", 7,0 u., $301.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Dely Box", 7,0 u., $301.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Dely Box", 7,0 u., $301.000)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[P40B] Yogurt
+    Origen : Venta sin receta/insumo - 21,00 unidades | venta $241.500
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Yogurt", 21,0 u., $241.500)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Yogurt", 21,0 u., $241.500)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por código: "Yogurt", 21,0 u., $241.500)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Art. Inexistente
+    Origen : Venta sin receta/insumo - 1,00 unidades | venta $1
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por nombre: "Art. Inexistent", 18.341,3 u., $629.994)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Art. Inexistente", 1,0 u., $1)
+    ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR (por nombre: "Art. Inexistente", 1,0 u., $0)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] BOX MUNDIAL
+    Origen : Venta sin receta/insumo - 2,00 unidades | venta $374.500
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "BOX MUNDIAL", 2,0 u., $374.500)
+    ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR (por nombre: "BOX MUNDIAL", 2,0 u., $0)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] MENÚ
+    Origen : Venta sin receta/insumo - 15,00 unidades | venta $1.275.000
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "MENÚ", 15,0 u., $1.275.000)
+    ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR (por nombre: "MENÚ", 15,0 u., $0)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Pomelo Fizz Party
+    Origen : Venta sin receta/insumo - 16,00 unidades | venta $192.000
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Pomelo Fizz Party", 16,0 u., $192.000)
+    ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR (por nombre: "Pomelo Fizz Party", 16,0 u., $0)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Seña
+    Origen : Venta sin receta/insumo - 2,00 unidades | venta $374.550
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Seña", 2,0 u., $374.550)
+    ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR (por nombre: "Seña", 2,0 u., $0)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SIN SKU] Stella Porron
+    Origen : Venta sin receta/insumo - 20,00 unidades | venta $130.193
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Stella Porron", 20,0 u., $130.193)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Comentarios (por código: "Art. Inexistente, BOX MUNDIAL, MENÚ, Pomelo Fizz Party, Seña", 56,0 u., $2.346.244)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Rentabilidad | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+
+##############################################################################
+## Congreso - 10/2026  (65 ítems)
+##############################################################################
+[ABA] Arroz basmati
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,00 KG | faltante $24.862
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[ACNDS] Aceitunas negras descarozadas
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,00 KG | faltante $47.394
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[ACVDS] Aceitunas verdes descarozadas
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,00 KG | faltante $31.394
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[AGI] Aceite girasol Alsamar
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 25,00 LTS | faltante $74.448
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "ACEITE GIRASO", 15,0 u., $43.500)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[AJOE] Ajo Entero
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,00  | faltante $48.900
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Ajo pelad", 2.700,0 u., $37.905)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[AMA] Azúcar mascabo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $2.537
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[ANE] Azúcar negra
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $1.575
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[AOZU] Aceite de oliva Zuelo ZUCARDI
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 50,00 LTS | faltante $713.636
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Aceite de Oliv", 625,0 u., $8.817.594)
+    ENCONTRADO EN: MENSUAL LAFI -31.XLSX › Hoja1 (por código: "Aceite de Oliva", 100,0 u., $1.414.100)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos
+[ARROZPERSO] Arroz personal Don Marcos
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 10,00  | faltante $8.265
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[AZU] Azúcar
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 60,00 KG | faltante $70.162
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CAEP] Canela en polvo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $14.396
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CDL] Crema de leche
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,00 LTS | faltante $48.799
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Crema d, GR. Crema de lec", 5.001,0 u., $140.950)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CDO] Clavo de olor
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $10.869
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Clavo de olor", 0,3 u., $9.333)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[CEP] Cúrcuma en polvo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $5.863
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CERE] Cerezas
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,79  | faltante $25.032
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CINS] Café instantáneo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $33.103
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CIR] Ciruelas
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,08  | faltante $9.234
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[COMI] Comino molido
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $7.548
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CPT] Carne picada vaca
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 6,68 KG | faltante $77.321
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CPU] CEBOLLA PLUMA
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 100,00 KG | faltante $517.500
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CROIL] Croissant
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 145,00 UN | faltante $274.253
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Croissant Ob", 1.100,0 u., $2.010.214)
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Croissant", 204,0 u., $358.722)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[CSA] Chocolate Amargo Fenix 87
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,50 KG | faltante $75.276
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[DDLR] Dulce de leche
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 20,00 KG | faltante $76.977
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Dulce de lec", 29.285,0 u., $108.791)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[DUR] Durazno
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,52  | faltante $4.774
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[EDT] Extracto de Tomate
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,00 UN | faltante $4.629
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Extracto de", 50,0 u., $33.401)
+    ENCONTRADO EN: MENSUAL LAFI -31.XLSX › Hoja1 (por código: "UN. Extracto de tomate", 24,0 u., $3.631)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos
+[FRUC] Frutillas congeladas
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 13,00 KG | faltante $76.050
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. frutillas co", 42.000,0 u., $246.400)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[GAR] Garbanzos
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 75,00 KG | faltante $121.770
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Garbanzo", 37.000,0 u., $59.100)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[H30] Harina 000
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 25,00 KG | faltante $22.266
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Harina 000", 121.210,0 u., $103.094)
+    ENCONTRADO EN: MENSUAL LAFI -31.XLSX › Hoja1 (por código: "GR. Harina 000", 5.000,0 u., $4.150)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos
+[HDPA] Hoja parra
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,00 KG | faltante $57.000
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[HOJ] Hojaldre
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 8,00 KG | faltante $84.000
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Hojaldr", 74.000,0 u., $744.120)
+    ENCONTRADO EN: MENSUAL LAFI -31.XLSX › Hoja1 (por código: "GR. Hojaldre", 8.000,0 u., $80.000)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos
+[LEN] Leche entera
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 24,00 LTS | faltante $34.415
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. leche enter", 24,0 u., $33.672)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LEV] Levadura prensada
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,50 KG | faltante $4.296
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[MAN] Mostaza Antigua
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 0,15 KG | faltante $1.092
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Ad Mostaza Antigua", 12,0 u., $18.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Ad Mostaza Antigua", 12,0 u., $18.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Ad Mostaza Antigua", 12,0 u., $18.000)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[MILAPP] Milanesa de pollo PERSONAL
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 2,12 KG | faltante $26.219
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PANK] Panko
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,00 KG | faltante $31.357
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PARA] Pan rallado
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,00 KG | faltante $11.054
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PATAMUSLO] Pata y muslo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 83,25 KG | faltante $226.031
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PBA] Papa Baston PREMIUM
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 30,00 KG | faltante $108.000
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PDCAF] Pan de campo (Hogaza)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 9,00 UN | faltante $28.350
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Pan de Camp", 36,0 u., $112.759)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PDCDES] Pierna de cordero deshuesada
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 9,90 KG | faltante $166.319
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PEP] Papa Entera Pelada PREMIUM
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 435,00 KG | faltante $1.696.500
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PNE] Pimienta negra en grano
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 1,00 KG | faltante $15.021
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Pimienta Neg", 1.000,0 u., $15.410)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PPVCORTE] Pastron
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 36,24 KG | faltante $1.298.704
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Pastro", 3,0 u., $2.449.503)
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Pastrón de pecho vacuno", 14,2 u., $461.337)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[QCTI] Queso crema Tipico
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 24,00 KG | faltante $173.058
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Queso crema", 195.775,0 u., $1.473.547)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[QMU] Queso Muzzarella
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,00 KG | faltante $36.988
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Ques, GR. Queso muzzar", 35.077,0 u., $407.555)
+    ENCONTRADO EN: MENSUAL LAFI -31.XLSX › Hoja1 (por código: "GR. Queso muzzarella", 5.000,0 u., $37.000)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos
+[QSE] Queso sardo estacionado (no pintado)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 3,38 KG | faltante $48.878
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Queso sardo", 29.718,0 u., $412.743)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[RIC] Ricota
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 12,00 KG | faltante $54.601
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[SDS] Semillas de sésamo blanco
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 4,00 KG | faltante $20.195
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Semillas de sésamo blanco", 0,5 u., $2.337)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[SEM] Semolín
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 25,00 KG | faltante $26.943
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Semoli", 228.732,0 u., $252.192)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[TAH] Tahina (FRASCO x 3,6KG)
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 43,20 KG | faltante $707.355
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "TAHINA", 5,4 u., $84.631)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[TBG] Trigo Burgol grueso
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 5,00 KG | faltante $37.476
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Trigo Burgo", 14.500,0 u., $104.270)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[TPPP] Tapa para pascualina PERSONAL
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 6,00 UN | faltante $7.303
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. Tapa pascual", 28,0 u., $33.388)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[TSAL] Filet de trucha crudo
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 35,60 KG | faltante $744.040
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "GR. Filet de tru", 91.673,0 u., $1.925.601)
+    ENCONTRADO EN: MENSUAL LAFI -31.XLSX › Hoja1 (por código: "GR. Filet de trucha fresca", 3.230,0 u., $77.423)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos
+[TSALEN] Filet de trucha crudo entera
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 50,00  | faltante $1.045.000
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[VDA] Vinagre de alcohol
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 80,00 LITROS | faltante $65.101
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[VTI] Vino tinto
+    Origen : Auditoría de desvíos - Materia prima auditada | consumo real 12,00 LTS | faltante $14.953
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Vino tint", 12,0 u., $14.952)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[BAMAPOLA] Bagel Amapola
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 24,00 UN | faltante $45.600 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Bagel Amapol", 153,0 u., $293.200)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Bagel Amapola", 4,0 u., $14.000)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Bagel Amapola", 4,0 u., $14.000)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Bagel Amapola", 4,0 u., $14.000)
+    ENCONTRADO EN: Ventas_Obrador_Septiembre 2026 › Traspasos (por código: "Bagel Amapola", 4,0 u., $7.600)
+    NO ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | MENSUAL LAFI -31.XLSX › Hoja1
+[BSESAMO] Baguel
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 624,00 UN | faltante $686.400 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Bagel Sesam", 4.343,0 u., $4.865.615)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[CAJAPIZZA] Caja de pizza 33 x33 x 50 un
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 100,00 UN | faltante $19.500 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Caja pizz", 557,0 u., $113.307)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[HUE] Huevo
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 360,00 UN | faltante $72.474 || sin receta/venta que lo use (alerta del Obrador)
+    NO ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos | Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[LAFFA] Laffa
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 590,00 UN | faltante $295.000 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. masa lafa (120gr)", 4.497,0 u., $2.174.789)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PDM] PAN DE MIGA
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 4,00 UN | faltante $31 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Pan de Mig", 36,0 u., $278.284)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PITA] Pita
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 610,00 UN | faltante $244.000 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Pit", 5.076,0 u., $1.861.276)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PLETZ] PLETZALEJ
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 432,00 UN | faltante $1.080.000 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "UN. Pletzalej Ob", 3.668,0 u., $8.801.341)
+    ENCONTRADO EN: Resumen Ventas › Ventas (por nombre: "Pletzalej", 72,0 u., $285.600)
+    ENCONTRADO EN: Resumen Ventas › RENTABILIDAD_POR_PLATO (por nombre: "Pletzalej", 72,0 u., $285.600)
+    ENCONTRADO EN: Ventas ARCOS 09-26 › Rentabilidad (por nombre: "Pletzalej", 72,0 u., $285.600)
+    NO ENCONTRADO EN: Resumen Ventas › FALTANTES_PARA_REVISAR | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+[PNYP] Pan de nuez y pasas
+    Origen : Auditoría de desvíos + Obrador - Semielaborado Obrador | consumo real 119,00 UN | faltante $559.300 || sin receta/venta que lo use (alerta del Obrador)
+    ENCONTRADO EN: Ventas_Obrador_Octubre 2026 › Historial_Productos (por código: "Un. Pan de Nuez", 748,0 u., $3.546.158)
+    NO ENCONTRADO EN: Resumen Ventas › Ventas | Resumen Ventas › FALTANTES_PARA_REVISAR | Resumen Ventas › RENTABILIDAD_POR_PLATO | Ventas ARCOS 09-26 › Rentabilidad | Ventas ARCOS 09-26 › Comentarios | Ventas_Obrador_Septiembre 2026 › Traspasos | MENSUAL LAFI -31.XLSX › Hoja1
+
+##############################################################################
+## CÓDIGOS MAXIREST SIN 'SKU RECETA' (Ventas_Obrador › Historial_Productos)
+##############################################################################
+No figuran en 'Casi gestion' › Equivalencias (ni en las otras tablas de equivalencias).
+Para incorporarlos: 'Codigo maxirest -> SKU RECETA'.
+
+[09/2026] código Maxirest 5140   | un. alcaparra po             |         18.0 UN    | $       441,000 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 3822   | GR. Tahin                    |          2.0 GR    | $       349,056 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 153    | UN. Caja MISHIGU             |         93.0 UN    | $       123,690 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 5583   | Gr. Tahin                    |      5,400.0 GR    | $        84,618 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 154    | UN. Caja Rectang             |         20.0 UN    | $        28,700 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 5161   | gr. queso pategr             |      1,080.0 GR    | $        13,576 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 5310   | UN. HUEV                     |         60.0 UN    | $        10,380 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 1112   | Un. DIP Tapa 60              |        200.0 UN    | $         7,000 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 5299   | gr. chocolate fe             |        160.0 GR    | $         4,818 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 4400   | GR. Sesamo blanc             |      1,000.0 GR    | $         4,670 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 5291   | Un. DIP Pote 60              |        200.0 UN    | $         3,600 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[09/2026] código Maxirest 5584   | Un. Bolsa vacio 2            |         16.0 UN    | $         2,464 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 850    | un. rollo papel              |          1.0 UN    | $        49,900 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 3904   | UN. ECOBANDEJA 90            |        150.0 UN    | $        34,720 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 3902   | UN. TAPA ECOBAND             |        200.0 UN    | $        25,620 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 151    | UN. Rollo sticke             |          1.0 UN    | $        24,792 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 804    | Un. Frasco 200m              |         28.0 UN    | $        22,807 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 153    | UN. Caja MISHIGU             |         10.0 UN    | $        15,960 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 157    | UN. Cinta Mishig             |          2.0 UN    | $         4,738 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 3442   | GR. Sal Entre fi             |      1,000.0 GR    | $           510 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos
+[10/2026] código Maxirest 3904   | UN. ECOBANDEJ                |      9,050.0 UN    | $             0 | aparece en: Ventas_Obrador_Octubre 2026 › Historial_Productos

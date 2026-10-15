@@ -201,9 +201,18 @@ class Local:
 # --------------------------------------------------------------------------- #
 # Aprendizaje (texto del proveedor -> presentación)
 # --------------------------------------------------------------------------- #
+_AP_CACHE: dict = {"mt": None, "txt": None}
+
+
 def cargar_aprendizaje() -> dict:
+    """aprendizaje_proveedores.json: el texto se guarda en RAM y solo se relee si cambia el mtime; cada llamada
+    devuelve un dict nuevo (los llamadores lo mutan)."""
     try:
-        return json.loads(APRENDIZAJE_JSON.read_text(encoding="utf-8"))
+        st = APRENDIZAJE_JSON.stat()
+        mt = (st.st_mtime_ns, st.st_size)
+        if _AP_CACHE["mt"] != mt:
+            _AP_CACHE.update(mt=mt, txt=APRENDIZAJE_JSON.read_text(encoding="utf-8"))
+        return json.loads(_AP_CACHE["txt"])
     except (OSError, ValueError):
         return {"version": 1, "mapeos": {}}
 
@@ -213,6 +222,7 @@ def guardar_aprendizaje(ap: dict) -> None:
     tmp = APRENDIZAJE_JSON.with_suffix(".tmp")
     tmp.write_text(json.dumps(ap, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     tmp.replace(APRENDIZAJE_JSON)
+    _AP_CACHE["mt"] = None
 
 
 def aprender(ap: dict, proveedor: str, descripcion: str, presentacion: str, local: str, n: int = 1) -> None:
@@ -479,9 +489,7 @@ _VIG_CACHE: dict[str, Local] = {}
 
 
 def _vigente_otro_local(nombre: str, pres: str, antes) -> tuple[float | None, str | None]:
-    if nombre not in _VIG_CACHE:
-        _VIG_CACHE[nombre] = Local(nombre)
-    return _VIG_CACHE[nombre].costo_vigente(pres, antes)
+    return obtener_local(nombre).costo_vigente(pres, antes)
 
 
 def numero_a_celda(numero: str | None) -> float | int | str | None:
@@ -786,15 +794,70 @@ def crear_copia_chimidoha(destino: Path) -> None:
 _LOCALES_CACHE: dict[str, "Local"] = {}
 
 
+import threading as _threading
+
+_LOCALES_FIRMA: tuple | None = None
+_PERFIL_CACHE: dict = {}
+_RAM_LOCK = _threading.RLock()
+
+
+def _firma_archivos(nombres: list[str]) -> tuple:
+    """(ruta, mtime_ns, tamaño) de los .xlsx de origen y de las copias: si no cambian, el catálogo y el historial
+    siguen en RAM (singleton por proceso) y no se vuelven a leer 6 MB por foto o lote."""
+    f = []
+    for n in nombres:
+        for ruta in (DATA_DIR / PLANILLAS[n], COPIAS_DIR / f"{n}_FACTURAS_COPIA.xlsx"):
+            try:
+                st = ruta.stat()
+                f.append((str(ruta), st.st_mtime_ns, st.st_size))
+            except OSError:
+                f.append((str(ruta), 0, 0))
+    return tuple(f)
+
+
 def locales_todos() -> dict[str, "Local"]:
-    """Los 4 locales con planilla propia (Chimidoha comparte el catálogo de Congreso)."""
+    """Los 4 locales con planilla propia (Chimidoha comparte el catálogo de Congreso). Singleton en RAM: se recarga
+    solo si cambia el mtime/tamaño de algún .xlsx de origen o de las copias."""
+    global _LOCALES_FIRMA
     nombres = ["Arcos", "Cabello", "Lafinur", "Congreso"]
     if (COPIAS_DIR / "Chimidoha_FACTURAS_COPIA.xlsx").is_file():
         nombres.append("Chimidoha")
-    for n in nombres:
-        if n not in _LOCALES_CACHE:
-            _LOCALES_CACHE[n] = Local(n)
-    return {n: _LOCALES_CACHE[n] for n in nombres}
+    with _RAM_LOCK:
+        firma = _firma_archivos(nombres)
+        if firma != _LOCALES_FIRMA:
+            _LOCALES_CACHE.clear()
+            _PERFIL_CACHE.clear()
+            _VIG_CACHE.clear()
+            _LOCALES_FIRMA = firma
+        for n in nombres:
+            if n not in _LOCALES_CACHE:
+                _LOCALES_CACHE[n] = Local(n)
+        return {n: _LOCALES_CACHE[n] for n in nombres}
+
+
+def obtener_local(nombre: str) -> "Local":
+    """Singleton por proceso (misma instancia que locales_todos()): nunca relee los .xlsx si no cambiaron."""
+    with _RAM_LOCK:
+        locales_todos()                                      # valida la firma de archivos
+        if nombre not in _LOCALES_CACHE:
+            _LOCALES_CACHE[nombre] = Local(nombre)
+        return _LOCALES_CACHE[nombre]
+
+
+def precargar_ram() -> dict:
+    """Arranque del orquestador: catálogos, historial por local, Equivalencias del Maestro y aprendizaje quedan en RAM
+    para que la primera foto no pague la lectura de 5 libros de ~6 MB."""
+    import time as _t
+    t = _t.time()
+    locs = locales_todos()
+    for n in PLANILLAS:
+        obtener_local(n)
+    try:
+        bulto_kg("cebolla")                               # fuerza la lectura de la pestaña Equivalencias
+    except Exception:                                        # noqa: BLE001
+        pass
+    cargar_aprendizaje()
+    return {"locales": sorted(_LOCALES_CACHE), "segundos": round(_t.time() - t, 1)}
 
 
 def neto_efectivo(comp: dict) -> float:
@@ -925,13 +988,19 @@ def aprender_de_historial(ap: dict, comp: dict, match: dict) -> dict:
         usados_i.add(ii)
         libres.discard(fi)
         pres = str(filas.iloc[fi]["PRODUCTO"])
+        if norm(pres).startswith("revisar"):           # fila REVISAR escrita por el propio agente: no es una corrección humana
+            continue
         aprender(ap, prov, items[ii]["descripcion_original"], pres, match["local"])
         res["aprendidos"].append((items[ii]["descripcion_original"], pres))
     return res
 
 
 def perfil_historico_proveedores(locales: dict[str, "Local"], minimo: int = 5, umbral: float = 0.8) -> dict:
-    """Proveedores cuya historia es mayoritariamente 'una fila por factura con concepto genérico' (Verdulería, Varios…)."""
+    """Proveedores cuya historia es mayoritariamente 'una fila por factura con concepto genérico' (Verdulería, Varios…).
+    Se memoriza mientras los Local en RAM sean los mismos objetos."""
+    clave = (tuple((n, id(l)) for n, l in locales.items()), minimo, umbral)
+    if _PERFIL_CACHE.get("clave") == clave:
+        return _PERFIL_CACHE["valor"]
     todo = pd.concat([l.facturas.assign(LOC=n) for n, l in locales.items()])
     todo["NN"] = pd.to_numeric(todo["N"], errors="coerce")
     g = todo.groupby([todo["PROVEEDOR"].map(norm), "LOC", "NN"]).agg(filas=("PRODUCTO", "size"),
@@ -945,6 +1014,7 @@ def perfil_historico_proveedores(locales: dict[str, "Local"], minimo: int = 5, u
         if top.index[0] in GENERICOS_AGRUPADO and top.iloc[0] / len(una) >= umbral:
             out[prov] = {"facturas": int(len(s)), "una_fila": int(len(una)),
                          "concepto": str(una["prod"][una["prod"].map(norm) == top.index[0]].iloc[0])}
+    _PERFIL_CACHE.update(clave=clave, valor=out)
     return out
 
 
@@ -1229,10 +1299,11 @@ def _hoja_por_clave(sh, clave: str):
     return next((w for w in hojas if clave in letras(w.title)), None)
 
 
-def _columnas_de_carga(ws) -> dict:
+def _columnas_de_carga(ws, datos: list | None = None) -> dict:
     """Mira la fila 2 de la pestaña real: las columnas con fórmula (=MAP/ARRAYFORMULA...) NO se pisan nunca.
     Devuelve las columnas A:I de carga manual y, si el código/SKU (col W/X) no tiene fórmula, dónde inyectarlo."""
-    datos = ws.get("A1:AA8", value_render_option="FORMULA")
+    if datos is None:
+        datos = ws.get("A1:AA8", value_render_option="FORMULA")
     head = datos[0] if datos else []
     # Una columna es "con fórmula" solo si la mayoría de las filas 2-8 trae una fórmula DERIVADA (función o referencia a
     # celdas). Un '=2*12' o '=10,5+10,6' tipeado como cantidad es un dato manual, no una columna calculada.
@@ -1260,7 +1331,18 @@ def _col_letra(i: int) -> str:
     return s
 
 
+_GC_CACHE: tuple | None = None
+
+
 def _gspread():
+    """Cliente autorizado reutilizado en el proceso (el token se renueva solo): no se re-autentica en cada push."""
+    global _GC_CACHE
+    if _GC_CACHE is None:
+        _GC_CACHE = _gspread_nuevo()
+    return _GC_CACHE
+
+
+def _gspread_nuevo():
     import gspread
     from google.oauth2.service_account import Credentials
     c = Credentials.from_service_account_file(
@@ -1374,7 +1456,7 @@ def procesar_remito_obrador(comp: dict, loc_receptor: "Local", ap: dict) -> dict
     """Remito emitido por el Obrador (Mishiguene, Av. Cerviño 4417) hacia un local. Si un renglón viene sin precio se
     calcula con la matriz de transferencia (transferencias_obrador.py) sobre el último costo vigente en Congreso."""
     import transferencias_obrador as tr
-    congreso = _LOCALES_CACHE.get("Congreso") or Local("Congreso")
+    congreso = obtener_local("Congreso")
     reng = []
     for it in comp.get("items", []):
         precio, origen = it.get("precio_unitario"), "remito"
@@ -1443,6 +1525,18 @@ def filas_remitos_pendientes(remitos: list[dict]) -> list[list]:
     return filas
 
 
+def _norm_celda(x) -> str:
+    """Comparación tolerante hoja↔registro: '10', 10 y 10.0 son lo mismo; None y '' también."""
+    if x is None:
+        return ""
+    t = str(x).strip()
+    try:
+        f = float(t.replace(",", ".")) if re.fullmatch(r"-?\d+(?:[.,]\d+)?", t) else None
+    except ValueError:
+        f = None
+    return f"{f:g}" if f is not None else t
+
+
 def push_remitos_proveedor_drive(local: str, remitos: list[dict], confirmado: bool = False) -> dict:
     """Registro separado de Facturas y de transferencias: no vuelve a imputar gasto/stock."""
     filas = filas_remitos_pendientes(remitos)
@@ -1455,7 +1549,7 @@ def push_remitos_proveedor_drive(local: str, remitos: list[dict], confirmado: bo
         ws = sh.add_worksheet(title="Remitos_Pendientes", rows=1000, cols=16)
         ws.update(range_name="A1:P1", values=[ENCABEZADO_PENDIENTES], value_input_option="RAW")
         ws.freeze(rows=1)
-    actuales = ws.get_all_values()
+    actuales = ws.get_all_values(value_render_option="UNFORMATTED_VALUE")
     if actuales and actuales[0][:16] != ENCABEZADO_PENDIENTES:
         raise ValueError("Remitos_Pendientes tiene otra estructura; no se modifica")
     idx = {fila[0]: n for n, fila in enumerate(actuales[1:], 2) if fila and fila[0]}
@@ -1463,14 +1557,22 @@ def push_remitos_proveedor_drive(local: str, remitos: list[dict], confirmado: bo
     updates = []
     for fila in filas:
         n = idx.get(fila[0])
+        valores = ["" if x is None else x for x in fila]
+        if n is not None:                                    # fila idéntica a la de la hoja: no se vuelve a escribir
+            previa = list(actuales[n - 1]) + [""] * 16
+            if [_norm_celda(x) for x in previa[:len(valores)]] == [_norm_celda(x) for x in valores]:
+                continue
         if n is None:
             n = proxima
             proxima += 1
             idx[fila[0]] = n
-        updates.append({"range": f"A{n}:P{n}", "values": [["" if x is None else x for x in fila]]})
+        updates.append({"range": f"A{n}:P{n}", "values": [valores]})
+    if not updates:
+        return {"escrito": True, "local": local, "tipo": "remitos_proveedor", "planilla": sh.title,
+                "sheet_id": IDS_PLANILLAS[local], "hoja": ws.title, "filas": 0, "sin_cambios": len(filas), "detalle": []}
     ws.batch_update([dict(u) for u in updates], value_input_option="RAW")   # gspread antepone el título al dict recibido
-    for u in updates:
-        leido = ws.get(u["range"], value_render_option="UNFORMATTED_VALUE")
+    leidos = ws.batch_get([u["range"] for u in updates], value_render_option="UNFORMATTED_VALUE")
+    for u, leido in zip(updates, leidos):
         expected = u["values"][0]
         actual = (list(leido[0]) if leido else [])
         actual += [""] * (len(expected) - len(actual))
@@ -1613,8 +1715,11 @@ def push_drive(local: str, filas: list[dict], confirmado: bool = False, demo: bo
     ws = _hoja_por_clave(sh, "factura")
     if ws is None:
         return {"escrito": False, "local": local, "motivo": "no encontré la pestaña Facturas"}
-    cols = _columnas_de_carga(ws)
-    col_a, col_d = ws.col_values(1), ws.col_values(4)
+    # una sola llamada a la API: encabezado/fórmulas (A1:AA8) + columnas A y D completas
+    bloques_api = ws.batch_get(["A1:AA8", "A:A", "D:D"], value_render_option="FORMULA")
+    cols = _columnas_de_carga(ws, bloques_api[0])
+    col_a = [(r[0] if r else "") for r in bloques_api[1]]
+    col_d = [(r[0] if r else "") for r in bloques_api[2]]
     existentes = {(ultimo_entero(a), norm(d)) for a, d in zip(col_a[1:], (col_d + [""] * len(col_a))[1:]) if a}
     nuevas, omitidas = [], []
     for f, fila in zip(cand, plan):
@@ -1881,7 +1986,7 @@ def main(argv: list[str] | None = None) -> int:
         if nombre not in PLANILLAS:
             LOG.error("%s: local destino '%s' sin planilla de Facturas; indicá --local", comp.get("archivo"), destino)
             continue
-        loc = cache_locales.setdefault(nombre, Local(nombre))
+        loc = cache_locales.setdefault(nombre, obtener_local(nombre))
         resultados.append(imputar_comprobante(comp, loc, ap, omitir_duplicados=bool(args.demo_historico)))
         locales.append(nombre)
 

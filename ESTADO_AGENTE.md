@@ -46,3 +46,10 @@ Bot: PID 23916, commit 9866f59. Eventos: `logs/pipeline_eventos.jsonl`.
 - Las copias traen protecciones de hoja: A:I de Facturas es escribible; K:M/T:V (reparar #REF!) y Remitos NO. Acción del dueño: ejecutar
   desprotegerCopiasDePrueba() (GAS/crear_trials/Code.js) y luego `python reparar_ref_planillas.py --local Lafinur --apply`.
 - /deshacer ahora vacía celdas si la hoja está protegida (probado en Cabello PRUEBA).
+
+## Camino rápido del orquestador (15/10/2026)
+- Modelo de visión fijo: `gemini-3.8-flash` con `thinking_level="low"` (2.5 y 1.5 dan 404 en la cuenta; los 404 se recuerdan 24 h en `estado/gemini_modelos_caidos.json`).
+- Catálogos/historial/aprendizaje en RAM (`imputacion_facturas.locales_todos/obtener_local/precargar_ram`, recarga solo si cambia mtime/tamaño). El orquestador precarga al arrancar (~40 s una vez).
+- `procesar_lote_wpp.ejecutar(..., escribir_xlsx_local=False)`: no abre ni guarda `Copias_Gestion/*_FACTURAS_COPIA.xlsx`; deja aprendizaje + `Carpeta Revision/log_camino_rapido.csv` y escribe directo en Sheets.
+- En PRUEBA `--push-drive` es el defecto; `AgenteRecalculoCascada` solo con `--con-cascada`.
+- Carpeta raíz ordenada: `Reportes_Generados/`, `Archivo_Mantenimiento/`, `Documentacion/` (los scripts apuntan a las nuevas rutas).

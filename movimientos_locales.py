@@ -147,7 +147,8 @@ def main() -> int:
                      .agg(Filas=("Código", "count"), **{"Importe fichado $": ("Importe fichado $", "sum")}))
         sin = det[det["Vía"].isin(["Sin resolver", "Excluido"]) | det["Estado"].str.startswith("unidad incompatible")
                   | det["Estado"].str.startswith("receta no calculable")]
-        destino = BASE_DIR / f"Movimientos_Explotados_{mes:02d}_{args.anio}.xlsx"
+        (BASE_DIR / "Reportes_Generados").mkdir(exist_ok=True)
+        destino = BASE_DIR / "Reportes_Generados" / f"Movimientos_Explotados_{mes:02d}_{args.anio}.xlsx"
         try:
             with pd.ExcelWriter(destino) as w:
                 por_local.to_excel(w, sheet_name="Resumen por local", index=False)
@@ -174,7 +175,8 @@ def main() -> int:
             sys.path.insert(0, str(BASE_DIR))
             from consolidador import agregar_hoja_df
             for loc in LOCALES_MOV:
-                cand = sorted(BASE_DIR.glob(f"Analisis_Gestion_Comercial_{loc}_{mes:02d}_{args.anio}*.xlsx"),
+                cand = sorted([*(BASE_DIR / "Reportes_Generados").glob(f"Analisis_Gestion_Comercial_{loc}_{mes:02d}_{args.anio}*.xlsx"),
+                               *BASE_DIR.glob(f"Analisis_Gestion_Comercial_{loc}_{mes:02d}_{args.anio}*.xlsx")],
                               key=lambda p: p.stat().st_mtime, reverse=True)
                 if not cand:
                     continue

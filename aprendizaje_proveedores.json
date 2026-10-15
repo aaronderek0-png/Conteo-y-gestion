@@ -920,14 +920,6 @@
    "presentacion": "Trigo Burgol grueso",
    "ultima": "2026-10-14"
   },
-  "cleopatra dist kosta|caja 3 pouch hojas de parra x 3 kg la emilia": {
-   "locales": [
-    "Congreso"
-   ],
-   "n": 6,
-   "presentacion": "REVISAR / NO CATALOGADO",
-   "ultima": "2026-10-14"
-  },
   "cleopatra dist kosta|caja hojas de parra 3 x 3 kg la emilia": {
    "locales": [
     "Congreso"
@@ -1024,14 +1016,6 @@
    "presentacion": "Mantenimiento",
    "ultima": "2026-10-13"
   },
-  "daich marcos roberto|aluminio x kilo": {
-   "locales": [
-    "Congreso"
-   ],
-   "n": 6,
-   "presentacion": "REVISAR / NO CATALOGADO",
-   "ultima": "2026-10-14"
-  },
   "daich marcos roberto|bandas elasticas": {
    "locales": [
     "Arcos"
@@ -1039,14 +1023,6 @@
    "n": 1,
    "presentacion": "Bandas Elasticas",
    "ultima": "2026-10-13"
-  },
-  "daich marcos roberto|bobina 20 x 400 x 2 sedapel": {
-   "locales": [
-    "Congreso"
-   ],
-   "n": 6,
-   "presentacion": "REVISAR / NO CATALOGADO",
-   "ultima": "2026-10-14"
   },
   "daich marcos roberto|bobina papel tissue": {
    "locales": [
@@ -1424,14 +1400,6 @@
    "presentacion": "Folex 25*35 * KG",
    "ultima": "2026-10-13"
   },
-  "daich marcos roberto|folex 25x35 x kilo": {
-   "locales": [
-    "Congreso"
-   ],
-   "n": 6,
-   "presentacion": "REVISAR / NO CATALOGADO",
-   "ultima": "2026-10-14"
-  },
   "daich marcos roberto|folex 37 x 50 antartida panaderia": {
    "locales": [
     "Cabello"
@@ -1519,14 +1487,6 @@
    "n": 1,
    "presentacion": "Pack Bolsa Negra 45*60",
    "ultima": "2026-10-13"
-  },
-  "daich marcos roberto|papel film 45x1000": {
-   "locales": [
-    "Congreso"
-   ],
-   "n": 6,
-   "presentacion": "REVISAR / NO CATALOGADO",
-   "ultima": "2026-10-14"
   },
   "daich marcos roberto|papel higienico 300 m eco": {
    "locales": [
@@ -3080,6 +3040,14 @@
    "presentacion": "Mostaza Antigua X 850 Gr",
    "ultima": "2026-10-13"
   },
+  "el emporio|mostaza dijon ant arytza 850g": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 20,
+   "presentacion": "Mostaza dijon x .85KG",
+   "ultima": "2026-10-15"
+  },
   "el emporio|mostaza dijon x 85kg": {
    "locales": [
     "Congreso"
@@ -3183,6 +3151,14 @@
    "n": 1,
    "presentacion": "Vajilla",
    "ultima": "2026-10-13"
+  },
+  "el emporio|vino t break tto 1lt": {
+   "locales": [
+    "Congreso"
+   ],
+   "n": 20,
+   "presentacion": "Vino tinto",
+   "ultima": "2026-10-15"
   },
   "el emporio|vino tinto": {
    "locales": [
@@ -4216,14 +4192,6 @@
    "presentacion": "Varios",
    "ultima": "2026-10-13"
   },
-  "megaenvases sa|frasco morronero 200ml conserv ades dorado": {
-   "locales": [
-    "Arcos"
-   ],
-   "n": 6,
-   "presentacion": "REVISAR / NO CATALOGADO",
-   "ultima": "2026-10-14"
-  },
   "melena|envio": {
    "locales": [
     "Lafinur"
@@ -4390,14 +4358,6 @@
    ],
    "n": 1,
    "presentacion": "Etiqueta IL VIP 50x20",
-   "ultima": "2026-10-14"
-  },
-  "mix 57|etiqueta il vip 50x50 1000u b25 1b circ imp logo celeste p 284c": {
-   "locales": [
-    "Congreso"
-   ],
-   "n": 6,
-   "presentacion": "REVISAR / NO CATALOGADO",
    "ultima": "2026-10-14"
   },
   "mix 57|varios": {
@@ -5615,14 +5575,6 @@
    "n": 1,
    "presentacion": "Bolsa vacio 20x30",
    "ultima": "2026-10-13"
-  },
-  "roberto o rodofeli y cia s r l|bolsas vacio 20x30 mp": {
-   "locales": [
-    "Congreso"
-   ],
-   "n": 6,
-   "presentacion": "REVISAR / NO CATALOGADO",
-   "ultima": "2026-10-14"
   },
   "rupajo s a|pan arabe clasico bolsa": {
    "locales": [

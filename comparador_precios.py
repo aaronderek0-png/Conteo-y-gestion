@@ -60,7 +60,7 @@ from rapidfuzz import fuzz
 
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_CREDS = BASE_DIR / "credentials.json"
-DOSSIER = BASE_DIR / "Dossier_Mensual_Mishiguene.xlsx"
+DOSSIER = BASE_DIR / "Reportes_Generados" / "Dossier_Mensual_Mishiguene.xlsx"
 OUTPUT_DIR = BASE_DIR / "Reportes_Ahorro"
 
 # Carpeta 'Listas proveedores' en Drive (compartida con la Service Account)

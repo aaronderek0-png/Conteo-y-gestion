@@ -2500,7 +2500,7 @@ def main() -> int:
     ap.add_argument("--anio", type=int, default=2026)
     ap.add_argument("--mes", type=int, default=MES_BASE)
     ap.add_argument("--meses", type=int, nargs="+", help="varios meses (pisa --mes)")
-    ap.add_argument("--out-dir", type=Path, default=BASE_DIR)
+    ap.add_argument("--out-dir", type=Path, default=BASE_DIR / "Reportes_Generados")
     ap.add_argument("--locales", nargs="+", default=list(LOCALES), choices=list(LOCALES),
                     help="sucursales a procesar (por defecto todas)")
     args = ap.parse_args()
@@ -2521,7 +2521,8 @@ def main() -> int:
         descargar(args.refresh, args.anio, mes)
         ok, _ = generar(args.anio, mes, args.locales, args.out_dir)
         resultados += ok
-    n = escribir_huerfanos(resultados, BASE_DIR / "reporte_items_huerfanos.txt")
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    n = escribir_huerfanos(resultados, args.out_dir / "reporte_items_huerfanos.txt")
     LOG.info("reporte_items_huerfanos.txt: %d ítems sin mapeo", n)
     return 0
 

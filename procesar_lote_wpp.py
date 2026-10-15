@@ -20,6 +20,7 @@ solo con `imputacion_facturas.push_drive(..., confirmado=True)` / `--push-drive 
 from __future__ import annotations
 
 import argparse
+import time
 import hashlib
 import json
 import logging
@@ -331,13 +332,42 @@ def main(argv: list[str] | None = None) -> int:
     return _imprimir(reporte, locales, ap, args, cl)
 
 
+_ULTIMO_DHASH = 0.0
+
+
+def _log_liviano(filas: list[dict], carpeta_nombre: str = "") -> None:
+    """CSV liviano del camino rápido (sin abrir ni guardar ningún .xlsx): Carpeta Revision/log_camino_rapido.csv."""
+    import csv
+    dest = BASE_DIR / "Carpeta Revision"
+    dest.mkdir(exist_ok=True)
+    f = dest / "log_camino_rapido.csv"
+    nuevo = not f.exists()
+    with open(f, "a", newline="", encoding="utf-8-sig") as fh:
+        w = csv.writer(fh)
+        if nuevo:
+            w.writerow(["ts", "local", "N", "proveedor", "producto", "original", "G", "H", "I", "estado", "motivos"])
+        ts = datetime.now().isoformat(timespec="seconds")
+        for r in filas:
+            w.writerow([ts, r.get("local"), r.get("N"), r.get("proveedor"), r.get("presentacion"), r.get("original"),
+                        r.get("G"), r.get("H"), r.get("I"), r.get("estado"), r.get("motivos")])
+
+
 def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True, forzar_nuevas: bool = False,
-             demo: bool = False):
+             demo: bool = False, escribir_xlsx_local: bool | None = None):
     """Núcleo reutilizable (lo usa también telegram_ingestor.py). `args` necesita .push_drive y
-    .confirmo_escribir_produccion. Devuelve (reporte, locales, ap, clasificación)."""
+    .confirmo_escribir_produccion. Devuelve (reporte, locales, ap, clasificación).
+
+    `escribir_xlsx_local`: False = CAMINO RÁPIDO (imputa en RAM, guarda aprendizaje + CSV liviano y escribe directo en
+    Google Sheets; no abre ni guarda los Copias_Gestion/*_FACTURAS_COPIA.xlsx de ~6 MB). None = False cuando hay
+    push_drive y True en el resto (CLI clásico)."""
+    global _ULTIMO_DHASH
+    if escribir_xlsx_local is None:
+        escribir_xlsx_local = not bool(getattr(args, "push_drive", False))
+    rapido = not escribir_xlsx_local
     # ---- Nivel 1 ------------------------------------------------------------
     try:
-        if escribir:
+        if escribir and (not rapido or time.time() - _ULTIMO_DHASH > 600):
+            _ULTIMO_DHASH = time.time()
             ip.indexar_dhash(BASE_DIR / "Facturas Mishiguene")     # huella visual de las lecturas ya guardadas
     except Exception as e:
         LOG.debug("indexar_dhash: %s", e)
@@ -396,7 +426,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
 
     # ---- simulación sobre lo ya cargado (validación del motor contra la carga humana) -------------------
     simulaciones: dict[str, dict] = {}
-    for c in cl["comprobantes"]:
+    for c in ([] if rapido else cl["comprobantes"]):
         an = analisis[c["archivo"]]
         m0 = an["m0"]
         if not m0 or c.get("tipo") not in ("Factura", "NC") or not c.get("items"):
@@ -432,6 +462,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
             reg.update({"estado": "CONCILIADO", "factura_definitiva": fac.get("numero_factura"),
                         "alertas": conc["alertas"], "conciliacion": conc})
         return fac
+    estado_remitos_antes = {k_: v_.get("estado") for k_, v_ in remitos.items()}
     # También conciliar los guardados cuando la factura llega en un lote posterior.
     for previo in remitos.values():
         if previo.get("estado") == "PENDIENTE":
@@ -473,7 +504,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
             continue
         receptor = analisis[c["archivo"]]["local"]
         if receptor:
-            loc_rx = locales.get(receptor) or imp.Local(receptor)
+            loc_rx = locales.get(receptor) or imp.obtener_local(receptor)
             reg = imp.procesar_remito_obrador(c, loc_rx, ap)
             c["_remito_obrador"] = reg
             remitos_obrador_por_local.setdefault(receptor, []).append(reg)
@@ -500,7 +531,7 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
             c.setdefault("advertencias", []).append(
                 "no se imputa: " + ("sin local" if destino is None else "comprobante incompleto (sin N° o sin renglones)"))
             continue
-        loc = imp.Local(destino) if destino not in locales else locales[destino]
+        loc = imp.obtener_local(destino) if destino not in locales else locales[destino]
         res = imp.construir_filas(c, loc, ap)
         filas_por_comp[c["archivo"]] = res["filas"]
         plan_por_local.setdefault(destino, []).extend(res["filas"])
@@ -527,13 +558,17 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
             imp.guardar_remitos(remitos)
         for nombre in sorted(set(plan_por_local) | set(marcas_por_local) | set(remitos_tab_por_local)
                              | set(remitos_obrador_por_local)):
-            loc = locales.get(nombre) or imp.Local(nombre)
-            rep = imp.aplicar_a_copia([{"filas": plan_por_local.get(nombre, [])}], loc,
-                                      remitos=remitos_tab_por_local.get(nombre),
-                                      marcar=marcas_por_local.get(nombre),
-                                      remitos_obrador=remitos_obrador_por_local.get(nombre))
-            escrituras[nombre] = {"copia": loc.copia.name, "filas": rep["escritas"], "verificadas": rep["verificadas"],
-                                  "marcadas": len(marcas_por_local.get(nombre, []))}
+            loc = locales.get(nombre) or imp.obtener_local(nombre)
+            if rapido:                          # sin .xlsx: filas del plan en memoria + CSV liviano
+                rep = {"escritas": len(plan_por_local.get(nombre, [])), "verificadas": 0,
+                       "filas": [(None, f) for f in plan_por_local.get(nombre, [])]}
+            else:
+                rep = imp.aplicar_a_copia([{"filas": plan_por_local.get(nombre, [])}], loc,
+                                          remitos=remitos_tab_por_local.get(nombre),
+                                          marcar=marcas_por_local.get(nombre),
+                                          remitos_obrador=remitos_obrador_por_local.get(nombre))
+            escrituras[nombre] = {"copia": None if rapido else loc.copia.name, "filas": rep["escritas"],
+                                  "verificadas": rep["verificadas"], "marcadas": len(marcas_por_local.get(nombre, []))}
             for r_, f_ in rep["filas"]:
                 revision_filas.append({"local": nombre, "fila_excel": r_, "N": f_.get("A"), "fecha": f_.get("B"),
                                        "proveedor": f_.get("D"), "presentacion": f_.get("presentacion"),
@@ -543,7 +578,10 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
                                        "motivos": "; ".join((f_.get("motivos") or []) + (f_.get("avisos") or [])),
                                        "transferencia": (f_.get("transferencia") or {}).get("p_un_transferencia")})
     if escribir and not demo:
-        escribir_carpeta_revision(revision_filas, analisis, cl)
+        if rapido:
+            _log_liviano(revision_filas)
+        else:
+            escribir_carpeta_revision(revision_filas, analisis, cl)
     pushes = {}
     if args.push_drive and not getattr(args, "dry_run", False):
         import registro_fallos as rf
@@ -559,7 +597,11 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
                 pushes[nombre] = {"escrito": False, "local": nombre, "motivo": "ERROR " + rf.detalle_excepcion(e)["tipo"],
                                   "error": rf.detalle_excepcion(e)}
         proveedores_por_local = {}
-        for reg in remitos.values():
+        # camino rápido: solo los remitos de este lote o cuyo estado cambió (conciliación); el resto ya está en la hoja
+        ids_lote = {id(r) for r in remitos_lote}
+        for k_, reg in remitos.items():
+            if rapido and id(reg) not in ids_lote and reg.get("estado") == estado_remitos_antes.get(k_):
+                continue
             if reg.get("local") in locales:
                 proveedores_por_local.setdefault(reg["local"], []).append(reg)
         for local_r, regs in proveedores_por_local.items():

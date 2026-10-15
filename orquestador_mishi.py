@@ -8,7 +8,7 @@
                                (secuencial: no satura VRAM ni rate-limit). La escritura a Sheets es EN BLOQUE: una
                                values_batch_update por planilla y lote, con backoff ante 429/5xx. Un fallo del lote se
                                aísla archivo por archivo; nada se pierde ni se marca ESCRITO tras un error.
- Auxiliares AgenteFileWatcher (carpetas locales → misma cola), AgenteAprobaciones (Q:X), AgenteRecalculoCascada.
+ Auxiliares AgenteFileWatcher (carpetas locales → misma cola), AgenteAprobaciones (Q:X), AgenteRecalculoCascada (solo con --con-cascada).
 Estado: estado/orquestador_estado.json (latido). Parar: Ctrl+C o crear estado/STOP. Un solo consumidor de getUpdates.
 Uso: python orquestador_mishi.py [--push-drive] [--sin-telegram] [--reemplazar]   (o RUN_BOT.bat)
 """
@@ -232,7 +232,9 @@ class AgenteProcesador(Agente):
             for j in jobs:
                 shutil.copy2(j["ruta"], tmp / Path(j["ruta"]).name)
             ns = SimpleNamespace(push_drive=self.push, confirmo_escribir_produccion=self.push, dry_run=False, json=None)
-            return lote.ejecutar(tmp, not demo, ns, indexar_informes=False, forzar_nuevas=demo, demo=demo)[0]
+            # CAMINO RÁPIDO: catálogos en RAM, sin reescribir los .xlsx de Copias_Gestion; escritura directa a Sheets
+            return lote.ejecutar(tmp, not demo, ns, indexar_informes=False, forzar_nuevas=demo, demo=demo,
+                                 escribir_xlsx_local=False)[0]
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
 
@@ -505,10 +507,14 @@ def main(argv=None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(name)s | %(message)s", datefmt="%H:%M:%S")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--push-drive", action="store_true", help="escribe en la planilla real del entorno activo")
+    ap.add_argument("--con-cascada", action="store_true",
+                    help="activa AgenteRecalculoCascada (BOM + comparador). Apagado por defecto: no corre con facturas de Telegram")
     ap.add_argument("--sin-telegram", action="store_true")
     ap.add_argument("--sin-aprobaciones", action="store_true")
     ap.add_argument("--reemplazar", action="store_true", help="ignora otros consumidores detectados (no recomendado)")
     a = ap.parse_args(argv)
+    if not a.push_drive and _entorno() == "PRUEBA":
+        a.push_drive = True                    # en PRUEBA la escritura viva en las copias NO CARGAR es el comportamiento por defecto
     ESTADO.mkdir(exist_ok=True)
     otros = otros_consumidores()
     if otros and not a.reemplazar:
@@ -527,7 +533,9 @@ def main(argv=None) -> int:
     agentes: list[Agente] = []
     if not a.sin_telegram:
         agentes.append(AgenteReceptor())
-    agentes += [AgenteProcesador(a.push_drive), AgenteFileWatcher(), AgenteRecalculoCascada()]
+    agentes += [AgenteProcesador(a.push_drive), AgenteFileWatcher()]
+    if a.con_cascada:
+        agentes.append(AgenteRecalculoCascada())
     if not a.sin_aprobaciones:
         agentes.append(AgenteAprobaciones(vivo=a.push_drive))
     # trabajos que quedaron reclamados por un proceso anterior: se liberan al arrancar
@@ -536,6 +544,14 @@ def main(argv=None) -> int:
         coordinador.Cola()._mutar(lambda t: [j.pop("en_proceso", None) for j in t.values()])
     except Exception:                                          # noqa: BLE001
         pass
+    def _precarga():
+        try:
+            import imputacion_facturas as imp
+            r = imp.precargar_ram()
+            LOG.info("catálogos en RAM: %s en %.1f s", ", ".join(r["locales"]), r["segundos"])
+        except Exception as e:                                 # noqa: BLE001
+            LOG.warning("precarga en RAM falló (%s): se cargará bajo demanda", str(e)[:120])
+    threading.Thread(target=_precarga, name="precarga-ram", daemon=True).start()
     t0 = time.time()
     for g in agentes:
         g.start()

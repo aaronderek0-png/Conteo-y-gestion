@@ -15,7 +15,7 @@ from pathlib import Path
 import pandas as pd
 
 BASE = Path(__file__).resolve().parent
-DOSSIER = BASE / "Dossier_Mensual_Mishiguene.xlsx"
+DOSSIER = BASE / "Reportes_Generados" / "Dossier_Mensual_Mishiguene.xlsx"
 RESUMEN = BASE / "Reportes_Ahorro" / "Reporte_Ahorro_Resumen.xlsx"
 SALIDA = BASE / "Reportes_Ahorro" / "Productos_Sin_Referencia.xlsx"
 

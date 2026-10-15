@@ -94,7 +94,7 @@ md += ["", f"**{ok_e} de {len(esc)} escenarios en verde.** Suite `tests/`: {' '.
        "- Remito 3727 en Cabello/Remitos: pestaña protegida y llena (respaldo en `Remitos_Pendientes`, estado BLOQUEADO_PERMISOS).",
        "- Rupajo 34674, Miño 421/423 y la factura de Wigen esperan decisión humana (`/pendientes`, `/asignar`).",
        "- Desvíos de gestión comercial por local: `analisis_gestion_comercial.py` no se ejecutó en este benchmark (solo `--help`)."]
-(B / "JUSTIFICACION_EJECUTIVA_MISHIGUENE.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+(B / "Reportes_Generados" / "JUSTIFICACION_EJECUTIVA_MISHIGUENE.md").write_text("\n".join(md) + "\n", encoding="utf-8")
 
 
 # ---- HTML ---------------------------------------------------------------------------------
@@ -147,5 +147,5 @@ border-radius:8px;padding:8px 12px}} .flow i{{color:var(--ac);font-style:normal}
 <h2>Mayor gasto sin referencia</h2><div class=wrap>{tabla([(r['SKU'], r['Producto'], r['Categoría'], r['Proveedor actual'], f"${r['Monto total']:,.0f}") for _, r in top_sr.iterrows()], ['SKU', 'Producto', 'Categoría', 'Proveedor', 'Monto'])}</div>
 <p style="color:var(--mut);margin-top:24px">Horas humanas ahorradas: <b>no medido</b> (no hay línea base de carga manual). El ahorro del comparador es una estimación sobre listas, no realizado.</p>
 </main></body></html>"""
-(B / "Panel_Ejecutivo_Agente_Mishiguene.html").write_text(page, encoding="utf-8")
+(B / "Reportes_Generados" / "Panel_Ejecutivo_Agente_Mishiguene.html").write_text(page, encoding="utf-8")
 print("ok", ok_s, len(bm["scripts"]), ok_e, len(esc))

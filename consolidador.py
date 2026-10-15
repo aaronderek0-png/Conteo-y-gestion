@@ -50,7 +50,8 @@ DATA_DIR = BASE_DIR / "Arcos_data"
 VENTAS_DIR = DATA_DIR / "ventas_drive"      # caché de las planillas de ventas bajadas de Drive
 RESPALDO_SALIDA = BASE_DIR / "WebTest"      # si la raíz no admite archivos nuevos
 DOSSIER = "Dossier_Mensual_Mishiguene.xlsx"
-CARPETAS_IGNORADAS = {"node_modules", ".git", "__pycache__", "backup_previo", "WebTest", "Arcos_data"}
+CARPETAS_IGNORADAS = {"node_modules", ".git", "__pycache__", "backup_previo", "WebTest", "Arcos_data",
+                      "Archivo_Mantenimiento", "Reportes_Generados", "Documentacion"}
 
 # ID del Google Sheet de cada local (el tramo entre /d/ y /edit en la URL).
 LOCALES = {
@@ -1100,7 +1101,9 @@ def carpeta_salida() -> Path:
     try:
         prueba.write_text("x")
         prueba.unlink()
-        return BASE_DIR
+        destino = BASE_DIR / "Reportes_Generados"
+        destino.mkdir(exist_ok=True)
+        return destino
     except OSError:
         LOG.warning("La raíz no admite archivos nuevos: las salidas van a %s", RESPALDO_SALIDA)
         return RESPALDO_SALIDA

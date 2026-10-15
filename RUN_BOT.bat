@@ -8,6 +8,7 @@ echo  Escribe SOLO en las copias de prueba; rechaza IDs de produccion.
 echo  Parar: Ctrl+C en esta ventana, o crear el archivo estado\STOP
 echo ============================================================
 python estado_bot.py
+rem PRUEBA: escritura viva por defecto; cascada apagada (agregar --con-cascada)
 python orquestador_mishi.py --push-drive
 echo.
 echo Orquestador detenido (codigo %ERRORLEVEL%). Codigo 3 = ya hay otro consumidor activo (usar python estado_bot.py).

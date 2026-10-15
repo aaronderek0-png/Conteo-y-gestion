@@ -117,7 +117,7 @@ def correr_pipeline(anio: int, meses: list[int], dry_run: bool) -> bool:
 def ultimos_analisis() -> dict[str, Path]:
     """Por nombre canónico (sin '_nuevo'), la versión modificada más recientemente en la raíz."""
     mejor: dict[str, Path] = {}
-    for f in RAIZ.glob("Analisis_Gestion_Comercial_*_*.xlsx"):
+    for f in [*(RAIZ / "Reportes_Generados").glob("Analisis_Gestion_Comercial_*_*.xlsx"), *RAIZ.glob("Analisis_Gestion_Comercial_*_*.xlsx")]:
         if f.name.startswith("~$") or " (1)" in f.name:
             continue
         canon = f.name.replace("_nuevo", "")
@@ -130,12 +130,15 @@ def archivos_a_sincronizar() -> list[tuple[Path, str]]:
     """(origen, nombre en WebTest/)."""
     out: list[tuple[Path, str]] = [(src, canon) for canon, src in sorted(ultimos_analisis().items())]
     for patron in ("Movimientos_Explotados_*.xlsx", "reporte_gestion_*.html"):
-        out += [(f, f.name) for f in sorted(RAIZ.glob(patron)) if "_nuevo" not in f.name and " (1)" not in f.name]
+        out += [(f, f.name) for f in sorted([*(RAIZ / "Reportes_Generados").glob(patron), *RAIZ.glob(patron)])
+                if "_nuevo" not in f.name and " (1)" not in f.name]
     for nombre in ("Dossier_Mensual_Mishiguene.xlsx", "Balanza_Datos.xlsx", "reporte_items_huerfanos.txt"):
-        if (RAIZ / nombre).exists():
-            out.append((RAIZ / nombre, nombre))
+        for base in (RAIZ / "Reportes_Generados", RAIZ):
+            if (base / nombre).exists():
+                out.append((base / nombre, nombre))
+                break
     # preview del mail: la versión más nueva entre la raíz y Reportes_Ahorro/
-    prev = [f for f in (REPORTES / "preview_mail.html", RAIZ / "preview_mail.html") if f.exists()]
+    prev = [f for f in (REPORTES / "preview_mail.html", RAIZ / "Reportes_Generados" / "preview_mail.html", RAIZ / "preview_mail.html") if f.exists()]
     if prev:
         out.append((max(prev, key=lambda f: f.stat().st_mtime), "preview_mail.html"))
     # app.py: si hubiera uno en la raíz más nuevo que el de WebTest/, se publica ese

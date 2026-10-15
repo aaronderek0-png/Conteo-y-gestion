@@ -29,8 +29,9 @@ import comparador_precios as cp
 
 LOG = logging.getLogger("balanza_datos")
 BASE_DIR = Path(__file__).resolve().parent
-DOSSIER = BASE_DIR / "Dossier_Mensual_Mishiguene.xlsx"
-SALIDA = BASE_DIR / "Balanza_Datos.xlsx"
+(BASE_DIR / "Reportes_Generados").mkdir(exist_ok=True)
+DOSSIER = BASE_DIR / "Reportes_Generados" / "Dossier_Mensual_Mishiguene.xlsx"
+SALIDA = BASE_DIR / "Reportes_Generados" / "Balanza_Datos.xlsx"
 MESES = {"enero": 1, "febrero": 2, "marzo": 3, "abril": 4, "mayo": 5, "junio": 6, "julio": 7, "agosto": 8,
          "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12}
 COLS_DOSSIER = ["Código SKU", "Productos", "Categoría Gasto", "Categoría 2", "Proveedor", "Cantidad Inventario",

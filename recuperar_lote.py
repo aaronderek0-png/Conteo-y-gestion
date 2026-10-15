@@ -33,7 +33,7 @@ ADJUNTOS = ["IMG20260828153210.jpg", "IMG20260819152602.jpg", "IMG20260808100551
             # fotos de la prueba anterior: Miño 421/423, Raíces 8528 y remito Obrador 3727 (Cabello)
             "IMG20260706112445.jpg", "IMG20260707095646.jpg", "WhatsApp Image 2026-10-14 at 00.53.06 (2).jpeg"]
 PLAN = BASE / "recuperacion_plan.json"
-BACKUPS = BASE / "backups_recuperacion"
+BACKUPS = BASE / "Archivo_Mantenimiento" / "backups_recuperacion"
 
 
 def construir() -> tuple[dict, dict]:
