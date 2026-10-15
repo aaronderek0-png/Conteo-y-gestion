@@ -1232,10 +1232,19 @@ def _hoja_por_clave(sh, clave: str):
 def _columnas_de_carga(ws) -> dict:
     """Mira la fila 2 de la pestaña real: las columnas con fórmula (=MAP/ARRAYFORMULA...) NO se pisan nunca.
     Devuelve las columnas A:I de carga manual y, si el código/SKU (col W/X) no tiene fórmula, dónde inyectarlo."""
-    datos = ws.get("A1:AA2", value_render_option="FORMULA")
+    datos = ws.get("A1:AA8", value_render_option="FORMULA")
     head = datos[0] if datos else []
-    fila2 = datos[1] if len(datos) > 1 else []
-    con_formula = {i for i, v in enumerate(fila2) if isinstance(v, str) and v.lstrip().startswith("=")}
+    # Una columna es "con fórmula" solo si la mayoría de las filas 2-8 trae una fórmula DERIVADA (función o referencia a
+    # celdas). Un '=2*12' o '=10,5+10,6' tipeado como cantidad es un dato manual, no una columna calculada.
+    derivada = re.compile(r"[A-Za-z]{1,3}\$?\d+|[A-Za-z_]+\(")
+    filas = [r for r in datos[1:8]]
+    con_formula = set()
+    for i in range(max((len(r) for r in filas), default=0)):
+        n = sum(1 for r in filas if i < len(r) and isinstance(r[i], str) and r[i].lstrip().startswith("=")
+                and derivada.search(r[i]))
+        if filas and n * 2 > len(filas) - 0:
+            con_formula.add(i)
+    fila2 = []
     manuales = [i for i in range(9) if i not in con_formula]
     sku_col = next((i for i, h in enumerate(head) if i >= 9 and re.search(r"codigo|sku", norm(h))), None)
     return {"manuales": manuales, "con_formula": sorted(con_formula),

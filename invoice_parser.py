@@ -1064,10 +1064,35 @@ _PROMPT_VISION = (
 _GEMINI_BLOQ_HASTA = 0.0      # corte de circuito: clave rechazada / cuota agotada -> OCR sin reintentar cada foto
 
 
+_MODELOS_CAIDOS = Path(os.environ.get("MISHI_ESTADO_DIR") or Path(__file__).with_name("estado")) / "gemini_modelos_caidos.json"
+
+
+def _modelos_caidos() -> dict:
+    try:
+        return json.loads(_MODELOS_CAIDOS.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def _marcar_caido(modelo: str) -> None:
+    """Un 404 (modelo dado de baja) se recuerda 24 h en disco: no se vuelve a pedir en cada foto ni al reiniciar."""
+    import time
+    d = _modelos_caidos()
+    d[modelo] = time.time()
+    try:
+        _MODELOS_CAIDOS.parent.mkdir(exist_ok=True)
+        _MODELOS_CAIDOS.write_text(json.dumps(d), encoding="utf-8")
+    except OSError:
+        pass
+
+
 def _gemini_modelos() -> list[str]:
-    """GEMINI_MODEL (si está) y luego alias vigentes; gemini-1.5-flash fue dado de baja por Google (404)."""
+    """GEMINI_MODEL (si está), gemini-2.5-flash y, si Google lo devuelve 404, gemini-3.8-flash (el que la API
+    indicó como vigente). Los modelos con 404 reciente se saltean."""
+    import time
+    caidos = {m for m, t in _modelos_caidos().items() if time.time() - t < 86400}
     pref = (os.environ.get("GEMINI_MODEL") or "").strip()
-    return [m for m in dict.fromkeys([pref, "gemini-3.8-flash", "gemini-flash-latest"]) if m]
+    return [m for m in dict.fromkeys([pref, "gemini-2.5-flash", "gemini-3.8-flash"]) if m and m not in caidos]
 
 
 def _cargar_env() -> None:
@@ -1082,6 +1107,37 @@ def _cargar_env() -> None:
                     os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
         except OSError:
             pass
+
+
+def _esquema_gemini():
+    """Esquema Pydantic de salida (lista de comprobantes por foto). Incluye los campos de ruteo (sello, anotaciones,
+    destino por renglón) que usa detectar_local; el JSON ya viene validado por la API."""
+    from pydantic import BaseModel
+
+    class ItemFactura(BaseModel):
+        descripcion_original: str
+        cantidad: float
+        precio_unitario: float
+        total_linea: float
+        unidad_detectada: str | None = None
+        descuento_pct: float | None = None
+        local_destino: str | None = None
+
+    class EsquemaFactura(BaseModel):
+        proveedor_detectado: str | None = None
+        fecha_factura: str | None = None
+        numero_factura: str | None = None
+        total_comprobante: float | None = None
+        tipo: str | None = None
+        local_destino_base: str | None = None
+        sello: str | None = None
+        direccion_entrega: str | None = None
+        razon_social_cliente: str | None = None
+        firmas: list[str] | None = None
+        anotaciones_manuscritas: list[str] | None = None
+        items: list[ItemFactura]
+
+    return list[EsquemaFactura]
 
 
 def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
@@ -1109,7 +1165,8 @@ def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
                         try:
                             r = client.models.generate_content(
                                 model=modelo, contents=[_PROMPT_VISION.format(ruta=path.name), parte],
-                                config=types.GenerateContentConfig(temperature=0, response_mime_type="application/json",
+                                config=types.GenerateContentConfig(temperature=0.0, response_mime_type="application/json",
+                                                                   response_schema=_esquema_gemini(),
                                                                    thinking_config=razonamiento))
                             return r.text
                         except Exception as e2:              # noqa: BLE001
@@ -1118,6 +1175,9 @@ def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
                 except Exception as e:                       # noqa: BLE001
                     ultimo = f"{modelo}: {type(e).__name__} {str(e)[:100]}".replace(key, "<clave>")
                     codigo = getattr(e, "code", None)
+                    if codigo == 404:
+                        _marcar_caido(modelo)
+                        break                                # modelo inexistente: siguiente, sin reintentar
                     if codigo in (429, 500, 503) or "RESOURCE_EXHAUSTED" in str(e):   # cuota o saturación: backoff
                         STATS["gemini_429"] = STATS.get("gemini_429", 0) + 1
                         if intento == 3:
