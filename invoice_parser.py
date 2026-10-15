@@ -1095,13 +1095,11 @@ def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
     if not key or time.time() < _GEMINI_BLOQ_HASTA:
         return None
     try:
-        import warnings
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            import google.generativeai as genai
-        genai.configure(api_key=key)
+        from google import genai
+        from google.genai import types
+        client = genai.Client(api_key=key, http_options=types.HttpOptions(timeout=int(timeout * 1000)))
         mime = {".png": "image/png", ".webp": "image/webp"}.get(path.suffix.lower(), "image/jpeg")
-        datos = {"mime_type": mime, "data": path.read_bytes()}
+        parte = types.Part.from_bytes(data=path.read_bytes(), mime_type=mime)
         espera = float(os.environ.get("GEMINI_MIN_INTERVALO", "4.2")) - (time.time() - _GEMINI_ULTIMA)
         if espera > 0:                                       # nivel gratuito: ~15 pedidos/min
             time.sleep(espera)
@@ -1109,18 +1107,17 @@ def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
         for modelo in _gemini_modelos():
             try:
                 _GEMINI_ULTIMA = time.time()
-                r = genai.GenerativeModel(modelo).generate_content(
-                    [_PROMPT_VISION.format(ruta=path.name), datos],
-                    generation_config={"temperature": 0, "response_mime_type": "application/json"},
-                    request_options={"timeout": timeout})
+                r = client.models.generate_content(
+                    model=modelo, contents=[_PROMPT_VISION.format(ruta=path.name), parte],
+                    config=types.GenerateContentConfig(temperature=0, response_mime_type="application/json"))
                 return r.text
             except Exception as e:                           # noqa: BLE001
                 ultimo = f"{modelo}: {type(e).__name__} {str(e)[:100]}".replace(key, "<clave>")
-                nombre = type(e).__name__
-                if nombre in ("PermissionDenied", "Unauthenticated", "InvalidArgument"):
+                codigo = getattr(e, "code", None)
+                if codigo in (400, 401, 403):
                     _GEMINI_BLOQ_HASTA = time.time() + 600   # clave inválida: no insistir 10 min
                     break
-                if nombre in ("ResourceExhausted", "TooManyRequests"):
+                if codigo == 429:
                     _GEMINI_BLOQ_HASTA = time.time() + 90
                     break
         LOG.warning("Gemini falló (%s): se usa OCR local", ultimo)
