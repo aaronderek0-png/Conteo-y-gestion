@@ -1062,7 +1062,6 @@ _PROMPT_VISION = (
 
 
 _GEMINI_BLOQ_HASTA = 0.0      # corte de circuito: clave rechazada / cuota agotada -> OCR sin reintentar cada foto
-_GEMINI_ULTIMA = 0.0
 
 
 def _gemini_modelos() -> list[str]:
@@ -1089,7 +1088,7 @@ def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
     """Lee la foto con Gemini (API, sin ventanas ni procesos hijos). Devuelve el texto JSON o None si no hay clave,
     red, cuota o el modelo falla: el llamador cae a Tesseract. Nunca lanza ni registra la clave."""
     import time
-    global _GEMINI_BLOQ_HASTA, _GEMINI_ULTIMA
+    global _GEMINI_BLOQ_HASTA
     _cargar_env()
     key = os.environ.get("GEMINI_API_KEY")
     if not key or time.time() < _GEMINI_BLOQ_HASTA:
@@ -1100,32 +1099,36 @@ def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
         client = genai.Client(api_key=key, http_options=types.HttpOptions(timeout=int(timeout * 1000)))
         mime = {".png": "image/png", ".webp": "image/webp"}.get(path.suffix.lower(), "image/jpeg")
         parte = types.Part.from_bytes(data=path.read_bytes(), mime_type=mime)
-        espera = float(os.environ.get("GEMINI_MIN_INTERVALO", "4.2")) - (time.time() - _GEMINI_ULTIMA)
-        if espera > 0:                                       # nivel gratuito: ~15 pedidos/min
-            time.sleep(espera)
         ultimo = ""
         for modelo in _gemini_modelos():
-            try:
-                _GEMINI_ULTIMA = time.time()
-                for razonamiento in (types.ThinkingConfig(thinking_level="low"), None):   # low: 8 s vs 21 s, mismo resultado
-                    try:
-                        r = client.models.generate_content(
-                            model=modelo, contents=[_PROMPT_VISION.format(ruta=path.name), parte],
-                            config=types.GenerateContentConfig(temperature=0, response_mime_type="application/json",
-                                                               thinking_config=razonamiento))
-                        return r.text
-                    except Exception as e2:                  # noqa: BLE001
-                        if razonamiento is None or "hinking" not in str(e2):
-                            raise
-            except Exception as e:                           # noqa: BLE001
-                ultimo = f"{modelo}: {type(e).__name__} {str(e)[:100]}".replace(key, "<clave>")
-                codigo = getattr(e, "code", None)
-                if codigo in (400, 401, 403):
-                    _GEMINI_BLOQ_HASTA = time.time() + 600   # clave inválida: no insistir 10 min
-                    break
-                if codigo == 429:
-                    _GEMINI_BLOQ_HASTA = time.time() + 90
-                    break
+            for intento, pausa in enumerate((0, 5, 10, 20)):   # 429: backoff exponencial 5-10-20 s y recién ahí OCR
+                if pausa:
+                    time.sleep(pausa)
+                try:
+                    for razonamiento in (types.ThinkingConfig(thinking_level="low"), None):   # low: 8 s vs 21 s
+                        try:
+                            r = client.models.generate_content(
+                                model=modelo, contents=[_PROMPT_VISION.format(ruta=path.name), parte],
+                                config=types.GenerateContentConfig(temperature=0, response_mime_type="application/json",
+                                                                   thinking_config=razonamiento))
+                            return r.text
+                        except Exception as e2:              # noqa: BLE001
+                            if razonamiento is None or "hinking" not in str(e2):
+                                raise
+                except Exception as e:                       # noqa: BLE001
+                    ultimo = f"{modelo}: {type(e).__name__} {str(e)[:100]}".replace(key, "<clave>")
+                    codigo = getattr(e, "code", None)
+                    if codigo in (429, 500, 503) or "RESOURCE_EXHAUSTED" in str(e):   # cuota o saturación: backoff
+                        STATS["gemini_429"] = STATS.get("gemini_429", 0) + 1
+                        if intento == 3:
+                            _GEMINI_BLOQ_HASTA = time.time() + 60
+                        continue
+                    if codigo in (400, 401, 403):
+                        _GEMINI_BLOQ_HASTA = time.time() + 600
+                        return None
+                    break                                    # red/5xx/modelo: siguiente modelo
+            else:
+                break                                        # 429 persistente: no probar otros modelos
         LOG.warning("Gemini falló (%s): se usa OCR local", ultimo)
     except Exception as e:                                   # noqa: BLE001
         LOG.warning("Gemini no disponible (%s): se usa OCR local", f"{type(e).__name__} {e}"[:120].replace(key, "<clave>"))
