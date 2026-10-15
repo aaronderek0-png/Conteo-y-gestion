@@ -233,8 +233,14 @@ def comando_asignar(texto: str, push: bool) -> str:
 
 
 def guardar_estado(e: dict) -> None:
-    temporal = STATE_JSON.with_suffix(".tmp")
+    temporal = STATE_JSON.with_suffix(f".{os.getpid()}.tmp")
     temporal.write_text(json.dumps(e, ensure_ascii=False, indent=1), encoding="utf-8")
+    for n in range(8):
+        try:
+            temporal.replace(STATE_JSON)
+            return
+        except PermissionError:
+            time.sleep(0.05 * (n + 1))
     temporal.replace(STATE_JSON)
 
 

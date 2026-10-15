@@ -80,8 +80,14 @@ def _leer(path: Path) -> dict:
 
 
 def _guardar(path: Path, datos: dict) -> None:
-    tmp = path.with_suffix(".tmp")
+    tmp = path.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
+    for n in range(8):                                  # Windows: otro proceso puede estar leyendo el destino
+        try:
+            tmp.replace(path)
+            return
+        except PermissionError:
+            time.sleep(0.05 * (n + 1))
     tmp.replace(path)
 
 
@@ -134,6 +140,12 @@ class Cola:
         """Reclama hasta `n` trabajos (RECIBIDO, o ERROR con intentos restantes) marcándolos `en_proceso`. Un trabajo
         reclamado hace más de `rancio_s` (proceso caído) vuelve a estar disponible. Orden: más antiguos primero."""
         ahora = time.time()
+        # lectura sin bloqueo ni escritura: si no hay nada que reclamar no se toca el disco (el worker consulta cada 0,5 s)
+        vistos = _leer(self.path)["trabajos"].values()
+        if not any((j["estado"] == "RECIBIDO" or (j["estado"] == "ERROR" and j["intentos"] < max_intentos))
+                   and not (j.get("en_proceso") and ahora - j["en_proceso"] < rancio_s)
+                   and (solo_demo is None or bool(j.get("demo")) == solo_demo) for j in vistos):
+            return []
 
         def f(t):
             libres = []

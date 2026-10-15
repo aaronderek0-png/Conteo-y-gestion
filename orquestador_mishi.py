@@ -484,9 +484,14 @@ def latido(agentes: list[Agente], t0: float) -> None:
              "cola": cola, "lectura": stats, "batch_max": BATCH_MAX,
              "agentes": {a.nombre: {**_m(a.nombre), "vivo": a.is_alive()} for a in agentes},
              "entorno": os.environ.get("MISHI_ENTORNO", "PRODUCCION")}
-    tmp = LATIDO.with_suffix(".tmp")
+    tmp = LATIDO.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
-    tmp.replace(LATIDO)
+    for n in range(8):
+        try:
+            tmp.replace(LATIDO)
+            break
+        except PermissionError:                                # estado_bot.py puede estar leyéndolo
+            time.sleep(0.05 * (n + 1))
 
 
 def main(argv=None) -> int:
