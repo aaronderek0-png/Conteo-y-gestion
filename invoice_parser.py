@@ -44,7 +44,7 @@ import pandas as pd
 import pdfplumber
 
 LOG = logging.getLogger("invoice_parser")
-STATS = {"cache_sha": 0, "dhash": 0, "vision_local": 0, "vision_claude": 0, "ocr": 0}   # contadores del proceso
+STATS = {"cache_sha": 0, "dhash": 0, "vision_gemini": 0, "ocr": 0}   # contadores del proceso
 
 COLUMNS = ["Proveedor", "Producto", "Cantidad", "Precio Unitario", "Fecha"]
 
@@ -991,7 +991,7 @@ def _digitos_en_ocr(path: Path, numeros: list[str]) -> bool:
 def reutilizar_lectura_por_parecido(path: str | Path, umbral: int = 40) -> list[dict]:
     """Telegram/WhatsApp recomprimen las fotos y cambian el SHA-256. Busca en cache_facturas.json una lectura visual de la
     misma foto por hash perceptual y la CONFIRMA con OCR rápido (los N° de comprobante tienen que figurar en la imagen).
-    Si coincide, registra el alias por SHA-256 y devuelve los comprobantes: respuesta en ~1-3 s sin llamar a `claude -p`."""
+    Si coincide, registra el alias por SHA-256 y devuelve los comprobantes: respuesta en ~1-3 s sin llamar a la API de visión."""
     path = Path(path)
     cache = _leer_cache()
     try:
@@ -1050,8 +1050,8 @@ def indexar_dhash(carpeta: str | Path) -> int:
 
 
 _PROMPT_VISION = (
-    "Sos un lector de comprobantes argentinos (facturas, remitos, notas de crédito). Leé la imagen {ruta} con la "
-    "herramienta Read. Puede haber MÁS DE UN comprobante en la misma foto (p. ej. dos facturas lado a lado): separalos. "
+    "Sos un lector de comprobantes argentinos (facturas, remitos, notas de crédito). Leé la imagen adjunta ({ruta}). "
+    "Puede haber MÁS DE UN comprobante en la misma foto (p. ej. dos facturas lado a lado): separalos. "
     "Respetá las correcciones a mano en birome (cantidades tachadas o reescritas, 'NO', pesos reales): la cantidad "
     "vigente es la manuscrita. Devolvé SOLO un JSON (sin texto extra) con una lista de objetos: "
     '{{"tipo":"Factura|Remito|NC|RemitoObrador","numero_factura":"PPPPP-NNNNNNNN","fecha_factura":"YYYY-MM-DD",'
@@ -1061,43 +1061,79 @@ _PROMPT_VISION = (
     '"descuento_pct":0,"total_linea":0}}]}}. Una flecha en un renglón afecta solo ese renglón, con local_destino; local_destino_base conserva la entrega del resto. Usá RemitoObrador si lo emite Mishiguene (Av. Cerviño 4417) a un local.')
 
 
-def _vlm_local(path: Path, timeout: int = 90) -> str | None:
-    """Endpoint OpenAI-compatible local (LM Studio, p. ej. en la RTX 4060): MISHI_LOCAL_VLM_URL, defecto
-    http://localhost:1234/v1/chat/completions. Si no escucha (socket cerrado en 1 s) devuelve None sin demorar."""
-    import base64
-    import os
-    import socket
-    from urllib.parse import urlparse
-    url = os.environ.get("MISHI_LOCAL_VLM_URL", "http://localhost:1234/v1/chat/completions")
-    u = urlparse(url)
+_GEMINI_BLOQ_HASTA = 0.0      # corte de circuito: clave rechazada / cuota agotada -> OCR sin reintentar cada foto
+_GEMINI_ULTIMA = 0.0
+
+
+def _gemini_modelos() -> list[str]:
+    """GEMINI_MODEL (si está) y luego alias vigentes; gemini-1.5-flash fue dado de baja por Google (404)."""
+    pref = (os.environ.get("GEMINI_MODEL") or "").strip()
+    return [m for m in dict.fromkeys([pref, "gemini-3.8-flash", "gemini-flash-latest"]) if m]
+
+
+def _cargar_env() -> None:
     try:
-        socket.create_connection((u.hostname, u.port or 80), timeout=1).close()
-    except OSError:
+        from dotenv import load_dotenv
+        load_dotenv(Path(__file__).with_name(".env"))
+    except ImportError:                                      # sin python-dotenv: lectura directa
+        try:
+            for ln in Path(__file__).with_name(".env").read_text(encoding="utf-8").splitlines():
+                k, _, v = ln.partition("=")
+                if k.strip() and not k.startswith("#"):
+                    os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+        except OSError:
+            pass
+
+
+def _vision_gemini(path: Path, timeout: int = 60) -> str | None:
+    """Lee la foto con Gemini (API, sin ventanas ni procesos hijos). Devuelve el texto JSON o None si no hay clave,
+    red, cuota o el modelo falla: el llamador cae a Tesseract. Nunca lanza ni registra la clave."""
+    import time
+    global _GEMINI_BLOQ_HASTA, _GEMINI_ULTIMA
+    _cargar_env()
+    key = os.environ.get("GEMINI_API_KEY")
+    if not key or time.time() < _GEMINI_BLOQ_HASTA:
         return None
     try:
-        import requests
-        img = base64.b64encode(Path(path).read_bytes()).decode()
-        mime = "image/png" if str(path).lower().endswith(".png") else "image/jpeg"
-        body = {"model": os.environ.get("MISHI_LOCAL_VLM_MODEL", "local"), "temperature": 0,
-                "messages": [{"role": "user", "content": [
-                    {"type": "text", "text": _PROMPT_VISION.format(ruta=Path(path).name) +
-                     " La imagen va adjunta; no uses herramientas."},
-                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{img}"}}]}]}
-        r = requests.post(url, json=body, timeout=timeout)
-        r.raise_for_status()
-        return r.json()["choices"][0]["message"]["content"]
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            import google.generativeai as genai
+        genai.configure(api_key=key)
+        mime = {".png": "image/png", ".webp": "image/webp"}.get(path.suffix.lower(), "image/jpeg")
+        datos = {"mime_type": mime, "data": path.read_bytes()}
+        espera = float(os.environ.get("GEMINI_MIN_INTERVALO", "4.2")) - (time.time() - _GEMINI_ULTIMA)
+        if espera > 0:                                       # nivel gratuito: ~15 pedidos/min
+            time.sleep(espera)
+        ultimo = ""
+        for modelo in _gemini_modelos():
+            try:
+                _GEMINI_ULTIMA = time.time()
+                r = genai.GenerativeModel(modelo).generate_content(
+                    [_PROMPT_VISION.format(ruta=path.name), datos],
+                    generation_config={"temperature": 0, "response_mime_type": "application/json"},
+                    request_options={"timeout": timeout})
+                return r.text
+            except Exception as e:                           # noqa: BLE001
+                ultimo = f"{modelo}: {type(e).__name__} {str(e)[:100]}".replace(key, "<clave>")
+                nombre = type(e).__name__
+                if nombre in ("PermissionDenied", "Unauthenticated", "InvalidArgument"):
+                    _GEMINI_BLOQ_HASTA = time.time() + 600   # clave inválida: no insistir 10 min
+                    break
+                if nombre in ("ResourceExhausted", "TooManyRequests"):
+                    _GEMINI_BLOQ_HASTA = time.time() + 90
+                    break
+        LOG.warning("Gemini falló (%s): se usa OCR local", ultimo)
     except Exception as e:                                   # noqa: BLE001
-        LOG.warning("VLM local falló (%s): se prueba el siguiente motor", str(e)[:100])
-        return None
+        LOG.warning("Gemini no disponible (%s): se usa OCR local", f"{type(e).__name__} {e}"[:120].replace(key, "<clave>"))
+    return None
 
 
-def leer_imagen_vision(path: str | Path, timeout: int = 240) -> list[dict]:
-    """Fallback multimodal para fotos que no están en cache_facturas.json: invoca `claude -p` (Claude Code en modo
-    no interactivo, con la herramienta Read) para separar los comprobantes de la foto, respetar la birome y devolver
-    la estructura. Cada comprobante se guarda en cache_facturas.json por SHA-256 ('<sha>' o '<sha>#n' si son varios)."""
-    import subprocess
+def leer_imagen_vision(path: str | Path, timeout: int = 60) -> list[dict]:
+    """Foto que no está en cache_facturas.json: Gemini (API) separa los comprobantes, respeta la birome y devuelve
+    la estructura. Si no responde lanza OCRNoDisponible y el llamador usa Tesseract. Cada comprobante se guarda en
+    cache_facturas.json por SHA-256 ('<sha>' o '<sha>#n' si son varios)."""
     path = Path(path)
-    exe = shutil.which("claude")
     h = sha256_archivo(path)
     cache = _leer_cache()
     if h in cache:
@@ -1107,21 +1143,12 @@ def leer_imagen_vision(path: str | Path, timeout: int = 240) -> list[dict]:
     if previos:
         STATS["cache_sha"] += 1
         return previos
-    motor = "vision-multimodal (claude -p)"
-    txt, rc, err = _vlm_local(path), 0, ""
+    motor = "vision-gemini"
+    txt, rc, err = _vision_gemini(path, timeout), 0, ""
     if txt:
-        motor = "vision-local (OpenAI-compatible)"
-        STATS["vision_local"] += 1
-    elif exe:
-        try:                                                  # claude -p con timeout corto: si no responde, OCR
-            cmd = [exe, "-p", _PROMPT_VISION.format(ruta=str(path.resolve())), "--allowedTools", "Read",
-                   "--output-format", "text"]
-            r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", timeout=min(timeout, 20),
-                               cwd=str(path.resolve().parent))
-            txt, rc, err = (r.stdout or "").strip(), r.returncode, (r.stderr or "")
-            STATS["vision_claude"] += 1
-        except subprocess.TimeoutExpired:
-            raise OCRNoDisponible("claude -p no respondió en 20 s: se usa OCR local")
+        STATS["vision_gemini"] += 1
+    else:
+        raise OCRNoDisponible("Gemini sin respuesta (clave, red o cuota): se usa OCR local")
     m = re.search(r"\[.*\]|\{.*\}", txt or "", re.S)
     if rc != 0 or not m:
         raise OCRNoDisponible(f"visión sin respuesta utilizable ({rc}): {(err or txt or '')[:160]}")

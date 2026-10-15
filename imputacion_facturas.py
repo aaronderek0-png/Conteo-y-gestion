@@ -1459,7 +1459,7 @@ def push_remitos_proveedor_drive(local: str, remitos: list[dict], confirmado: bo
             proxima += 1
             idx[fila[0]] = n
         updates.append({"range": f"A{n}:P{n}", "values": [["" if x is None else x for x in fila]]})
-    ws.batch_update(updates, value_input_option="RAW")
+    ws.batch_update([dict(u) for u in updates], value_input_option="RAW")   # gspread antepone el título al dict recibido
     for u in updates:
         leido = ws.get(u["range"], value_render_option="UNFORMATTED_VALUE")
         expected = u["values"][0]

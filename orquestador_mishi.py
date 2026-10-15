@@ -4,7 +4,7 @@
                                en `Facturas Mishiguene/`, encola en coordinador.py (RECIBIDO) y confirma en < 10 s:
                                «✅ N comprobantes recibidos y encolados». El offset solo avanza DESPUÉS de guardar y encolar.
  CONSUMIDOR AgenteProcesador   un único worker. Toma hasta BATCH_MAX trabajos y corre procesar_lote_wpp.ejecutar sobre el
-                               lote: caché SHA / dHash / aprendizaje primero; VLM local o claude -p o Tesseract solo si falta
+                               lote: caché SHA / dHash / aprendizaje primero; Gemini (API) y luego Tesseract solo si falta
                                (secuencial: no satura VRAM ni rate-limit). La escritura a Sheets es EN BLOQUE: una
                                values_batch_update por planilla y lote, con backoff ante 429/5xx. Un fallo del lote se
                                aísla archivo por archivo; nada se pierde ni se marca ESCRITO tras un error.
@@ -452,7 +452,8 @@ class AgenteRecalculoCascada(Agente):
             for d in ("costos_bom", "comparativa_precios"):
                 if d in self.pendiente:
                     for cmd in self.COMANDOS[d]:
-                        r = subprocess.run([sys.executable, *cmd], cwd=str(BASE), capture_output=True, text=True, timeout=900)
+                        r = subprocess.run([sys.executable, *cmd], cwd=str(BASE), capture_output=True, text=True, timeout=900,
+                                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
                         hechos.append((cmd[0], r.returncode))
             LOG.info("cascada recalculada: %s", hechos)
             self.pendiente.clear()
@@ -468,7 +469,8 @@ def otros_consumidores() -> list[int]:
     r = subprocess.run(["powershell", "-NoProfile", "-Command",
                         "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'telegram_ingestor.py|orquestador_mishi.py' "
                         "-and $_.ProcessId -ne " + str(os.getpid()) + " -and $_.Name -match 'python' } | "
-                        "Select-Object -ExpandProperty ProcessId"], capture_output=True, text=True)
+                        "Select-Object -ExpandProperty ProcessId"], capture_output=True, text=True,
+                       creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     return [int(x) for x in r.stdout.split() if x.strip().isdigit()]
 
 

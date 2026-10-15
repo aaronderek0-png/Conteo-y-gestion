@@ -16,3 +16,6 @@ pillow
 pytesseract
 xlrd
 # Tesseract OCR: winget install --id UB-Mannheim.TesseractOCR -e ; luego bajar spa.traineddata a tessdata/
+
+google-generativeai>=0.8.6
+python-dotenv>=1.0
