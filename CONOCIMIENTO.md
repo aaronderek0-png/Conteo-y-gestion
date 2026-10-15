@@ -29,3 +29,16 @@ por destino (`destino_lock`). El offset de Telegram y el SHA procesado solo avan
 ## Qué requiere que la PC siga encendida
 El bot (`Iniciar_Bot_Vivo.bat` / `telegram_ingestor.py --watch`) corre en esta PC; no depende de la sesión de Claude.
 Detener: cerrar su ventana o `Stop-Process -Id <PID>`; verificar con `Get-CimInstance Win32_Process | ? CommandLine -like *telegram_ingestor*`.
+
+## Qué decide la IA y qué ejecutan reglas Python
+| Decide la IA (visión `claude -p`) | Ejecuta Python determinista |
+|---|---|
+| Leer la foto: encabezado, renglones, birome, sellos, varios comprobantes por imagen | Número/fecha → clave, duplicados (SHA, dHash, N° + proveedor) |
+| Proponer producto cuando no hay regla validada | Ruteo de local, compra centralizada, umbrales ±25/±50 %, aritmética, NC, prorrateos |
+| Casos nuevos o ambiguos (marcados REVISAR) | Mapeo por aprendizaje validado, conversiones, escritura, read-back, aprobaciones |
+
+**Aprender ≠ cachear.** Guardar la lectura de una foto en `cache_facturas.json` solo evita releerla. Una *regla* nace cuando
+un humano corrige o aprueba (estado APROBADO en el registro) y se guarda con: proveedor, producto/presentación, unidad,
+contexto (local/comprobante), fuente, fecha, vigencia y alcance, vía `conocimiento.registrar_dato(estado="validado")` o
+`aprendizaje_proveedores.json`. Una decisión de un comprobante no se generaliza: el alcance por defecto es «ese proveedor + ese
+producto + esa unidad». La propuesta de la IA entra como `inferencia` y no pisa un dato `validado`.

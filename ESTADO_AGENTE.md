@@ -31,3 +31,10 @@ Bot: PID 23916, commit 9866f59. Eventos: `logs/pipeline_eventos.jsonl`.
   como editora de ese rango. Luego `python recuperar_lote.py apply` (vigencia del plan se revalida sola).
 - BOM: `bom_diferencias.py` → 142 recetas con diferencia (25 incompletas, 24 con factor entero = hoja sin dividir por REND,
   93 sin patrón). Cálculo sobre export local Recetas.xlsx, no Drive en vivo. No se publica ningún costo.
+
+## 14/10/2026 — trials (misión de ambientes)
+- Copias de prueba: NO creadas. Drive `files.copy` con la SA → 403 storageQuotaExceeded. Acción: dueño copia las 5 planillas, comparte con la SA
+  como Editor y pasa los IDs (ver TRIALS_Y_REF.md). Controles por ID implementados (entornos.py) y probados.
+- Registro de aprobación (aprobaciones.py): modelo Q:X + reglas probadas en memoria; sin aplicar a planillas reales.
+- Ventas Maxirest: solo estudio (PROPUESTA_VENTAS_MAXIREST.md); recomendación A. Nada modificado.
+- #REF! Lafinur: causa en TRIALS_Y_REF.md (comodín vertical {"";"";""} derramando sobre la fila siguiente). Sin tocar producción.
