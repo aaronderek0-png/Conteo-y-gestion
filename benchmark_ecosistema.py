@@ -203,8 +203,17 @@ def escenarios() -> list[dict]:
 
 def main() -> int:
     rapido = "--rapido" in sys.argv
+    solo = next((a.split("=", 1)[1].split(",") for a in sys.argv if a.startswith("--solo=")), None)
     filas = []
+    previo = {}
+    if solo:                                   # re-mide solo esos scripts y conserva el resto del JSON anterior
+        try:
+            previo = json.loads(SALIDA.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            previo = {}
     for p in scripts():
+        if solo and p.name not in solo:
+            continue
         t0 = time.perf_counter()
         sint = "ok"
         try:
@@ -221,7 +230,12 @@ def main() -> int:
         r = correr(p, modo, args or [], to)
         filas.append({"script": p.relative_to(BASE).as_posix(), "sintaxis": "ok", "modo": modo, **r})
         print(f"{p.name:34} {modo:6} rc={r['rc']!s:3} {r['s']:>8}s {str(r['pico_mb']):>7} MB  {r['error'][:60]}")
-    esc = escenarios()
+    if solo and previo:
+        vistos = {f["script"] for f in filas}
+        filas = [f for f in previo.get("scripts", []) if f["script"] not in vistos] + filas
+        esc = previo.get("escenarios", [])
+    else:
+        esc = escenarios()
     for e in esc:
         print(("OK  " if e["ok"] else "FALLA"), e["escenario"], f"{e['ms']} ms", "|", str(e["detalle"])[:100])
     tests = subprocess.run([PY, "-m", "unittest", "discover", "-s", "tests", "-q"], cwd=str(BASE), capture_output=True, text=True)

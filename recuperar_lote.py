@@ -232,7 +232,9 @@ def aplicar_remitos(reporte: dict) -> None:
 
 if __name__ == "__main__":
     modo = sys.argv[1] if len(sys.argv) > 1 else "plan"
-    if modo == "plan":
+    if modo in ("-h", "--help"):
+        print(__doc__)
+    elif modo == "plan":
         hacer_plan()
     elif modo == "apply":
         aplicar()

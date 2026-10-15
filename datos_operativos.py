@@ -141,6 +141,9 @@ def indexar(origen: Path = BASE_DIR / "Facturas Mishiguene", destino: Path = DES
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(message)s")
+    if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
+        print("Uso: python datos_operativos.py [carpeta]   (indexa VENTAS RESUMIDAS / INFORME MOV DE STOCK; defecto: Facturas Mishiguene)")
+        raise SystemExit(0)
     carpeta = Path(sys.argv[1]) if len(sys.argv) > 1 else BASE_DIR / "Facturas Mishiguene"
     res = indexar(carpeta)
     print(json.dumps(res, ensure_ascii=False, indent=1, default=str)[:6000])

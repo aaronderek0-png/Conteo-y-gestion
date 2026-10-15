@@ -1,5 +1,5 @@
 {
- "generado": "2026-10-14T22:01:32",
+ "generado": "2026-10-14T22:14:45",
  "version": 1,
  "scripts": [
   {
@@ -52,6 +52,8 @@
    "invocacion": "python aprobaciones.py",
    "tiene_main": false,
    "usado_por": [
+    "benchmark_ecosistema",
+    "orquestador_mishi",
     "test_entornos_aprobaciones"
    ]
   },
@@ -72,6 +74,30 @@
    "escribe_en_sheets": false,
    "cli": true,
    "invocacion": "python balanza_datos.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "benchmark_ecosistema.py",
+   "lineas": 239,
+   "modificado": "2026-10-14T22:09:20",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "aprobaciones",
+    "coordinador",
+    "imputacion_facturas",
+    "procesar_lote_wpp"
+   ],
+   "lee_o_escribe_archivos": [
+    "benchmark_ecosistema.json",
+    "cache_facturas.json",
+    "t.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python benchmark_ecosistema.py --help",
    "tiene_main": true,
    "usado_por": []
   },
@@ -127,11 +153,12 @@
   },
   {
    "ruta": "conocimiento.py",
-   "lineas": 120,
-   "modificado": "2026-10-14T03:24:39",
+   "lineas": 168,
+   "modificado": "2026-10-14T22:05:59",
    "sintaxis_ok": true,
    "depende_de": [],
    "lee_o_escribe_archivos": [
+    "aprendizaje_proveedores.json",
     "estado_cache.json",
     "fuentes.json"
    ],
@@ -142,6 +169,7 @@
    "invocacion": "python conocimiento.py",
    "tiene_main": false,
    "usado_por": [
+    "orquestador_mishi",
     "test_coordinador_conocimiento"
    ]
   },
@@ -175,8 +203,8 @@
   },
   {
    "ruta": "coordinador.py",
-   "lineas": 152,
-   "modificado": "2026-10-14T03:25:03",
+   "lineas": 186,
+   "modificado": "2026-10-14T22:05:59",
    "sintaxis_ok": true,
    "depende_de": [],
    "lee_o_escribe_archivos": [
@@ -189,16 +217,20 @@
    "invocacion": "python coordinador.py",
    "tiene_main": false,
    "usado_por": [
+    "benchmark_ecosistema",
+    "estado_bot",
+    "orquestador_mishi",
     "telegram_ingestor",
     "test_coordinador_conocimiento"
    ]
   },
   {
    "ruta": "crear_trials.py",
-   "lineas": 65,
-   "modificado": "2026-10-14T21:26:48",
+   "lineas": 103,
+   "modificado": "2026-10-14T22:02:41",
    "sintaxis_ok": true,
    "depende_de": [
+    "entornos",
     "imputacion_facturas"
    ],
    "lee_o_escribe_archivos": [
@@ -278,11 +310,12 @@
   },
   {
    "ruta": "ecosistema_scan.py",
-   "lineas": 172,
-   "modificado": "2026-10-12T20:49:39",
+   "lineas": 177,
+   "modificado": "2026-10-14T22:01:36",
    "sintaxis_ok": true,
    "depende_de": [
     "defensivo",
+    "mapa_sistema",
     "motor_recetas"
    ],
    "lee_o_escribe_archivos": [
@@ -295,8 +328,8 @@
    "ids_sheets_fijos": 0,
    "usa_gspread": false,
    "escribe_en_sheets": false,
-   "cli": false,
-   "invocacion": "python ecosistema_scan.py",
+   "cli": true,
+   "invocacion": "python ecosistema_scan.py --help",
    "tiene_main": true,
    "usado_por": []
   },
@@ -317,6 +350,7 @@
    "invocacion": "python entornos.py",
    "tiene_main": false,
    "usado_por": [
+    "crear_trials",
     "imputacion_facturas",
     "reparar_ref_planillas",
     "test_entornos_aprobaciones"
@@ -341,6 +375,28 @@
    "usado_por": []
   },
   {
+   "ruta": "estado_bot.py",
+   "lineas": 64,
+   "modificado": "2026-10-14T22:03:02",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "coordinador"
+   ],
+   "lee_o_escribe_archivos": [
+    "bloqueos_permisos.json",
+    "orquestador_estado.json",
+    "pipeline_eventos.jsonl",
+    "telegram_state.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python estado_bot.py",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
    "ruta": "gas_sync.py",
    "lineas": 40,
    "modificado": "2026-10-12T22:27:24",
@@ -357,8 +413,8 @@
   },
   {
    "ruta": "imputacion_facturas.py",
-   "lineas": 1906,
-   "modificado": "2026-10-14T21:59:15",
+   "lineas": 1909,
+   "modificado": "2026-10-14T22:06:11",
    "sintaxis_ok": true,
    "depende_de": [
     "benchmark_grupo_free",
@@ -390,7 +446,9 @@
    "invocacion": "python imputacion_facturas.py --help",
    "tiene_main": true,
    "usado_por": [
+    "benchmark_ecosistema",
     "crear_trials",
+    "orquestador_mishi",
     "procesar_lote_wpp",
     "recuperar_lote",
     "reparar_ref_planillas",
@@ -402,8 +460,8 @@
   },
   {
    "ruta": "invoice_parser.py",
-   "lineas": 1196,
-   "modificado": "2026-10-14T21:57:41",
+   "lineas": 1201,
+   "modificado": "2026-10-14T22:06:11",
    "sintaxis_ok": true,
    "depende_de": [],
    "lee_o_escribe_archivos": [
@@ -420,6 +478,7 @@
    "tiene_main": true,
    "usado_por": [
     "imputacion_facturas",
+    "orquestador_mishi",
     "procesar_lote_wpp",
     "test_ruteo_remitos"
    ]
@@ -442,7 +501,9 @@
    "cli": true,
    "invocacion": "python mapa_sistema.py --help",
    "tiene_main": true,
-   "usado_por": []
+   "usado_por": [
+    "ecosistema_scan"
+   ]
   },
   {
    "ruta": "motor_recetas.py",
@@ -493,6 +554,32 @@
    "escribe_en_sheets": false,
    "cli": true,
    "invocacion": "python movimientos_locales.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "orquestador_mishi.py",
+   "lineas": 549,
+   "modificado": "2026-10-14T22:07:29",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "aprobaciones",
+    "conocimiento",
+    "coordinador",
+    "imputacion_facturas",
+    "invoice_parser",
+    "procesar_lote_wpp",
+    "registro_fallos",
+    "telegram_ingestor"
+   ],
+   "lee_o_escribe_archivos": [
+    "orquestador_estado.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python orquestador_mishi.py --help",
    "tiene_main": true,
    "usado_por": []
   },
@@ -580,8 +667,8 @@
   },
   {
    "ruta": "procesar_lote_wpp.py",
-   "lineas": 644,
-   "modificado": "2026-10-14T21:58:05",
+   "lineas": 646,
+   "modificado": "2026-10-14T22:07:11",
    "sintaxis_ok": true,
    "depende_de": [
     "benchmark_grupo_free",
@@ -604,6 +691,8 @@
    "invocacion": "python procesar_lote_wpp.py --help",
    "tiene_main": true,
    "usado_por": [
+    "benchmark_ecosistema",
+    "orquestador_mishi",
     "recuperar_lote",
     "telegram_ingestor",
     "test_ruteo_remitos"
@@ -697,6 +786,7 @@
    "invocacion": "python registro_fallos.py",
    "tiene_main": false,
    "usado_por": [
+    "orquestador_mishi",
     "procesar_lote_wpp",
     "recuperar_lote",
     "telegram_ingestor",
@@ -742,8 +832,8 @@
   },
   {
    "ruta": "telegram_ingestor.py",
-   "lineas": 589,
-   "modificado": "2026-10-14T21:58:14",
+   "lineas": 593,
+   "modificado": "2026-10-14T22:03:48",
    "sintaxis_ok": true,
    "depende_de": [
     "coordinador",
@@ -763,13 +853,14 @@
    "invocacion": "python telegram_ingestor.py --help",
    "tiene_main": true,
    "usado_por": [
+    "orquestador_mishi",
     "test_ruteo_remitos"
    ]
   },
   {
    "ruta": "tests/test_coordinador_conocimiento.py",
-   "lineas": 68,
-   "modificado": "2026-10-14T03:25:11",
+   "lineas": 77,
+   "modificado": "2026-10-14T22:09:33",
    "sintaxis_ok": true,
    "depende_de": [
     "conocimiento",
@@ -894,12 +985,12 @@
  "carpetas": {
   ".": {
    "existe": true,
-   "archivos": 88,
-   "mb": 97.74
+   "archivos": 92,
+   "mb": 97.79
   },
   "GAS": {
    "existe": true,
-   "archivos": 64,
+   "archivos": 65,
    "mb": 0.38
   },
   "Precios": {
@@ -935,7 +1026,7 @@
   "Reportes_Ahorro": {
    "existe": true,
    "archivos": 43,
-   "mb": 1.44
+   "mb": 1.42
   },
   "WebTest": {
    "existe": true,
@@ -949,18 +1040,18 @@
   },
   "estado": {
    "existe": true,
-   "archivos": 2,
-   "mb": 0.0
+   "archivos": 4,
+   "mb": 0.01
   },
   "conocimiento": {
    "existe": true,
-   "archivos": 1,
-   "mb": 0.0
+   "archivos": 2,
+   "mb": 0.03
   },
   "logs": {
    "existe": true,
    "archivos": 1,
-   "mb": 0.0
+   "mb": 0.01
   },
   "Facturas Mishiguene": {
    "existe": true,
@@ -1032,6 +1123,11 @@
   "congreso_precios": {
    "openById": 1,
    "ids_fijos": 1,
+   "importrange": false
+  },
+  "crear_trials": {
+   "openById": 0,
+   "ids_fijos": 5,
    "importrange": false
   },
   "lafinur_precios": {

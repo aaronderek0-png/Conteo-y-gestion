@@ -1,0 +1,413 @@
+{
+ "generado": "2026-10-14T22:17:06",
+ "scripts": [
+  {
+   "script": "analisis_gestion_comercial.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 2.596,
+   "pico_mb": 59.4,
+   "error": ""
+  },
+  {
+   "script": "aprobaciones.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.011,
+   "pico_mb": 0.6,
+   "error": ""
+  },
+  {
+   "script": "balanza_datos.py",
+   "sintaxis": "ok",
+   "modo": "import",
+   "rc": 0,
+   "s": 2.958,
+   "pico_mb": 61.9,
+   "error": ""
+  },
+  {
+   "script": "bom_diferencias.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 14.488,
+   "pico_mb": 30.6,
+   "error": ""
+  },
+  {
+   "script": "comparador_precios.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 281.055,
+   "pico_mb": 328.6,
+   "error": ""
+  },
+  {
+   "script": "conocimiento.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.031,
+   "pico_mb": 0.9,
+   "error": ""
+  },
+  {
+   "script": "consolidador.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 3.129,
+   "pico_mb": 55.8,
+   "error": ""
+  },
+  {
+   "script": "coordinador.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.022,
+   "pico_mb": 0.9,
+   "error": ""
+  },
+  {
+   "script": "crear_trials.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.328,
+   "pico_mb": 40.0,
+   "error": ""
+  },
+  {
+   "script": "defensivo.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.036,
+   "pico_mb": 1.6,
+   "error": ""
+  },
+  {
+   "script": "drive_connector.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 2.69,
+   "pico_mb": 55.5,
+   "error": ""
+  },
+  {
+   "script": "ecosistema_scan.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 2.793,
+   "pico_mb": 34.7,
+   "error": ""
+  },
+  {
+   "script": "entornos.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.02,
+   "pico_mb": 0.6,
+   "error": ""
+  },
+  {
+   "script": "enviador_mails.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 2.69,
+   "pico_mb": 51.0,
+   "error": ""
+  },
+  {
+   "script": "estado_bot.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.439,
+   "pico_mb": 1.4,
+   "error": ""
+  },
+  {
+   "script": "gas_sync.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.04,
+   "pico_mb": 1.2,
+   "error": ""
+  },
+  {
+   "script": "imputacion_facturas.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.434,
+   "pico_mb": 41.1,
+   "error": ""
+  },
+  {
+   "script": "invoice_parser.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.766,
+   "pico_mb": 47.3,
+   "error": ""
+  },
+  {
+   "script": "mapa_sistema.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.639,
+   "pico_mb": 18.4,
+   "error": ""
+  },
+  {
+   "script": "motor_recetas.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 13.794,
+   "pico_mb": 30.3,
+   "error": ""
+  },
+  {
+   "script": "movimientos_locales.py",
+   "sintaxis": "ok",
+   "modo": "import",
+   "rc": 0,
+   "s": 3.149,
+   "pico_mb": 61.3,
+   "error": ""
+  },
+  {
+   "script": "orquestador_mishi.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.275,
+   "pico_mb": 4.6,
+   "error": ""
+  },
+  {
+   "script": "procesar_lote_wpp.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.898,
+   "pico_mb": 48.4,
+   "error": ""
+  },
+  {
+   "script": "publicar_web.py",
+   "sintaxis": "ok",
+   "modo": "import",
+   "rc": 0,
+   "s": 0.147,
+   "pico_mb": 5.1,
+   "error": ""
+  },
+  {
+   "script": "refactor_precios_gestion.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.169,
+   "pico_mb": 21.4,
+   "error": ""
+  },
+  {
+   "script": "registro_fallos.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.018,
+   "pico_mb": 0.6,
+   "error": ""
+  },
+  {
+   "script": "reparar_ref_planillas.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.133,
+   "pico_mb": 2.5,
+   "error": ""
+  },
+  {
+   "script": "scouting_sin_referencia.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 2.979,
+   "pico_mb": 49.5,
+   "error": ""
+  },
+  {
+   "script": "telegram_ingestor.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 0.2,
+   "pico_mb": 4.9,
+   "error": ""
+  },
+  {
+   "script": "transferencias_obrador.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.289,
+   "pico_mb": 39.2,
+   "error": ""
+  },
+  {
+   "script": "verificar_vivo.py",
+   "sintaxis": "ok",
+   "modo": "import",
+   "rc": 0,
+   "s": 1.323,
+   "pico_mb": 40.0,
+   "error": ""
+  },
+  {
+   "script": "Precios/benchmark_grupo_free.py",
+   "sintaxis": "ok",
+   "modo": "import",
+   "rc": 0,
+   "s": 0.516,
+   "pico_mb": 12.8,
+   "error": ""
+  },
+  {
+   "script": "Precios/ingesta_listas.py",
+   "sintaxis": "ok",
+   "modo": "import",
+   "rc": 0,
+   "s": 1.345,
+   "pico_mb": 40.1,
+   "error": ""
+  },
+  {
+   "script": "WebTest/app.py",
+   "sintaxis": "ok",
+   "modo": "import",
+   "rc": 1,
+   "s": 0.113,
+   "pico_mb": 10.5,
+   "error": "ModuleNotFoundError: No module named 'streamlit'"
+  },
+  {
+   "script": "datos_operativos.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.088,
+   "pico_mb": 39.4,
+   "error": ""
+  },
+  {
+   "script": "recuperar_lote.py",
+   "sintaxis": "ok",
+   "modo": "run",
+   "rc": 0,
+   "s": 1.912,
+   "pico_mb": 47.4,
+   "error": ""
+  }
+ ],
+ "escenarios": [
+  {
+   "escenario": "1 factura normal (ya cargada: no duplica)",
+   "ok": true,
+   "detalle": "YA_CARGADA_FILAS",
+   "ms": 55944
+  },
+  {
+   "escenario": "2 NC caso A (devolución: cantidad negativa)",
+   "ok": true,
+   "detalle": "1 fila(s), G=[-2.0]",
+   "ms": 13136
+  },
+  {
+   "escenario": "3 NC caso B (bonificación: fila NC −1)",
+   "ok": true,
+   "detalle": "1 fila(s): [('Nota de credito Materia Prima', -1.0)]",
+   "ms": 7353
+  },
+  {
+   "escenario": "4 remito proveedor (birome/NO/balanza)",
+   "ok": true,
+   "detalle": "estado=PENDIENTE renglones=5 total_est=50225.0",
+   "ms": 528
+  },
+  {
+   "escenario": "5 transferencia Obrador → Cabello",
+   "ok": true,
+   "detalle": "5 renglones total=58656.3 → Cabello",
+   "ms": 75
+  },
+  {
+   "escenario": "6 destinos por renglón (Wigen)",
+   "ok": true,
+   "detalle": {
+    "Congreso": [
+     "NUECES PARTIDAS",
+     "ALMENDRAS"
+    ],
+    "Lafinur": [
+     "NUECES (→ LAFINUR)"
+    ]
+   },
+   "ms": 0
+  },
+  {
+   "escenario": "7 aprobación (APROBADO → CARGAR; ya ESCRITO → NADA)",
+   "ok": true,
+   "detalle": "idempotente",
+   "ms": 0
+  },
+  {
+   "escenario": "8 denegación (cierra sin efecto)",
+   "ok": true,
+   "detalle": "sin gasto ni stock",
+   "ms": 0
+  },
+  {
+   "escenario": "9 duplicado (idempotencia por SHA)",
+   "ok": true,
+   "detalle": "una sola entrada por SHA",
+   "ms": 14
+  },
+  {
+   "escenario": "10 fallo parcial y 11 reintento",
+   "ok": true,
+   "detalle": "ERROR no consume; reintento termina en ESCRITO",
+   "ms": 48
+  },
+  {
+   "escenario": "12 hoja sin filas / protegida",
+   "ok": true,
+   "detalle": "add_rows rechazado → push_remitos_drive deriva a _bloqueo_remitos (cola + respaldo)",
+   "ms": 0
+  }
+ ],
+ "tests": {
+  "rc": 0,
+  "resumen": [
+   "Ran 31 tests in 0.558s",
+   "",
+   "OK"
+  ]
+ }
+}
