@@ -1166,6 +1166,12 @@ IDS_PLANILLAS = {"Congreso": "1udLEQpQ29avK4c6fNnQig-w02xIV82IgLe85yVJXaOY",
                  "Cabello": "1zAxYyNB98Sb1-D0HtfokESXc6FrDS96EbFYyMmsseIE"}
 
 
+_IDS_PRODUCCION = dict(IDS_PLANILLAS)
+import entornos as _entornos                                # noqa: E402
+if _entornos.entorno() == "PRUEBA":                          # rutas explícitas por ambiente
+    IDS_PLANILLAS = _entornos.ids(_IDS_PRODUCCION)
+
+
 def _hoja_por_clave(sh, clave: str):
     """Busca una pestaña por nombre ignorando emojis, candados y espacios ('🔒 Facturas', 'Remitos'...).
     Prefiere el nombre exacto (singular o plural) y descarta '... pendientes'."""
@@ -1206,7 +1212,15 @@ def _gspread():
     c = Credentials.from_service_account_file(
         str(BASE_DIR / "credentials.json"),
         scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.readonly"])
-    return gspread.authorize(c), c
+    gc = gspread.authorize(c)
+    _abrir = gc.open_by_key
+
+    def open_by_key(key, *a, **k):                           # control por ID: en PRUEBA rechaza producción
+        import entornos
+        entornos.validar_destino(key, _IDS_PRODUCCION)
+        return _abrir(key, *a, **k)
+    gc.open_by_key = open_by_key
+    return gc, c
 
 
 def verificar_acceso_planillas() -> dict:
