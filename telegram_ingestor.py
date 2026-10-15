@@ -183,6 +183,55 @@ def limpiar(api: "TelegramAPI", chat_id: int | str, est: dict, extra_ids: list[i
     return {"chat": str(chat_id), "fijado": fijado, "intentados": len(objetivo), "borrados": borrados}
 
 
+def texto_pendientes() -> str:
+    """Comprobantes en REVISAR / ERROR / pendientes de la cola persistente (estado/trabajos.json)."""
+    import coordinador
+    q = coordinador.Cola()
+    filas = []
+    for j in q._mutar(lambda t: list(t.values())):
+        if j["estado"] in ("REVISAR", "ERROR", "RECIBIDO", "LEIDO", "VALIDADO"):
+            ev = (j.get("evidencia") or {}).get("estado_pipeline") or j.get("ultimo_error") or ""
+            filas.append(f"• {j['estado']} · {j.get('archivo', '')[:40]} · {ev[:60]}")
+    return "Pendientes:"+chr(10)+chr(10).join(filas[:25]) if filas else "No hay pendientes en la cola."
+
+
+def comando_asignar(texto: str, push: bool) -> str:
+    """/asignar <numero_factura> <Local> [proveedor]: fija el local y re-procesa ese comprobante (decisión humana)."""
+    partes = texto.split()
+    if len(partes) < 3:
+        return "Uso: /asignar <numero_factura> <Local>  (Locales: Arcos, Congreso, Lafinur, Cabello, Chimidoha)"
+    import imputacion_facturas as imp
+    n = imp.ultimo_entero(partes[1])
+    local = next((l for l in imp.IDS_PLANILLAS if l.lower() == partes[2].lower()), None)
+    if n is None or local is None:
+        return f"No entendí número/local: {partes[1]} {partes[2]}"
+    f = BASE_DIR / "estado" / "asignaciones.json"
+    d = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
+    d[str(n)] = {"local": local, "proveedor": " ".join(partes[3:]).lower() or None,
+                 "fecha": time.strftime("%Y-%m-%d %H:%M"), "fuente": "telegram /asignar"}
+    f.parent.mkdir(exist_ok=True)
+    f.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+    cache = json.loads((BASE_DIR / "cache_facturas.json").read_text(encoding="utf-8"))
+    archivos = {v.get("archivo", "").split(" [")[0] for v in cache.values() if imp.ultimo_entero(v.get("numero_factura")) == n}
+    ruta = next((p for a in archivos for p in ENTRADA.glob("*") if p.name.endswith(a) or a.endswith(p.name)), None)
+    if ruta is None:
+        return f"Asignación guardada ({n} → {local}); no encontré el archivo para reprocesar ahora."
+    import procesar_lote_wpp as lote
+    tmp = BASE_DIR / "Carpeta Revision" / "lote asignar temporal"
+    shutil.rmtree(tmp, ignore_errors=True)
+    tmp.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(ruta, tmp / ruta.name)
+    try:
+        ns = SimpleNamespace(push_drive=push, confirmo_escribir_produccion=push, dry_run=False, json=None)
+        reporte, *_ = lote.ejecutar(tmp, True, ns, indexar_informes=False)
+        pushes = [r for r in (reporte.get("push_drive") or {}).values() if r]
+        if pushes:
+            return f"N° {n} asignado a {local}." + chr(10) + chr(10).join(texto_push(r) for r in pushes)
+        return f"N° {n} asignado a {local}; sin filas nuevas para escribir (ya cargado o REVISAR)."
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def guardar_estado(e: dict) -> None:
     temporal = STATE_JSON.with_suffix(".tmp")
     temporal.write_text(json.dumps(e, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -281,6 +330,13 @@ def pasada(api: TelegramAPI, escribir: bool = True, chat_permitido: str | None =
             est["offset"] = ultimo
             api.responder(chat, f"🧹 Listo: {r['borrados']} mensajes borrados"
                                 + (" (el fijado se conserva)." if r["fijado"] else "."))
+            continue
+        cmd0 = texto_msg.split("@")[0].split(" ")[0]
+        if cmd0 == "/pendientes" and escribir:
+            api.responder(chat, texto_pendientes(), msg["message_id"])
+            continue
+        if cmd0 == "/asignar" and escribir:
+            api.responder(chat, comando_asignar(texto_msg, push), msg["message_id"])
             continue
         if texto_msg.split("@")[0] == "/deshacer":
             r = deshacer_push(est.get("ultima_inyeccion"))
@@ -458,10 +514,14 @@ def conectar(token: str, http: Callable[..., Any] | None = None, escribir: bool 
             "coincide_nombre": _norm_titulo(elegido.get("title")) == _norm_titulo(NOMBRE_GRUPO), "pasada": stats}
 
 
-def crear_tarea(minutos: int = 15) -> list[str]:
-    cmd = ["schtasks", "/Create", "/SC", "MINUTE", "/MO", str(minutos), "/TN", "Mishiguene_Telegram_Ingestor",
-           "/TR", f'"{sys.executable}" "{Path(__file__).resolve()}" --once --push-drive', "/F"]
-    return cmd
+def crear_tarea(minutos: int = 5) -> list[str]:
+    """Arranque estable sin permisos de administrador: cada N minutos se intenta lanzar el ORQUESTADOR con pythonw (sin
+    ventana). Si ya hay un consumidor, termina enseguida (código 3): un solo getUpdates; si cayó, se levanta solo."""
+    orq = Path(__file__).resolve().parent / "orquestador_mishi.py"
+    exe = Path(sys.executable).with_name("pythonw.exe")
+    exe = exe if exe.exists() else Path(sys.executable)
+    return ["schtasks", "/Create", "/SC", "MINUTE", "/MO", str(minutos), "/TN", "Mishiguene_Telegram_Ingestor",
+            "/TR", f'"{exe}" "{orq}" --push-drive', "/F"]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -520,12 +580,12 @@ def main(argv: list[str] | None = None) -> int:
     LOG.info("modo vivo cada %d s (Ctrl+C para salir)", args.interval)
     while True:
         try:
-            s = pasada(api, escribir=not args.dry_run, chat_permitido=chat, push=args.push_drive)
+            s = pasada(api, escribir=not args.dry_run, chat_permitido=chat, push=args.push_drive, timeout=25)
             if s["updates"]:
                 LOG.info("pasada: %s", s)
         except Exception:
             LOG.exception("error en la pasada; se reintenta")
-        time.sleep(args.interval)
+        time.sleep(max(1, min(args.interval, 2)))        # long polling real: getUpdates espera hasta 25 s por novedades
 
 
 if __name__ == "__main__":

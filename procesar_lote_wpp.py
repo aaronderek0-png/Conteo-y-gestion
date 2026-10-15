@@ -74,6 +74,19 @@ def separar_destinos_remito(comp: dict) -> list[dict]:
     return out
 
 
+def _asignacion_manual(numero, proveedor=None) -> str | None:
+    """estado/asignaciones.json: {'<N° significativo>': {'local': 'Congreso', 'proveedor': 'rupajo'}} (comando /asignar)."""
+    try:
+        d = json.loads((BASE_DIR / "estado" / "asignaciones.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    n = imp.ultimo_entero(numero)
+    r = d.get(str(n)) if n is not None else None
+    if r and (not r.get("proveedor") or r["proveedor"] in imp.norm(proveedor or "")):
+        return r["local"]
+    return None
+
+
 def clasificar_carpeta(carpeta: Path, escribir_cache: bool = True) -> dict:
     """Devuelve {'comprobantes': [...], 'informes': [Path], 'listas': [Path], 'duplicados': [(Path, Path)]}."""
     out = {"comprobantes": [], "informes": [], "listas": [], "duplicados": [], "otros": []}
@@ -194,6 +207,9 @@ def analizar(comp: dict, locales: dict, ap: dict) -> dict:
         comp["proveedor_planilla"] = m0["proveedor_planilla"]       # nombre con el que figura en la planilla
     if "local_destino_renglon" in comp:
         regla = {"local": comp["local_destino_renglon"], "regla": "destino por renglón: entrega base y anotación específica", "alertas": []}
+    asig = _asignacion_manual(comp.get("numero_factura"), comp.get("proveedor_detectado"))
+    if asig:                                                 # /asignar desde Telegram (decisión humana validada)
+        regla = {"local": asig, "regla": "asignación manual por Telegram (/asignar)", "alertas": regla.get("alertas", [])}
     local, por = regla["local"], regla["regla"]
     alertas = list(regla["alertas"])
     if local is None and m0:
@@ -533,7 +549,9 @@ def ejecutar(carpeta: Path, escribir: bool, args, indexar_informes: bool = True,
         import registro_fallos as rf
         for nombre, filas in plan_por_local.items():
             try:
-                pushes[nombre] = imp.push_drive(nombre, filas, confirmado=args.confirmo_escribir_produccion, demo=demo)
+                pushes[nombre] = rf.con_reintentos(          # 429/5xx: backoff; push_drive no duplica (N° + proveedor)
+                    lambda n=nombre, f=filas: imp.push_drive(n, f, confirmado=args.confirmo_escribir_produccion, demo=demo),
+                    trabajo=f"push:{nombre}", etapa="push_facturas_lote", intentos=4, espera=6)
                 rf.evento(f"push:{nombre}", "push_facturas", "OK" if pushes[nombre].get("escrito") else "NO_ESCRITO",
                           local=nombre, motivo=pushes[nombre].get("motivo", ""))
             except Exception as e:                       # cada destino es independiente; se re-lanza al terminar

@@ -30,6 +30,15 @@ class TestCola(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.c.transicion("abc", "LEIDO")                  # ESCRITO no se reabre
 
+    def test_tomar_reclama_sin_duplicar_y_libera_al_fallar(self):
+        for i in range(5):
+            self.c.registrar(f"k{i}", f"{i}.jpg", ruta=f"/x/{i}.jpg", demo=False)
+        a = self.c.tomar(3, solo_demo=False)
+        b = self.c.tomar(3, solo_demo=False)
+        self.assertEqual((len(a), len(b)), (3, 2))                   # nadie toma dos veces el mismo trabajo
+        self.c.transicion(a[0]["clave"], "ERROR", error="429")
+        self.assertEqual(len(self.c.tomar(5, solo_demo=False)), 1)  # el ERROR vuelve a estar disponible
+
     def test_no_salta_a_escrito_desde_recibido(self):
         self.c.registrar("x")
         with self.assertRaises(ValueError):

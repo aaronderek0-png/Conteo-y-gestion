@@ -42,3 +42,10 @@ un humano corrige o aprueba (estado APROBADO en el registro) y se guarda con: pr
 contexto (local/comprobante), fuente, fecha, vigencia y alcance, vía `conocimiento.registrar_dato(estado="validado")` o
 `aprendizaje_proveedores.json`. Una decisión de un comprobante no se generaliza: el alcance por defecto es «ese proveedor + ese
 producto + esa unidad». La propuesta de la IA entra como `inferencia` y no pisa un dato `validado`.
+
+## Actualización 14/10/2026 — datos validados
+- Ventas Maxirest `1IRRh0wf…` es el archivo vivo; Variante A aprobada (ver PROPUESTA_VENTAS_MAXIREST.md). Estado: validado.
+- Kilos por bulto de Raíces: la pestaña `Equivalencias` del Maestro manda (BERE 11, CEB 18, LMO 17, PPP 8, TPE 18 kg);
+  `BULTO_KG_DEFAULT` queda de respaldo (`imputacion_facturas.bulto_kg`).
+- Fecha futura (> hoy + 3 días) = `FECHA_FUTURA_INVALIDA`: no entra al costo vigente (`defensivo.fecha_futura_invalida`).
+- Memoria de matchs: `conocimiento.match_lookup/match_guardar` (RAM con invalidación por mtime, escritura atómica en aprendizaje_proveedores.json).

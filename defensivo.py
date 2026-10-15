@@ -347,3 +347,20 @@ if __name__ == "__main__":
     assert parse_fecha_robusta(dt.datetime(2026, 9, 29), dt.date(2026, 10, 12))[0] == dt.date(2026, 9, 29)
     assert "POL" in codigos_colisionados([("POL", "Petalo de rosa"), ("POL", "POLENTA"), ("AZU", "Azucar"), ("AZU", "Azúcar")])
     print("defensivo.py: auto-test OK")
+
+
+def fecha_futura_invalida(fecha, tolerancia_dias: int = 3, hoy=None) -> bool:
+    """True si la fecha de factura es posterior a hoy + tolerancia (p. ej. 21/4/2027 mal tipeado). Una fecha futura
+    contaminaría `costo_vigente` (se toma la última factura por fecha). None/NaT -> False (se trata aparte)."""
+    from datetime import date, datetime, timedelta
+    try:
+        import pandas as pd
+        if fecha is None or pd.isna(fecha):
+            return False
+        f = pd.Timestamp(fecha).date()
+    except Exception:
+        return False
+    h = hoy or date.today()
+    if isinstance(h, datetime):
+        h = h.date()
+    return f > h + timedelta(days=tolerancia_dias)

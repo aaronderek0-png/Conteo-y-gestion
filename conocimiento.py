@@ -117,3 +117,51 @@ def registrar_dato(clave: str, valor, estado: str, fuente: str, vigencia: str | 
                             "vigencia": vigencia, "version": (previo or {}).get("version", 0) + 1}
     _guardar(ruta, base)
     return {"aceptado": True, "version": base["datos"][clave]["version"]}
+
+
+# --- memoria de matchs (proveedor + texto → presentación/SKU) en RAM con invalidación por mtime ----------------------
+_APR = BASE_DIR / "aprendizaje_proveedores.json"
+_RAM: dict = {"mt": None, "mapeos": {}}
+
+
+def _norm(t: str) -> str:
+    import re
+    import unicodedata
+    s = unicodedata.normalize("NFKD", str(t or "")).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", s)).strip()
+
+
+def _mapeos() -> dict:
+    try:
+        mt = _APR.stat().st_mtime
+    except OSError:
+        return {}
+    if _RAM["mt"] != mt:
+        _RAM["mapeos"] = _json(_APR, {}).get("mapeos", {})
+        _RAM["mt"] = mt
+    return _RAM["mapeos"]
+
+
+def match_lookup(proveedor: str, descripcion: str) -> dict | None:
+    """Match validado en milisegundos (sin recalcular ni fuzzy). None si no existe → recién ahí OCR/IA/fuzzy."""
+    e = _mapeos().get(f"{_norm(proveedor)}|{_norm(descripcion)}")
+    return dict(e) if e else None
+
+
+def match_guardar(proveedor: str, descripcion: str, presentacion: str, local: str, sku: str | None = None,
+                  fuente: str = "decisión humana") -> dict:
+    """Guarda un match validado (escritura atómica). No degrada uno existente con otra presentación salvo que sea validado."""
+    ap = _json(_APR, {"mapeos": {}, "version": 1})
+    k = f"{_norm(proveedor)}|{_norm(descripcion)}"
+    e = ap.setdefault("mapeos", {}).setdefault(k, {"presentacion": presentacion, "n": 0, "locales": []})
+    if e["presentacion"] != presentacion:
+        e["presentacion"], e["n"] = presentacion, 0
+    e["n"] += 1
+    if local not in e["locales"]:
+        e["locales"].append(local)
+    e.update({"ultima": _ahora()[:10], "fuente": fuente, **({"sku": sku} if sku else {})})
+    tmp = _APR.with_suffix(".tmp")
+    tmp.write_text(json.dumps(ap, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    tmp.replace(_APR)
+    _RAM["mt"] = None
+    return e

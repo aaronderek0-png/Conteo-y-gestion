@@ -44,6 +44,7 @@ import pandas as pd
 import pdfplumber
 
 LOG = logging.getLogger("invoice_parser")
+STATS = {"cache_sha": 0, "dhash": 0, "vision_local": 0, "vision_claude": 0, "ocr": 0}   # contadores del proceso
 
 COLUMNS = ["Proveedor", "Producto", "Cantidad", "Precio Unitario", "Fecha"]
 
@@ -1060,6 +1061,36 @@ _PROMPT_VISION = (
     '"descuento_pct":0,"total_linea":0}}]}}. Una flecha en un renglón afecta solo ese renglón, con local_destino; local_destino_base conserva la entrega del resto. Usá RemitoObrador si lo emite Mishiguene (Av. Cerviño 4417) a un local.')
 
 
+def _vlm_local(path: Path, timeout: int = 90) -> str | None:
+    """Endpoint OpenAI-compatible local (LM Studio, p. ej. en la RTX 4060): MISHI_LOCAL_VLM_URL, defecto
+    http://localhost:1234/v1/chat/completions. Si no escucha (socket cerrado en 1 s) devuelve None sin demorar."""
+    import base64
+    import os
+    import socket
+    from urllib.parse import urlparse
+    url = os.environ.get("MISHI_LOCAL_VLM_URL", "http://localhost:1234/v1/chat/completions")
+    u = urlparse(url)
+    try:
+        socket.create_connection((u.hostname, u.port or 80), timeout=1).close()
+    except OSError:
+        return None
+    try:
+        import requests
+        img = base64.b64encode(Path(path).read_bytes()).decode()
+        mime = "image/png" if str(path).lower().endswith(".png") else "image/jpeg"
+        body = {"model": os.environ.get("MISHI_LOCAL_VLM_MODEL", "local"), "temperature": 0,
+                "messages": [{"role": "user", "content": [
+                    {"type": "text", "text": _PROMPT_VISION.format(ruta=Path(path).name) +
+                     " La imagen va adjunta; no uses herramientas."},
+                    {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{img}"}}]}]}
+        r = requests.post(url, json=body, timeout=timeout)
+        r.raise_for_status()
+        return r.json()["choices"][0]["message"]["content"]
+    except Exception as e:                                   # noqa: BLE001
+        LOG.warning("VLM local falló (%s): se prueba el siguiente motor", str(e)[:100])
+        return None
+
+
 def leer_imagen_vision(path: str | Path, timeout: int = 240) -> list[dict]:
     """Fallback multimodal para fotos que no están en cache_facturas.json: invoca `claude -p` (Claude Code en modo
     no interactivo, con la herramienta Read) para separar los comprobantes de la foto, respetar la birome y devolver
@@ -1067,23 +1098,33 @@ def leer_imagen_vision(path: str | Path, timeout: int = 240) -> list[dict]:
     import subprocess
     path = Path(path)
     exe = shutil.which("claude")
-    if not exe:
-        raise OCRNoDisponible("no está el comando `claude` en el PATH (visión multimodal no disponible)")
     h = sha256_archivo(path)
     cache = _leer_cache()
     if h in cache:
+        STATS["cache_sha"] += 1
         return [cache[h]]
     previos = [v for k, v in cache.items() if k.startswith(h + "#")]
     if previos:
+        STATS["cache_sha"] += 1
         return previos
-    cmd = [exe, "-p", _PROMPT_VISION.format(ruta=str(path.resolve())), "--allowedTools", "Read",
-           "--output-format", "text"]
-    r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", timeout=timeout,
-                       cwd=str(path.resolve().parent))
-    txt = (r.stdout or "").strip()
-    m = re.search(r"\[.*\]|\{.*\}", txt, re.S)
-    if r.returncode != 0 or not m:
-        raise RuntimeError(f"claude -p no devolvió JSON ({r.returncode}): {(r.stderr or txt)[:200]}")
+    motor = "vision-multimodal (claude -p)"
+    txt, rc, err = _vlm_local(path), 0, ""
+    if txt:
+        motor = "vision-local (OpenAI-compatible)"
+        STATS["vision_local"] += 1
+    elif exe:
+        try:                                                  # claude -p con timeout corto: si no responde, OCR
+            cmd = [exe, "-p", _PROMPT_VISION.format(ruta=str(path.resolve())), "--allowedTools", "Read",
+                   "--output-format", "text"]
+            r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", timeout=min(timeout, 20),
+                               cwd=str(path.resolve().parent))
+            txt, rc, err = (r.stdout or "").strip(), r.returncode, (r.stderr or "")
+            STATS["vision_claude"] += 1
+        except subprocess.TimeoutExpired:
+            raise OCRNoDisponible("claude -p no respondió en 20 s: se usa OCR local")
+    m = re.search(r"\[.*\]|\{.*\}", txt or "", re.S)
+    if rc != 0 or not m:
+        raise OCRNoDisponible(f"visión sin respuesta utilizable ({rc}): {(err or txt or '')[:160]}")
     datos = json.loads(m.group(0))
     datos = datos if isinstance(datos, list) else [datos]
     out = []
@@ -1094,7 +1135,7 @@ def leer_imagen_vision(path: str | Path, timeout: int = 240) -> list[dict]:
             it["linea_consistente"] = abs(it["cantidad"] * it["precio_unitario"] * (1 - it["descuento_pct"] / 100)
                                           - it["total_linea"]) <= max(1.0, 0.02 * abs(it["total_linea"]))
         c.update({"archivo": path.name if len(datos) == 1 else f"{path.name} [comprobante {i + 1}]", "sha256": h,
-                  "motor": "vision-multimodal (claude -p)", "validacion": validar_aritmetica(
+                  "motor": motor, "validacion": validar_aritmetica(
                       c.get("items", []), c.get("total_comprobante"), c.get("extra")), "texto_encabezado": ""})
         cache[h if len(datos) == 1 else f"{h}#{i + 1}"] = c
         out.append(c)

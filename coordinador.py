@@ -122,12 +122,46 @@ class Cola:
                 j["intentos"] += 1
                 j["ultimo_error"] = (error or "")[:300]
             j["estado"] = estado
+            j.pop("en_proceso", None)
             j.setdefault("historial", []).append({"ts": _ahora(), "estado": estado, "evidencia": evidencia or {},
                                                   **({"error": (error or "")[:300]} if error else {})})
             if evidencia:
                 j.setdefault("evidencia", {}).update(evidencia)
             return dict(j)
         return self._mutar(f)
+
+    def tomar(self, n: int = 20, max_intentos: int = 5, rancio_s: int = 900, solo_demo: bool | None = None) -> list[dict]:
+        """Reclama hasta `n` trabajos (RECIBIDO, o ERROR con intentos restantes) marcándolos `en_proceso`. Un trabajo
+        reclamado hace más de `rancio_s` (proceso caído) vuelve a estar disponible. Orden: más antiguos primero."""
+        ahora = time.time()
+
+        def f(t):
+            libres = []
+            for j in t.values():
+                if j.get("en_proceso") and ahora - j["en_proceso"] < rancio_s:
+                    continue
+                if solo_demo is not None and bool(j.get("demo")) != solo_demo:
+                    continue
+                if j["estado"] == "RECIBIDO" or (j["estado"] == "ERROR" and j["intentos"] < max_intentos):
+                    libres.append(j)
+            libres.sort(key=lambda j: j.get("creado", ""))
+            elegidos = libres[:n]
+            for j in elegidos:
+                j["en_proceso"] = ahora
+            return [dict(j) for j in elegidos]
+        return self._mutar(f)
+
+    def liberar(self, clave: str) -> None:
+        def f(t):
+            if clave in t:
+                t[clave].pop("en_proceso", None)
+        self._mutar(f)
+
+    def actualizar(self, clave: str, **meta) -> None:
+        def f(t):
+            if clave in t:
+                t[clave].update(meta)
+        self._mutar(f)
 
     def obtener(self, clave: str) -> dict | None:
         return _leer(self.path)["trabajos"].get(clave)

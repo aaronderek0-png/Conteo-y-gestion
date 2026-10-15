@@ -1,0 +1,1069 @@
+{
+ "generado": "2026-10-14T22:01:32",
+ "version": 1,
+ "scripts": [
+  {
+   "ruta": "analisis_gestion_comercial.py",
+   "lineas": 2531,
+   "modificado": "2026-10-14T00:20:34",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "defensivo",
+    "transferencias_obrador"
+   ],
+   "lee_o_escribe_archivos": [
+    "Reporte_Ahorro_Resumen.xlsx",
+    "_nuevo.xlsx",
+    "arcos.xlsx",
+    "casi_gestion.xlsx",
+    "congreso_facturas.xlsx",
+    "conteo_obrador.xlsx",
+    "credentials.json",
+    "lafinur.xlsx",
+    "lista_precios_obrador.xlsx",
+    "maestro.xlsx",
+    "precio_viejo_nuevo.xlsx",
+    "recetas.xlsx",
+    "reporte_items_huerfanos.txt",
+    "traspasos.xlsx"
+   ],
+   "ids_sheets_fijos": 16,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python analisis_gestion_comercial.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "consolidador",
+    "movimientos_locales"
+   ]
+  },
+  {
+   "ruta": "aprobaciones.py",
+   "lineas": 92,
+   "modificado": "2026-10-14T21:29:01",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python aprobaciones.py",
+   "tiene_main": false,
+   "usado_por": [
+    "test_entornos_aprobaciones"
+   ]
+  },
+  {
+   "ruta": "balanza_datos.py",
+   "lineas": 155,
+   "modificado": "2026-10-13T01:24:09",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "comparador_precios"
+   ],
+   "lee_o_escribe_archivos": [
+    "Balanza_Datos.xlsx",
+    "Dossier_Mensual_Mishiguene.xlsx"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python balanza_datos.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "bom_diferencias.py",
+   "lineas": 42,
+   "modificado": "2026-10-14T10:50:40",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "motor_recetas"
+   ],
+   "lee_o_escribe_archivos": [
+    "Recetas.xlsx",
+    "bom_diferencias.csv"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python bom_diferencias.py",
+   "tiene_main": false,
+   "usado_por": []
+  },
+  {
+   "ruta": "comparador_precios.py",
+   "lineas": 1559,
+   "modificado": "2026-10-13T22:05:34",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "ingesta_listas"
+   ],
+   "lee_o_escribe_archivos": [
+    "Dossier_Mensual_Mishiguene.xlsx",
+    "La Mesón.pdf",
+    "Precios/productos a buscar.txt",
+    "Reporte_Ahorro_Resumen.xlsx",
+    "catalogo_criollo_raw.csv",
+    "catalogo_nogada_raw.csv",
+    "credentials.json",
+    "ofertas_descartadas.csv",
+    "productos a buscar.txt"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python comparador_precios.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "balanza_datos",
+    "imputacion_facturas"
+   ]
+  },
+  {
+   "ruta": "conocimiento.py",
+   "lineas": 120,
+   "modificado": "2026-10-14T03:24:39",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "estado_cache.json",
+    "fuentes.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": false,
+   "invocacion": "python conocimiento.py",
+   "tiene_main": false,
+   "usado_por": [
+    "test_coordinador_conocimiento"
+   ]
+  },
+  {
+   "ruta": "consolidador.py",
+   "lineas": 1342,
+   "modificado": "2026-10-12T23:24:52",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "analisis_gestion_comercial",
+    "defensivo",
+    "drive_connector"
+   ],
+   "lee_o_escribe_archivos": [
+    "Arcos_data/casi_gestion.xlsx",
+    "Dossier_Mensual_Mishiguene.xlsx",
+    "_nuevo.xlsx",
+    "casi_gestion.xlsx",
+    "credentials.json",
+    "reporte_items_huerfanos.txt"
+   ],
+   "ids_sheets_fijos": 5,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python consolidador.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "movimientos_locales"
+   ]
+  },
+  {
+   "ruta": "coordinador.py",
+   "lineas": 152,
+   "modificado": "2026-10-14T03:25:03",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "trabajos.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": false,
+   "invocacion": "python coordinador.py",
+   "tiene_main": false,
+   "usado_por": [
+    "telegram_ingestor",
+    "test_coordinador_conocimiento"
+   ]
+  },
+  {
+   "ruta": "crear_trials.py",
+   "lineas": 65,
+   "modificado": "2026-10-14T21:26:48",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "imputacion_facturas"
+   ],
+   "lee_o_escribe_archivos": [
+    "credentials.json",
+    "entornos.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python crear_trials.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "datos_operativos.py",
+   "lineas": 147,
+   "modificado": "2026-10-14T00:21:24",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "indice_operativo.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python datos_operativos.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "procesar_lote_wpp"
+   ]
+  },
+  {
+   "ruta": "defensivo.py",
+   "lineas": 367,
+   "modificado": "2026-10-14T21:56:18",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python defensivo.py",
+   "tiene_main": true,
+   "usado_por": [
+    "analisis_gestion_comercial",
+    "consolidador",
+    "ecosistema_scan",
+    "imputacion_facturas",
+    "motor_recetas",
+    "movimientos_locales",
+    "refactor_precios_gestion"
+   ]
+  },
+  {
+   "ruta": "drive_connector.py",
+   "lineas": 208,
+   "modificado": "2026-10-12T13:28:47",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "Exportar resultado a .xlsx o .csv",
+    "Ruta a credentials.json",
+    "credentials.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python drive_connector.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "consolidador"
+   ]
+  },
+  {
+   "ruta": "ecosistema_scan.py",
+   "lineas": 172,
+   "modificado": "2026-10-12T20:49:39",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "defensivo",
+    "motor_recetas"
+   ],
+   "lee_o_escribe_archivos": [
+    "Recetas.xlsx",
+    "auditoria_ecosistema.json",
+    "casi_gestion.xlsx",
+    "traspasos.xlsx",
+    "trial.xlsx"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python ecosistema_scan.py",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "entornos.py",
+   "lineas": 78,
+   "modificado": "2026-10-14T21:28:48",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "entornos.json",
+    "modo PRUEBA sin IDs de prueba registrados en entornos.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python entornos.py",
+   "tiene_main": false,
+   "usado_por": [
+    "imputacion_facturas",
+    "reparar_ref_planillas",
+    "test_entornos_aprobaciones"
+   ]
+  },
+  {
+   "ruta": "enviador_mails.py",
+   "lineas": 286,
+   "modificado": "2026-10-13T00:42:19",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "Reporte_Ahorro_Resumen.xlsx",
+    "preview_mail.html"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python enviador_mails.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "gas_sync.py",
+   "lineas": 40,
+   "modificado": "2026-10-12T22:27:24",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python gas_sync.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "imputacion_facturas.py",
+   "lineas": 1906,
+   "modificado": "2026-10-14T21:59:15",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "benchmark_grupo_free",
+    "comparador_precios",
+    "defensivo",
+    "entornos",
+    "invoice_parser",
+    "transferencias_obrador"
+   ],
+   "lee_o_escribe_archivos": [
+    "Chimidoha_FACTURAS_COPIA.xlsx",
+    "Maestro_COPIA.xlsx",
+    "_FACTURAS_COPIA.xlsx",
+    "aprendizaje_proveedores.json",
+    "arcos.xlsx",
+    "bloqueos_permisos.json",
+    "cabello.xlsx",
+    "congreso_facturas.xlsx",
+    "credentials.json",
+    "lafinur.xlsx",
+    "maestro.xlsx",
+    "precios_verduleria_limpios.xlsx",
+    "remitos_pendientes.json"
+   ],
+   "ids_sheets_fijos": 5,
+   "usa_gspread": true,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python imputacion_facturas.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "crear_trials",
+    "procesar_lote_wpp",
+    "recuperar_lote",
+    "reparar_ref_planillas",
+    "telegram_ingestor",
+    "test_ruteo_remitos",
+    "transferencias_obrador",
+    "verificar_vivo"
+   ]
+  },
+  {
+   "ruta": "invoice_parser.py",
+   "lineas": 1196,
+   "modificado": "2026-10-14T21:57:41",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "(modo clásico) exportar el DataFrame de ítems a .csv/.xlsx",
+    "Guardar los comprobantes en este .json",
+    "No usar ni escribir cache_facturas.json",
+    "cache_facturas.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python invoice_parser.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "imputacion_facturas",
+    "procesar_lote_wpp",
+    "test_ruteo_remitos"
+   ]
+  },
+  {
+   "ruta": "mapa_sistema.py",
+   "lineas": 101,
+   "modificado": "2026-10-14T22:01:30",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "arbol_sistema.json",
+    "conocimiento/fuentes.json",
+    "estado/trabajos.json",
+    "logs/pipeline_eventos.jsonl"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python mapa_sistema.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "motor_recetas.py",
+   "lineas": 439,
+   "modificado": "2026-10-12T22:40:50",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "defensivo"
+   ],
+   "lee_o_escribe_archivos": [
+    "Recetas.xlsx"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python motor_recetas.py",
+   "tiene_main": true,
+   "usado_por": [
+    "bom_diferencias",
+    "ecosistema_scan",
+    "movimientos_locales",
+    "refactor_precios_gestion"
+   ]
+  },
+  {
+   "ruta": "movimientos_locales.py",
+   "lineas": 192,
+   "modificado": "2026-10-13T00:14:18",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "analisis_gestion_comercial",
+    "consolidador",
+    "defensivo",
+    "motor_recetas"
+   ],
+   "lee_o_escribe_archivos": [
+    "_nuevo.xlsx",
+    "arcos.xlsx",
+    "cabello.xlsx",
+    "congreso_facturas.xlsx",
+    "lafinur.xlsx",
+    "recetas.xlsx",
+    "traspasos.xlsx"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python movimientos_locales.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "Precios/benchmark_grupo_free.py",
+   "lineas": 95,
+   "modificado": "2026-10-13T23:32:08",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "Grupo Free - Naturales Septiembre v2.pdf",
+    "benchmark_grupo_free.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python benchmark_grupo_free.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "imputacion_facturas",
+    "procesar_lote_wpp"
+   ]
+  },
+  {
+   "ruta": "Precios/ingesta_listas.py",
+   "lineas": 289,
+   "modificado": "2026-10-13T22:07:40",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "cache_listas.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python ingesta_listas.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "comparador_precios"
+   ]
+  },
+  {
+   "ruta": "Precios/run_pipeline_pricing (1).py",
+   "lineas": 817,
+   "modificado": "2026-10-11T06:44:08",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "catalogo_criollo_raw.csv",
+    "emporio.xls",
+    "posta.xlsx",
+    "productos a buscar.txt",
+    "reporte_pricing_optimo.xlsx"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python run_pipeline_pricing (1).py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "Precios/run_pipeline_pricing.py",
+   "lineas": 817,
+   "modificado": "2026-10-11T10:44:08",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "catalogo_criollo_raw.csv",
+    "emporio.xls",
+    "posta.xlsx",
+    "productos a buscar.txt",
+    "reporte_pricing_optimo.xlsx"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python run_pipeline_pricing.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "procesar_lote_wpp.py",
+   "lineas": 644,
+   "modificado": "2026-10-14T21:58:05",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "benchmark_grupo_free",
+    "datos_operativos",
+    "imputacion_facturas",
+    "invoice_parser",
+    "registro_fallos"
+   ],
+   "lee_o_escribe_archivos": [
+    "Carpeta Revision/Revision Facturas IA.xlsx",
+    "Guardar el reporte en este .json",
+    "Revision Facturas IA.xlsx",
+    "_FACTURAS_COPIA.xlsx",
+    "asignaciones.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python procesar_lote_wpp.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "recuperar_lote",
+    "telegram_ingestor",
+    "test_ruteo_remitos"
+   ]
+  },
+  {
+   "ruta": "publicar_web.py",
+   "lineas": 379,
+   "modificado": "2026-10-13T01:29:21",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "Balanza_Datos.xlsx",
+    "Dossier_Mensual_Mishiguene.xlsx",
+    "preview_mail.html",
+    "reporte_items_huerfanos.txt"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python publicar_web.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "recuperar_lote.py",
+   "lineas": 242,
+   "modificado": "2026-10-14T10:44:29",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "imputacion_facturas",
+    "procesar_lote_wpp",
+    "registro_fallos"
+   ],
+   "lee_o_escribe_archivos": [
+    "recuperacion_plan.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python recuperar_lote.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "refactor_precios_gestion.py",
+   "lineas": 753,
+   "modificado": "2026-10-12T20:47:54",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "defensivo",
+    "motor_recetas"
+   ],
+   "lee_o_escribe_archivos": [
+    "Arcos_septiembre.xlsx",
+    "Cabello_septiembre.xlsx",
+    "Congreso_septiembre.xlsx",
+    "Lafinur_septiembre.xlsx",
+    "MaestroProductos.xlsx",
+    "Precios_mapeo.xlsx",
+    "Recetas.xlsx",
+    "Recetas_COPIA.xlsx",
+    "avisos_defensivos.txt",
+    "bom_auditoria.csv",
+    "c_un_sincronizacion.csv",
+    "faltantes_mapeo.csv"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python refactor_precios_gestion.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "registro_fallos.py",
+   "lineas": 84,
+   "modificado": "2026-10-14T03:25:03",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "pipeline_eventos.jsonl"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": true,
+   "cli": false,
+   "invocacion": "python registro_fallos.py",
+   "tiene_main": false,
+   "usado_por": [
+    "procesar_lote_wpp",
+    "recuperar_lote",
+    "telegram_ingestor",
+    "verificar_vivo"
+   ]
+  },
+  {
+   "ruta": "reparar_ref_planillas.py",
+   "lineas": 97,
+   "modificado": "2026-10-14T21:57:02",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "entornos",
+    "imputacion_facturas"
+   ],
+   "lee_o_escribe_archivos": [],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": true,
+   "cli": true,
+   "invocacion": "python reparar_ref_planillas.py --help",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "scouting_sin_referencia.py",
+   "lineas": 63,
+   "modificado": "2026-10-14T03:27:17",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "Dossier_Mensual_Mishiguene.xlsx",
+    "Productos_Sin_Referencia.xlsx",
+    "Reporte_Ahorro_Resumen.xlsx"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python scouting_sin_referencia.py",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "telegram_ingestor.py",
+   "lineas": 589,
+   "modificado": "2026-10-14T21:58:14",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "coordinador",
+    "imputacion_facturas",
+    "procesar_lote_wpp",
+    "registro_fallos"
+   ],
+   "lee_o_escribe_archivos": [
+    "asignaciones.json",
+    "cache_facturas.json",
+    "telegram_state.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": true,
+   "invocacion": "python telegram_ingestor.py --help",
+   "tiene_main": true,
+   "usado_por": [
+    "test_ruteo_remitos"
+   ]
+  },
+  {
+   "ruta": "tests/test_coordinador_conocimiento.py",
+   "lineas": 68,
+   "modificado": "2026-10-14T03:25:11",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "conocimiento",
+    "coordinador"
+   ],
+   "lee_o_escribe_archivos": [
+    "estado.json",
+    "f.json",
+    "trabajos.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python test_coordinador_conocimiento.py",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "tests/test_entornos_aprobaciones.py",
+   "lineas": 68,
+   "modificado": "2026-10-14T21:29:54",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "aprobaciones",
+    "entornos"
+   ],
+   "lee_o_escribe_archivos": [
+    "entornos.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python test_entornos_aprobaciones.py",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "tests/test_ruteo_remitos.py",
+   "lineas": 107,
+   "modificado": "2026-10-14T03:25:11",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "imputacion_facturas",
+    "invoice_parser",
+    "procesar_lote_wpp",
+    "telegram_ingestor"
+   ],
+   "lee_o_escribe_archivos": [
+    "state.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python test_ruteo_remitos.py",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "transferencias_obrador.py",
+   "lineas": 173,
+   "modificado": "2026-10-14T00:19:21",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "imputacion_facturas"
+   ],
+   "lee_o_escribe_archivos": [
+    "aprendizaje_transferencias.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python transferencias_obrador.py",
+   "tiene_main": true,
+   "usado_por": [
+    "analisis_gestion_comercial",
+    "imputacion_facturas"
+   ]
+  },
+  {
+   "ruta": "verificar_vivo.py",
+   "lineas": 53,
+   "modificado": "2026-10-14T03:17:49",
+   "sintaxis_ok": true,
+   "depende_de": [
+    "imputacion_facturas",
+    "registro_fallos"
+   ],
+   "lee_o_escribe_archivos": [
+    "verificacion_vivo.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": true,
+   "escribe_en_sheets": false,
+   "cli": false,
+   "invocacion": "python verificar_vivo.py",
+   "tiene_main": true,
+   "usado_por": []
+  },
+  {
+   "ruta": "WebTest/app.py",
+   "lineas": 2425,
+   "modificado": "2026-10-13T17:22:56",
+   "sintaxis_ok": true,
+   "depende_de": [],
+   "lee_o_escribe_archivos": [
+    "Balanza_Datos.xlsx",
+    "verduleria_obrador_datos.json"
+   ],
+   "ids_sheets_fijos": 0,
+   "usa_gspread": false,
+   "escribe_en_sheets": true,
+   "cli": false,
+   "invocacion": "python app.py",
+   "tiene_main": false,
+   "usado_por": []
+  }
+ ],
+ "carpetas": {
+  ".": {
+   "existe": true,
+   "archivos": 88,
+   "mb": 97.74
+  },
+  "GAS": {
+   "existe": true,
+   "archivos": 64,
+   "mb": 0.38
+  },
+  "Precios": {
+   "existe": true,
+   "archivos": 21,
+   "mb": 0.62
+  },
+  "Verduleria": {
+   "existe": true,
+   "archivos": 5,
+   "mb": 0.7
+  },
+  "Arcos_data": {
+   "existe": true,
+   "archivos": 109,
+   "mb": 39.4
+  },
+  "Copias_Gestion": {
+   "existe": true,
+   "archivos": 29,
+   "mb": 42.09
+  },
+  "Carpeta Revision": {
+   "existe": true,
+   "archivos": 1,
+   "mb": 0.01
+  },
+  "Datos_Operativos_Historicos": {
+   "existe": true,
+   "archivos": 4,
+   "mb": 0.1
+  },
+  "Reportes_Ahorro": {
+   "existe": true,
+   "archivos": 43,
+   "mb": 1.44
+  },
+  "WebTest": {
+   "existe": true,
+   "archivos": 37,
+   "mb": 7.81
+  },
+  "tests": {
+   "existe": true,
+   "archivos": 3,
+   "mb": 0.01
+  },
+  "estado": {
+   "existe": true,
+   "archivos": 2,
+   "mb": 0.0
+  },
+  "conocimiento": {
+   "existe": true,
+   "archivos": 1,
+   "mb": 0.0
+  },
+  "logs": {
+   "existe": true,
+   "archivos": 1,
+   "mb": 0.0
+  },
+  "Facturas Mishiguene": {
+   "existe": true,
+   "archivos": 65,
+   "mb": 57.92
+  },
+  "backups_recuperacion": {
+   "existe": true,
+   "archivos": 3,
+   "mb": 0.12
+  }
+ },
+ "gas": {
+  "_ajeno_quini6": {
+   "openById": 0,
+   "ids_fijos": 0,
+   "importrange": false
+  },
+  "_vacio": {
+   "openById": 0,
+   "ids_fijos": 0,
+   "importrange": false
+  },
+  "arcos_conteo_gestion": {
+   "openById": 3,
+   "ids_fijos": 3,
+   "importrange": false
+  },
+  "arcos_precios": {
+   "openById": 1,
+   "ids_fijos": 1,
+   "importrange": false
+  },
+  "arcos_remitos_alertas": {
+   "openById": 2,
+   "ids_fijos": 1,
+   "importrange": false
+  },
+  "cabello_conteo_gestion": {
+   "openById": 3,
+   "ids_fijos": 3,
+   "importrange": false
+  },
+  "cabello_precios": {
+   "openById": 4,
+   "ids_fijos": 2,
+   "importrange": false
+  },
+  "cabello_remitos_alertas": {
+   "openById": 2,
+   "ids_fijos": 1,
+   "importrange": false
+  },
+  "congreso_alertas": {
+   "openById": 1,
+   "ids_fijos": 1,
+   "importrange": false
+  },
+  "congreso_consumo_teorico": {
+   "openById": 6,
+   "ids_fijos": 6,
+   "importrange": false
+  },
+  "congreso_obrador_conteo": {
+   "openById": 4,
+   "ids_fijos": 3,
+   "importrange": false
+  },
+  "congreso_precios": {
+   "openById": 1,
+   "ids_fijos": 1,
+   "importrange": false
+  },
+  "lafinur_precios": {
+   "openById": 2,
+   "ids_fijos": 2,
+   "importrange": false
+  },
+  "lafinur_remitos_alertas": {
+   "openById": 2,
+   "ids_fijos": 1,
+   "importrange": false
+  },
+  "maestro_productos": {
+   "openById": 2,
+   "ids_fijos": 4,
+   "importrange": false
+  },
+  "recetas_costos": {
+   "openById": 2,
+   "ids_fijos": 2,
+   "importrange": false
+  },
+  "ventas_bom_rentabilidad": {
+   "openById": 1,
+   "ids_fijos": 1,
+   "importrange": false
+  }
+ },
+ "datos_clave": {
+  "planillas": "entornos.json / imputacion_facturas.IDS_PLANILLAS",
+  "cola": "estado/trabajos.json",
+  "eventos": "logs/pipeline_eventos.jsonl",
+  "conocimiento": "conocimiento/fuentes.json"
+ }
+}

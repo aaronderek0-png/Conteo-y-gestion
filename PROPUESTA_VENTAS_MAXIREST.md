@@ -37,3 +37,9 @@ Con la estructura real: el ID vivo ya lo fija un consumidor (`1IRRh0wf…`), el 
 internas a `Historial_Productos`. A no rompe nada y resuelve el problema de períodos (cierres por pestaña/archivo). B se puede
 introducir después aislando solo `Historial_Productos` como fuente única cuando el volumen lo justifique.
 Pendiente de confirmar con lectura viva: que `1IRRh0wf…` sea el archivo actual y quién más lo consume (no solo GAS del repo).
+
+## Actualización 14/10/2026 — Variante A CONFIRMADA
+Verificación en vivo (informada por el usuario): `1IRRh0wf…` SÍ es el archivo actual («Ventas_Obrador_Octubre 2026», 5.032 filas en
+`Historial_Productos` desde 01/07/2026; `Por día` cargado hasta el 14/10; `Planificacion_Bloques` al 15/10). Queda **aprobada la Variante A**:
+mantener ese ID único vivo y cerrar períodos por snapshot/pestaña sin romper `congreso_consumo_teorico` ni las 2.418 referencias de
+`Pronostico`. Estado en `conocimiento/fuentes.json`: `validado`. Aún sin aplicar ningún cambio al archivo.

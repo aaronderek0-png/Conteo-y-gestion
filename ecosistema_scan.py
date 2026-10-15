@@ -136,6 +136,11 @@ def codigos_y_tipado(hoy: dt.date) -> dict:
 
 
 def main() -> int:
+    import sys
+    if "--arbol" in sys.argv:                      # grafo de auto-consciencia del repositorio
+        import mapa_sistema
+        mapa_sistema.main()
+        return 0
     sys.stdout.reconfigure(encoding="utf-8")
     hoy = dt.date.today()
     rep: dict = {"fecha": hoy.isoformat()}

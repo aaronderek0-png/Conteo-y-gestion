@@ -70,6 +70,42 @@ BULTO_UNIDADES = {"BULTO", "CAJA", "CAJON", "CAJÓN", "BAL", "BALDE"}
 BULTO_KG_DEFAULT: dict[str, float] = {"tomate perita": 16.0, "limon": 16.0, "berenjena": 9.0, "cebolla": 17.0,
                                        "pepino": 13.0}
 
+def _fecha_futura_invalida(f) -> bool:
+    from defensivo import fecha_futura_invalida
+    return fecha_futura_invalida(f)
+
+
+_EQUIV_CACHE: dict = {}
+
+
+def bulto_kg_equivalencias() -> dict[str, float]:
+    """kg por bulto según la pestaña `Equivalencias` del Maestro (proveedor Raíces/Open Fruits, unidad KG, factor > 1,5).
+    Fuente primaria; `BULTO_KG_DEFAULT` queda solo de respaldo. Cacheado por mtime del export."""
+    p = BASE_DIR / "Arcos_data" / "maestro.xlsx"
+    try:
+        mt = p.stat().st_mtime
+    except OSError:
+        return {}
+    if _EQUIV_CACHE.get("mt") == mt:
+        return _EQUIV_CACHE["d"]
+    d: dict[str, float] = {}
+    try:
+        import openpyxl
+        wb = openpyxl.load_workbook(p, read_only=True, data_only=True)
+        if "Equivalencias" in wb.sheetnames:
+            for r in wb["Equivalencias"].iter_rows(min_row=2, values_only=True):
+                if len(r) > 5 and str(r[4] or "").upper() == "KG" and isinstance(r[5], (int, float)) and r[5] > 1.5:
+                    d[norm(r[1] or r[3])] = float(r[5])
+    except Exception as e:                                   # noqa: BLE001
+        LOG.warning("no pude leer Equivalencias del Maestro: %s", e)
+    _EQUIV_CACHE.update({"mt": mt, "d": d})
+    return d
+
+
+def bulto_kg(pres_norm: str) -> float | None:
+    return bulto_kg_equivalencias().get(pres_norm) or BULTO_KG_DEFAULT.get(pres_norm)
+
+
 LOG = logging.getLogger("imputacion_facturas")
 
 
@@ -120,6 +156,11 @@ class Local:
         def preparar(d: pd.DataFrame) -> pd.DataFrame:
             d = d[d["N"].notna() & d["PRODUCTO"].notna()].copy()
             d["F_FACTURA"] = pd.to_datetime(d["F_FACTURA"], errors="coerce")
+            fut = d["F_FACTURA"].map(_fecha_futura_invalida).astype(bool)
+            if fut.any():                                    # FECHA_FUTURA_INVALIDA: no entra al costo vigente
+                LOG.warning("%s: %d factura(s) con fecha futura descartadas del costo vigente (N° %s)", self.nombre if hasattr(self, "nombre") else "?",
+                            int(fut.sum()), sorted(set(d.loc[fut, "N"].astype(str)))[:5])
+                d = d[~fut].copy()
             d["PRECIO"] = pd.to_numeric(d["PRECIO"], errors="coerce")
             d["CANT"] = pd.to_numeric(d["CANT"], errors="coerce")
             d["DESC"] = pd.to_numeric(d["DESC"], errors="coerce").fillna(0.0)
@@ -145,6 +186,7 @@ class Local:
         h = self.facturas_precios
         f = h[h["PRODUCTO"].map(norm) == norm(presentacion)]
         f = f[f["P_NETO"].notna() & (f["P_NETO"] > 0)]
+        f = f[~f["F_FACTURA"].map(_fecha_futura_invalida).astype(bool)]      # FECHA_FUTURA_INVALIDA
         if antes_de is not None:
             f = f[f["F_FACTURA"] < pd.Timestamp(antes_de)]
         if f.empty:
@@ -167,7 +209,10 @@ def cargar_aprendizaje() -> dict:
 
 
 def guardar_aprendizaje(ap: dict) -> None:
-    APRENDIZAJE_JSON.write_text(json.dumps(ap, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    """Escritura atómica (tmp + replace): un corte no deja el aprendizaje validado vacío o truncado."""
+    tmp = APRENDIZAJE_JSON.with_suffix(".tmp")
+    tmp.write_text(json.dumps(ap, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    tmp.replace(APRENDIZAJE_JSON)
 
 
 def aprender(ap: dict, proveedor: str, descripcion: str, presentacion: str, local: str, n: int = 1) -> None:
@@ -344,7 +389,7 @@ def convertir_unidad(item: dict, cat: pd.Series) -> tuple[float | None, float | 
         en_lista = pres_norm in VERDULERIA_BULTO
         if es_bulto:
             m = _BULTO_KG.search(item["descripcion_original"])
-            kg = float(m.group(1).replace(",", ".")) if m else BULTO_KG_DEFAULT.get(pres_norm)
+            kg = float(m.group(1).replace(",", ".")) if m else bulto_kg(pres_norm)
             if not kg:
                 return None, None, avisos, ("bulto/cajón sin peso en el comprobante: no se puede llevar a kilos"
                                             if en_lista else
@@ -1436,6 +1481,58 @@ def _asegurar_filas(ws, ultima: int) -> int:
     return max(falta, 0)
 
 
+def _bloqueo_remitos(sh, local: str, remitos: list[dict], ws, primera: int, ultima: int, error: str) -> dict:
+    """La pestaña Remitos está protegida o sin grilla: no se pierde el remito. Se registra el bloqueo en
+    estado/bloqueos_permisos.json (cola de reintento limpio) y se vuelca un respaldo trazable en `Remitos_Pendientes`
+    con ESTADO=BLOQUEADO_PERMISOS (no suma gasto ni stock). Devuelve el diagnóstico exacto."""
+    import hashlib
+    ahora = datetime.now().isoformat(timespec="seconds") if "datetime" in globals() else ""
+    diag = {"escrito": False, "bloqueado": True, "local": local, "planilla": sh.title, "hoja": ws.title,
+            "grilla_filas": ws.row_count, "rango_pretendido": f"A{primera}:E{ultima}",
+            "error": re.sub(r"\s+", " ", error)[:240],
+            "pasos": ["En Google Sheets: Datos ▸ Proteger hojas y rangos ▸ pestaña Remitos ▸ quitar la protección o agregar a "
+                      "la Service Account agente-mishi@black-obelisk-460914-d9.iam.gserviceaccount.com como editora.",
+                      f"Agregar al menos {max(ultima - ws.row_count, 0) + 20} filas a la pestaña (la grilla tiene {ws.row_count}).",
+                      "Reintentar: python recuperar_lote.py apply (la cola estado/bloqueos_permisos.json conserva el remito)."]}
+    f = BASE_DIR / "estado" / "bloqueos_permisos.json"
+    f.parent.mkdir(exist_ok=True)
+    try:
+        cola = json.loads(f.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        cola = []
+    for rem in remitos:
+        cola.append({"ts": ahora, "tipo": "remito_obrador", "remito": rem.get("remito"), "local": local,
+                     "renglones": rem.get("renglones"), "total": rem.get("total"), "diagnostico": diag["error"],
+                     "estado": "BLOQUEADO_PERMISOS"})
+    tmp = f.with_suffix(".tmp")
+    tmp.write_text(json.dumps(cola, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    tmp.replace(f)
+    try:                                                      # respaldo en la nube
+        pend = next((w for w in sh.worksheets() if w.title == "Remitos_Pendientes"), None)
+        if pend is None:
+            pend = sh.add_worksheet(title="Remitos_Pendientes", rows=1000, cols=16)
+            pend.update(range_name="A1:P1", values=[ENCABEZADO_PENDIENTES], value_input_option="RAW")
+        vivos = {x[0] for x in pend.get_all_values()[1:]}
+        nuevas = []
+        for rem in remitos:
+            base = hashlib.sha256(f"{rem.get('remito')}|obrador|{local}".encode()).hexdigest()[:24]
+            for i, r in enumerate(rem["renglones"]):
+                rid = f"{base}:{i}"
+                if rid in vivos:
+                    continue
+                nuevas.append([rid, rem.get("remito"), str(r.get("fecha")), "OBRADOR (transferencia a " + local + ")",
+                               r["producto"], "UN", r["cantidad"], r["cantidad"], r["precio_unitario"], r.get("total"),
+                               "remito Obrador", "NO", "BLOQUEADO_PERMISOS", "", rem.get("archivo") or "",
+                               "Pestaña Remitos protegida/llena: pendiente de cargar en Remitos"])
+        if nuevas:
+            pend.append_rows(nuevas, value_input_option="RAW")
+        diag["respaldo_remitos_pendientes"] = len(nuevas)
+    except Exception as e:                                    # noqa: BLE001
+        diag["respaldo_remitos_pendientes"] = f"no se pudo: {type(e).__name__}"
+    diag["motivo"] = "pestaña Remitos protegida o sin filas: ver pasos"
+    return diag
+
+
 def push_remitos_drive(local: str, remitos: list[dict], confirmado: bool = False) -> dict:
     """Remitos del Obrador hacia la pestaña 'Remitos' de la planilla REAL del local receptor, en sus 5 columnas:
     A FECHA (DD/MM) · B PRODUCTO · C CANT. U/MEDIDA · D PRECIO U. · E PRECIO TOTAL (=C*D). Sin fila de total general.
@@ -1470,8 +1567,14 @@ def push_remitos_drive(local: str, remitos: list[dict], confirmado: bool = False
     if not filas:
         return {"escrito": False, "motivo": "el remito ya estaba cargado (no se duplica)", "hoja": estado_hoja}
     ultima = primera + len(filas) - 1
-    _asegurar_filas(ws, ultima)
-    ws.update(f"A{primera}:E{ultima}", filas, value_input_option="USER_ENTERED")
+    try:
+        _asegurar_filas(ws, ultima)
+        ws.update(f"A{primera}:E{ultima}", filas, value_input_option="USER_ENTERED")
+    except Exception as e:                                    # noqa: BLE001
+        txt = str(e)
+        if "protected" in txt or "exceeds grid limits" in txt:
+            return _bloqueo_remitos(sh, local, remitos, ws, primera, ultima, txt)
+        raise
     ws.batch_format([{"range": f"A{primera}:E{ultima}",
                       "format": {"backgroundColor": {"red": 1.0, "green": 0.973, "blue": 0.882},
                                  "numberFormat": {"type": "NUMBER", "pattern": "0.##"}}},
@@ -1628,7 +1731,7 @@ def completar_remito(reg: dict, loc: "Local", ap: dict) -> dict:
             cat = loc.catalogo[loc.catalogo["PRESENTACION"] == pres].iloc[0]
             if vig:
                 por_kg, origen = vig / ((_num(cat["UN_PRES"]) or 1) * (_num(cat["CANT_PRES"]) or 1)), "último costo vigente"
-        kg_bulto = BULTO_KG_DEFAULT.get(norm(pres or primera))
+        kg_bulto = bulto_kg(norm(pres or primera))
         cant = r["cantidad_facturada_remito"]
         u = (r.get("unidad") or "").upper()
         peso = r.get("peso_real_recibido_kg")
