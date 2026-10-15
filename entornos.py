@@ -30,7 +30,9 @@ def _datos() -> dict:
 
 
 def entorno() -> str:
-    e = (os.environ.get("MISHI_ENTORNO") or "PRODUCCION").upper()
+    """Prioridad: variable MISHI_ENTORNO → clave "activo" de entornos.json → PRODUCCION. Dejar "activo": "PRUEBA" en el
+    JSON fuerza PRUEBA también en la tarea programada y en cualquier proceso que arranque sin variables."""
+    e = (os.environ.get("MISHI_ENTORNO") or _datos().get("activo") or "PRODUCCION").upper()
     if e not in ("PRUEBA", "PRODUCCION"):
         raise ValueError(f"MISHI_ENTORNO inválido: {e}")
     return e

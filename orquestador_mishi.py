@@ -459,6 +459,11 @@ class AgenteRecalculoCascada(Agente):
 
 
 # =========================================================================== #
+def _entorno() -> str:
+    import entornos
+    return entornos.entorno()
+
+
 def otros_consumidores() -> list[int]:
     r = subprocess.run(["powershell", "-NoProfile", "-Command",
                         "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -match 'telegram_ingestor.py|orquestador_mishi.py' "
@@ -483,7 +488,7 @@ def latido(agentes: list[Agente], t0: float) -> None:
              "uptime_s": round(time.time() - t0), "ahora": time.strftime("%Y-%m-%d %H:%M:%S"),
              "cola": cola, "lectura": stats, "batch_max": BATCH_MAX,
              "agentes": {a.nombre: {**_m(a.nombre), "vivo": a.is_alive()} for a in agentes},
-             "entorno": os.environ.get("MISHI_ENTORNO", "PRODUCCION")}
+             "entorno": _entorno()}
     tmp = LATIDO.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
     for n in range(8):
@@ -533,7 +538,7 @@ def main(argv=None) -> int:
     for g in agentes:
         g.start()
     LOG.info("orquestador activo (PID %d, entorno %s, escritura=%s, lote=%d): %s", os.getpid(),
-             os.environ.get("MISHI_ENTORNO", "PRODUCCION"), a.push_drive, BATCH_MAX, ", ".join(g.nombre for g in agentes))
+             _entorno(), a.push_drive, BATCH_MAX, ", ".join(g.nombre for g in agentes))
     try:
         while not STOP.exists():
             latido(agentes, t0)

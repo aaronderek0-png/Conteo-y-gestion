@@ -93,7 +93,7 @@ class TelegramAPI:
     IDEMPOTENTES = {"getUpdates", "getFile", "getChat"}      # sendMessage/deleteMessage no se reintentan: duplicarían
 
     def _call(self, metodo: str, **params) -> dict:
-        intentos = 4 if metodo in self.IDEMPOTENTES else 1
+        intentos = 4 if metodo in self.IDEMPOTENTES and metodo != "getUpdates" else 1   # getUpdates: reintenta el bucle
         for n in range(1, intentos + 1):
             try:
                 r = self._http("POST", f"{API}/bot{self.token}/{metodo}", data=params, timeout=30)
@@ -118,7 +118,16 @@ class TelegramAPI:
         p: dict[str, Any] = {"timeout": timeout, "allowed_updates": json.dumps(["message", "channel_post"])}
         if offset is not None:
             p["offset"] = offset
-        return self._call("getUpdates", **p)
+        try:
+            return self._call("getUpdates", **p)
+        except Exception as e:                       # noqa: BLE001 — ConnectionError/ReadTimeout/10054/DNS: JAMÁS tumba el bucle
+            name = type(e).__name__
+            if name in ("ConnectionError", "ReadTimeout", "ConnectTimeout", "Timeout", "ChunkedEncodingError",
+                        "ConnectionResetError", "OSError", "RemoteDisconnected", "SSLError", "ProxyError")                     or "Connection" in name or isinstance(e, OSError):
+                LOG.warning("getUpdates: fallo de red (%s); pausa 2 s y se continúa", name)
+                time.sleep(2)
+                return []
+            raise
 
     def descargar(self, file_id: str, destino: Path) -> Path:
         info = self._call("getFile", file_id=file_id)

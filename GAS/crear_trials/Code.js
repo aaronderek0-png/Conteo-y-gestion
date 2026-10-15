@@ -22,3 +22,30 @@ function crearTrials() {
   Logger.log(JSON.stringify({ prueba: out }, null, 1));
   return out;
 }
+
+/**
+ * Quita las protecciones de hoja/rango SOLO en las 5 copias de PRUEBA (IDs fijos de abajo; nunca los originales), para que
+ * la Service Account pueda escribir en Facturas/Remitos del sandbox. Ejecutar a mano como dueño. No toca producción.
+ */
+function desprotegerCopiasDePrueba() {
+  var PRUEBA = {
+    Chimidoha: '1wkf1bu1m4K3ZOgCznJ3oDtN_nnjtaWCGxhONVSfTQxs',
+    Cabello: '1QdHOCClPQU0tOSMzBq56wCPYLhsleZbr7gFIJrlZRFM',
+    Lafinur: '1fqBlOxDKMGzYz7lG0-BNe1gJPVZGH01k5GxSgmz-vi4',
+    Arcos: '1bkSFcrUG0pAnO0VrxHcQKWM6h8M3pf8YLUfKKVH4XTg',
+    Congreso: '1YGNpT3zhnfGDdIzrDalNo8BRBBvvX51qCT5WuQsyME4'
+  };
+  var quitadas = {};
+  Object.keys(PRUEBA).forEach(function (local) {
+    var ss = SpreadsheetApp.openById(PRUEBA[local]);
+    if (ss.getName().indexOf('NO CARGAR - PRUEBA - ') !== 0) throw new Error('No es una copia de prueba: ' + local);
+    var n = 0;
+    ss.getSheets().forEach(function (sh) {
+      sh.getProtections(SpreadsheetApp.ProtectionType.SHEET).concat(
+        sh.getProtections(SpreadsheetApp.ProtectionType.RANGE)).forEach(function (p) { p.remove(); n++; });
+    });
+    quitadas[local] = n;
+  });
+  Logger.log(JSON.stringify(quitadas));
+  return quitadas;
+}

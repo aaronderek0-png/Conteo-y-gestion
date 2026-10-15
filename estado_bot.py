@@ -55,7 +55,11 @@ def main() -> int:
     bl = BASE / "estado" / "bloqueos_permisos.json"
     if bl.exists():
         print(f"Bloqueos de permisos en cola: {len(json.loads(bl.read_text(encoding='utf-8')))}")
-    print("Entorno:", os.environ.get("MISHI_ENTORNO", "PRODUCCION"))
+    try:
+        import entornos
+        print("Entorno:", entornos.entorno())
+    except Exception as e:
+        print("Entorno: error", e)
     return 0
 
 

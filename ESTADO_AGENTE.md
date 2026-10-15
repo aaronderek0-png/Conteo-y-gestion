@@ -38,3 +38,11 @@ Bot: PID 23916, commit 9866f59. Eventos: `logs/pipeline_eventos.jsonl`.
 - Registro de aprobación (aprobaciones.py): modelo Q:X + reglas probadas en memoria; sin aplicar a planillas reales.
 - Ventas Maxirest: solo estudio (PROPUESTA_VENTAS_MAXIREST.md); recomendación A. Nada modificado.
 - #REF! Lafinur: causa en TRIALS_Y_REF.md (comodín vertical {"";"";""} derramando sobre la fila siguiente). Sin tocar producción.
+
+## 14/10/2026 — sandbox PRUEBA activo
+- Copias NO CARGAR halladas por Drive (SA editora): Arcos 1bkSFcrU…, Congreso 1YGNpT3z…, Lafinur 1fqBlOxD…, Cabello 1QdHOCCl…, Chimidoha 1wkf1bu1…
+  registradas en entornos.json con "activo": "PRUEBA" (fuerza PRUEBA también en la tarea programada). El entornos.json del usuario no
+  estaba en la carpeta del proyecto; se regeneró desde Drive. Guardia por ID verificada: abrir un ID de producción lanza EscrituraProhibida.
+- Las copias traen protecciones de hoja: A:I de Facturas es escribible; K:M/T:V (reparar #REF!) y Remitos NO. Acción del dueño: ejecutar
+  desprotegerCopiasDePrueba() (GAS/crear_trials/Code.js) y luego `python reparar_ref_planillas.py --local Lafinur --apply`.
+- /deshacer ahora vacía celdas si la hoja está protegida (probado en Cabello PRUEBA).

@@ -1672,8 +1672,19 @@ def deshacer_push(registro: dict) -> dict:
                 return {"deshecho": False, "motivo": f"la fila {esperado['fila']} ya no coincide; no se borra"}
         elif str(real[0]) != str(esperado["N"]) or norm(real[3] if len(real) > 3 else "") != norm(esperado["proveedor"]):
             return {"deshecho": False, "motivo": f"la fila {esperado['fila']} ya no coincide (alguien la modificó); no se borra"}
-    ws.delete_rows(a, b)
-    return {"deshecho": True, "filas": b - a + 1, "desde_fila": a, "hasta_fila": b, "planilla": registro.get("planilla")}
+    modo = "filas eliminadas"
+    try:
+        ws.delete_rows(a, b)
+    except Exception as e:                                   # noqa: BLE001
+        if "protected" not in str(e):
+            raise
+        # hoja protegida: no se pueden borrar filas; se vacían A:I (columnas de carga) y se quita el color
+        rng = f"A{a}:E{b}" if es_remito else f"A{a}:I{b}"
+        ws.batch_clear([rng])
+        ws.format(rng, {"backgroundColor": {"red": 1, "green": 1, "blue": 1}})
+        modo = "celdas vaciadas (hoja protegida: no admite borrar filas)"
+    return {"deshecho": True, "filas": b - a + 1, "desde_fila": a, "hasta_fila": b, "planilla": registro.get("planilla"),
+            "modo": modo}
 
 
 # ---- remitos sin precio: valorización con lista del proveedor / último costo ----------------
