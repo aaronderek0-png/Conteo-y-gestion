@@ -223,6 +223,8 @@ function actualizarPreciosCabello() {
   const cantFilas = uFilaLocal - COLS.FILA_INICIO + 1;
   const codigos = hojaLocal.getRange(COLS.FILA_INICIO, COLS.CODIGO, cantFilas, 1).getValues();
   const preciosAnteriores = hojaLocal.getRange(COLS.FILA_INICIO, COLS.PRECIO_ANTERIOR, cantFilas, 1).getValues();
+  // v2: precio ACTUAL ya cargado en G (manual / cierre anterior): no se pisa con F si el SKU no tiene factura
+  const preciosActualesG = hojaLocal.getRange(COLS.FILA_INICIO, COLS.PRECIO_ACTUAL, cantFilas, 1).getValues();
 
   const salidaG = [];
   const salidaR = [];
@@ -247,6 +249,10 @@ function actualizarPreciosCabello() {
         salidaR.push([`Histórico factura: ${info.fechaTexto}`]);
         countMesesPrevios++;
       }
+    } else if (parseNum(preciosActualesG[i][0]) > 0) {
+      salidaG.push([preciosActualesG[i][0]]);
+      salidaR.push(["Sin factura - se mantuvo precio actual (Col G)"]);
+      countColF++;
     } else if (precioViejo > 0) {
       salidaG.push([precioViejo]);
       salidaR.push(["Precio anterior (Col F)"]);

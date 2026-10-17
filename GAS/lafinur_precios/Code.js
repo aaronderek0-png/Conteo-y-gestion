@@ -240,9 +240,15 @@ function actualizarPreciosDesdeFacturas() {
       matrizK[i][0] = match.fechaTexto;
       encontrados++;
     } else {
-      matrizG[i][0] = precioViejo;
-      const textoPrecio = (precioViejo !== "" && precioViejo !== null && precioViejo !== undefined) ? precioViejo : "-";
-      matrizK[i][0] = `No encontrado: ${textoPrecio}`;
+      // v2: si G ya tiene precio (manual o del cierre anterior) NO se pisa con F
+      const gActual = Number(matrizG[i][0]);
+      if (gActual > 0) {
+        matrizK[i][0] = `Sin factura - se mantuvo G: ${gActual}`;
+      } else {
+        matrizG[i][0] = precioViejo;
+        const textoPrecio = (precioViejo !== "" && precioViejo !== null && precioViejo !== undefined) ? precioViejo : "-";
+        matrizK[i][0] = `No encontrado: ${textoPrecio}`;
+      }
       noEncontrados++;
     }
   }

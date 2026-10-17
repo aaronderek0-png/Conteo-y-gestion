@@ -204,6 +204,8 @@ function actualizarUltimoPrecioMensual() {
   
   const matrizCodigos = hojaGestion.getRange(CONFIG_PRECIOS.FILA_INICIO_INV, CONFIG_PRECIOS.COL_CODIGO_INV, totalProductos, 1).getValues();
   const matrizPreciosViejos = hojaGestion.getRange(CONFIG_PRECIOS.FILA_INICIO_INV, CONFIG_PRECIOS.COL_PRECIO_VIEJO_INV, totalProductos, 1).getValues();
+  // v2: no pisar con F el precio ya cargado en G cuando el SKU no tiene factura
+  const matrizPreciosActualesG = hojaGestion.getRange(CONFIG_PRECIOS.FILA_INICIO_INV, CONFIG_PRECIOS.COL_PRECIO_NUEVO_INV, totalProductos, 1).getValues();
 
   const matrizNuevosPrecios = [];
   const matrizAuditoria = [];
@@ -240,8 +242,14 @@ function actualizarUltimoPrecioMensual() {
         countHistorico++;
       }
     } else {
-      matrizNuevosPrecios.push([precioBase]);
-      matrizAuditoria.push(["No encontrado - Se mantuvo precio anterior"]);
+      const precioActualG = parseNum(matrizPreciosActualesG[i][0]);
+      if (precioActualG > 0) {
+        matrizNuevosPrecios.push([matrizPreciosActualesG[i][0]]);
+        matrizAuditoria.push(["Sin factura - se mantuvo precio actual (Col G)"]);
+      } else {
+        matrizNuevosPrecios.push([precioBase]);
+        matrizAuditoria.push(["No encontrado - Se mantuvo precio anterior"]);
+      }
       countMantenidos++;
     }
   }

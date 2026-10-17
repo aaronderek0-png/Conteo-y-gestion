@@ -212,6 +212,8 @@ function actualizarUltimoPrecioMensualArcos() {
   
   const matrizCodigos = hojaGestion.getRange(CONFIG_PRECIOS.FILA_INICIO_INV, CONFIG_PRECIOS.COL_CODIGO_INV, totalProductosAProcesar, 1).getValues();
   const matrizPreciosViejos = hojaGestion.getRange(CONFIG_PRECIOS.FILA_INICIO_INV, CONFIG_PRECIOS.COL_PRECIO_VIEJO_INV, totalProductosAProcesar, 1).getValues();
+  // v18.1: precio ACTUAL ya cargado en G (a mano o del cierre anterior). Si un SKU no tiene factura NO se pisa con F.
+  const matrizPreciosActuales = hojaGestion.getRange(CONFIG_PRECIOS.FILA_INICIO_INV, CONFIG_PRECIOS.COL_PRECIO_NUEVO_INV, totalProductosAProcesar, 1).getValues();
   const matrizFinal = hojaGestion.getRange(CONFIG_PRECIOS.FILA_INICIO_INV, CONFIG_PRECIOS.COL_FINAL_INV, totalProductosAProcesar, 1).getValues(); // Columna P
 
   const matrizNuevosPrecios = [];
@@ -237,8 +239,11 @@ function actualizarUltimoPrecioMensualArcos() {
       continue;
     }
 
-    let precioAsignado = precioBasePlanilla;
-    let trackingOrigen = "No encontrado - Se mantuvo precio anterior";
+    const precioActualG = parseNum(matrizPreciosActuales[i][0]);
+    let precioAsignado = precioActualG > 0 ? matrizPreciosActuales[i][0] : precioBasePlanilla;
+    let trackingOrigen = precioActualG > 0
+      ? "Sin factura - se mantuvo precio actual (Col G)"
+      : "No encontrado - Se mantuvo precio anterior";
 
     if (mapaPreciosPorSku.has(codInventario)) {
       const match = mapaPreciosPorSku.get(codInventario);
