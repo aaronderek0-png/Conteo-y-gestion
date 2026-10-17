@@ -26,8 +26,7 @@ from __future__ import annotations
 import argparse
 import re
 import unicodedata
-from collections import OrderedDict, defaultdict
-from datetime import date, datetime
+from collections import defaultdict
 from pathlib import Path
 
 import openpyxl

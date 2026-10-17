@@ -13,10 +13,8 @@ from __future__ import annotations
 
 import re
 from collections import defaultdict
-from copy import copy
 
 import openpyxl
-import pandas as pd
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter as L
 
@@ -191,8 +189,7 @@ def construir_total(wb, local, df_local, F):
 def main():
     F = gm.Fuentes(10, 2026)
     med = gm._medida_por_sku(F)
-    from collections import defaultdict as dd
-    log = dd(list)
+    log = defaultdict(list)
     dfs = {l: gm.aplicar_reglas(F, l, gm.items_base(F, l, med), log[l]) for l in gm.SECTORES}
     gm.espejar_arcos_cabello(dfs, log)
     gm.OUT.mkdir(parents=True, exist_ok=True)
